@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ring: 0 0% 100%;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  @apply bg-neutral-950 text-neutral-100 antialiased;
+  background-image: theme('backgroundImage.radial-faded');
+}
+
+.glass {
+  @apply bg-white/5 border border-white/10 backdrop-blur-md shadow-soft;
+}
+
+.btn {
+  @apply inline-flex items-center gap-2 rounded-full px-5 py-2 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-brand-400;
+}
+
+.btn-primary {
+  @apply btn bg-brand-500 text-white hover:bg-brand-600;
+}
+
+.btn-ghost {
+  @apply btn bg-white/0 text-white hover:bg-white/10;
+}
+
+.container-pro {
+  @apply mx-auto max-w-[80rem] xl:max-w-[90rem] 2xl:max-w-[100rem] px-4 sm:px-6 lg:px-8;
+}
+
+.section {
+  @apply container-pro py-16 sm:py-20 lg:py-24 flex flex-col items-center gap-8 scroll-mt-28;
+}
+
+.section-hero {
+  @apply container-pro min-h-screen py-20 sm:py-24 flex items-center scroll-mt-28;
+}
+
+.heading {
+  @apply text-3xl sm:text-4xl font-semibold tracking-tight text-white;
+}
+
+.subheading {
+  @apply mt-2 max-w-2xl text-neutral-300;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+.scrollbar-hide::-webkit-scrollbar{display:none}
+.scrollbar-hide{-ms-overflow-style:none;scrollbar-width:none}
