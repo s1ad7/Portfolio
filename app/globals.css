@@ -12,6 +12,9 @@
   --color-panel: #f2f2f2;
   --color-panel-2: #e8e8e8;
   --color-line: #d1d1d1;
+  /* A lighter rule than --color-line, for controls sitting on white. Sampled
+     off the reference's language-switcher border. */
+  --color-hairline: #ededed;
   --color-ink: #191d21;
   --color-accent: #4d80d1;
 
