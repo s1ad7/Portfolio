@@ -12,6 +12,29 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { projects, type Project } from '@/lib/content'
+import manifest from '@/public/projects/manifest.json'
+
+/** Aspect of the preview frame, as height / width. Matches `aspect-[16/10]`. */
+const FRAME_RATIO = 10 / 16
+
+/**
+ * How tall the image must be to fill the frame's width, and how far it has to
+ * travel to reveal its full length.
+ *
+ * Captured pages differ enormously (1.5:1 to over 4:1 among these), so a
+ * hardcoded pan either stops short of the footer or races past it. Dimensions
+ * come from public/projects/manifest.json, written by `npm run capture:projects`
+ * alongside the images, so the two cannot drift apart.
+ */
+function panGeometry(slug: string) {
+  const dims = (manifest as Record<string, { width: number; height: number }>)[slug]
+  const ratio = dims ? dims.height / dims.width : 3
+  // Height as a percentage of the frame's height.
+  const heightPct = (ratio / FRAME_RATIO) * 100
+  // translateY is relative to the element's own height.
+  const travelPct = heightPct <= 100 ? 0 : (1 - 100 / heightPct) * 100
+  return { heightPct, travelPct }
+}
 
 /**
  * Pinned, scroll-scrubbed project showcase.
@@ -172,9 +195,14 @@ function SlidePreview({
   progress: MotionValue<number>
 }) {
   /* The pan stays scroll-scrubbed: transforms interpolate correctly, and this
-     is the effect worth scrubbing. The image is 400% of the frame height, so
-     walking to -75% travels from the top of the page to the bottom. */
-  const panY = useTransform(progress, [index / count, (index + 1) / count], ['0%', '-75%'])
+     is the effect worth scrubbing. Distance is derived per image so every site
+     travels from its own header to its own footer across one slide. */
+  const { heightPct, travelPct } = panGeometry(project.slug)
+  const panY = useTransform(
+    progress,
+    [index / count, (index + 1) / count],
+    ['0%', `-${travelPct.toFixed(2)}%`]
+  )
 
   return (
     <motion.div
@@ -185,13 +213,13 @@ function SlidePreview({
     >
       <BrowserChrome href={project.href} />
       <div className="absolute inset-x-0 bottom-0 top-9 overflow-hidden">
-        <motion.div style={{ y: panY }} className="relative h-[400%] w-full">
+        <motion.div style={{ y: panY, height: `${heightPct}%` }} className="relative w-full">
           <Image
             src={project.image}
             alt={`${project.title} website`}
             fill
             sizes="(max-width: 1279px) 100vw, 720px"
-            className="object-cover object-top"
+            className="object-fill"
             priority={index === 0}
           />
         </motion.div>
@@ -250,7 +278,7 @@ function ProjectList() {
                   alt={`${project.title} website`}
                   fill
                   sizes="100vw"
-                  className="object-cover object-top"
+                  className="object-fill"
                   priority={i === 0}
                 />
               </div>

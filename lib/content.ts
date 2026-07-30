@@ -61,22 +61,60 @@ export interface Project {
 }
 
 /**
- * The five sites, in the order they appear.
+ * The live sites, in display order. Everything here was read off the running
+ * site, so the descriptions are accurate rather than guessed.
  *
- * TODO (Saad): the descriptions below are drafts. Only the Marbio one is based
- * on the live site; the rest were written without access (this environment
- * cannot reach those domains), so correct anything that is wrong rather than
- * assuming it reads right.
+ * Screenshots come from `npm run capture:projects`, which reads this list.
+ *
+ * Not included yet: everstead.llc, which would not resolve when this was
+ * written, so there is nothing to capture or describe. Add an entry once it is
+ * reachable and re-run the capture.
  */
 export const projects: Project[] = [
   {
-    slug: 'everstead',
-    category: 'Web Design & Development',
-    title: 'Everstead',
+    slug: 'carently',
+    category: 'Booking Platform',
+    title: 'Carently',
     description:
-      'Design and build of the company site, from layout and content structure through to a responsive front-end and launch.',
-    image: '/projects/everstead.jpg',
-    href: 'https://www.everstead.llc/',
+      'Car rental platform for Morocco. Visitors browse the fleet, see featured vehicles and reviews, and book through a guided flow, with a separate sign-up path for partners listing their own cars.',
+    image: '/projects/carently.jpg',
+    href: 'https://www.carently.net/',
+  },
+  {
+    slug: 'streamelite',
+    category: 'Subscription Site, Next.js',
+    title: 'StreamElite',
+    description:
+      'Subscription site for a streaming service, built in Next.js and served in French. Channel browser, tiered pricing, blog and FAQ, all pointed at getting a visitor to a plan.',
+    image: '/projects/streamelite.jpg',
+    href: 'https://streamelite-two.vercel.app/',
+  },
+  {
+    slug: 'acscripts',
+    category: 'E-commerce, Next.js',
+    title: 'ACScripts',
+    description:
+      'Storefront for a premium software catalogue, covering individual products, bundles, custom-work enquiries and customer accounts behind a login.',
+    image: '/projects/acscripts.jpg',
+    href: 'https://acsripts.vercel.app/',
+  },
+  {
+    slug: 'acpins',
+    category: 'E-commerce, Next.js',
+    title: 'ACPins',
+    description:
+      'Storefront for digital game cards, top-ups and subscriptions in Morocco, priced in dirhams with codes delivered over WhatsApp. Spans gift cards, pins, subscriptions and game keys.',
+    image: '/projects/acpins.jpg',
+    href: 'https://ac-pins.vercel.app/',
+  },
+  {
+    slug: 'acpeds',
+    category: 'Catalogue, Next.js',
+    title: 'ACPeds',
+    description:
+      'Catalogue for a large library of custom character models, split by category so an image-heavy collection stays quick to scan. Served in French.',
+    image: '/projects/acpeds.jpg',
+    href: 'https://ac-peds.vercel.app/',
   },
   {
     slug: 'marbio',
@@ -86,33 +124,6 @@ export const projects: Project[] = [
       'Corporate site for a vaccine bioproduction company, covering governance, partners, services and production across a deep multi-section structure. Built on WordPress, in French.',
     image: '/projects/marbio.jpg',
     href: 'https://marbio.com/',
-  },
-  {
-    slug: 'ac-scripts',
-    category: 'E-commerce, Product Catalogue',
-    title: 'AC Scripts',
-    description:
-      'Storefront for a digital product catalogue, with product pages, previews and a purchase flow designed to keep browsing quick.',
-    image: '/projects/ac-scripts.jpg',
-    href: 'https://scripts.aczone.xyz/',
-  },
-  {
-    slug: 'ac-peds',
-    category: 'Catalogue, Multilingual',
-    title: 'AC Peds',
-    description:
-      'A browsable catalogue site served in more than one language, built so a large, image-heavy library stays fast and easy to scan.',
-    image: '/projects/ac-peds.jpg',
-    href: 'https://peds.aczone.xyz/fr',
-  },
-  {
-    slug: 'premium-stream-iptv',
-    category: 'Web Design & Development',
-    title: 'Premium Stream IPTV',
-    description:
-      'Marketing and subscription site for a streaming service, with plan comparison and a sign-up path as the primary journey.',
-    image: '/projects/premium-stream-iptv.jpg',
-    href: 'https://www.premiumstreamiptv.com/',
   },
 ]
 

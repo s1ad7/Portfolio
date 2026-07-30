@@ -14,7 +14,7 @@
  * install with:  npx playwright install chromium
  */
 import { chromium } from 'playwright'
-import { mkdirSync, existsSync } from 'node:fs'
+import { mkdirSync, existsSync, writeFileSync } from 'node:fs'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
@@ -59,6 +59,14 @@ async function launch() {
 const browser = await launch()
 let ok = 0
 let failed = 0
+
+/* Records each capture's pixel dimensions. The showcase needs them to size the
+   pan: pages differ wildly in length (1.5:1 to over 4:1 here), so a hardcoded
+   pan distance either stops short of the footer or races past it. */
+const manifestPath = join(outDir, 'manifest.json')
+const manifest = existsSync(manifestPath)
+  ? JSON.parse(readFileSync(manifestPath, 'utf8'))
+  : {}
 
 for (const { slug, href } of targets) {
   const ctx = await browser.newContext({
@@ -107,7 +115,8 @@ for (const { slug, href } of targets) {
       width: document.documentElement.scrollWidth,
       height: document.body.scrollHeight,
     }))
-    console.log(`ok  ${width}x${height}`)
+    manifest[slug] = { width, height }
+    console.log(`ok  ${width}x${height}  (${(height / width).toFixed(2)}:1)`)
     ok++
   } catch (e) {
     console.log(`FAILED  ${String(e).split('\n')[0].slice(0, 90)}`)
@@ -118,5 +127,8 @@ for (const { slug, href } of targets) {
 }
 
 await browser.close()
+
+writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n')
 console.log(`\n${ok} captured, ${failed} failed -> public/projects/`)
+console.log('manifest written -> public/projects/manifest.json')
 if (failed) process.exit(1)
