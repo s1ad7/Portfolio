@@ -130,7 +130,16 @@ function PinnedShowcase() {
 }
 
 /** Crossfade used when the active project changes. */
-const CROSSFADE = { duration: 0.45, ease: [0.44, 0, 0.56, 1] as const }
+const CROSSFADE = { duration: 0.35, ease: [0.44, 0, 0.56, 1] as const }
+
+/**
+ * Fraction of each slide held still at its top and again at its bottom, before
+ * and after the pan. This is what stops a project appearing mid-page: the
+ * crossfade gets time to finish while the incoming site is still showing its
+ * header, and the outgoing one rests on its footer rather than being yanked
+ * away mid-scroll.
+ */
+const HOLD = 0.18
 
 function SlideText({
   project,
@@ -196,12 +205,21 @@ function SlidePreview({
 }) {
   /* The pan stays scroll-scrubbed: transforms interpolate correctly, and this
      is the effect worth scrubbing. Distance is derived per image so every site
-     travels from its own header to its own footer across one slide. */
+     travels from its own header to its own footer across one slide.
+     
+     The two HOLD stops are the brake. Without them the pan is moving the
+     instant a slide becomes active, so by the time the crossfade finishes the
+     next site is already scrolled halfway down and you never see its header.
+     Holding at each end means every project settles on its top, pans, then
+     settles on its footer, in both scroll directions. */
   const { heightPct, travelPct } = panGeometry(project.slug)
+  const start = index / count
+  const end = (index + 1) / count
+  const hold = (end - start) * HOLD
   const panY = useTransform(
     progress,
-    [index / count, (index + 1) / count],
-    ['0%', `-${travelPct.toFixed(2)}%`]
+    [start, start + hold, end - hold, end],
+    ['0%', '0%', `-${travelPct.toFixed(2)}%`, `-${travelPct.toFixed(2)}%`]
   )
 
   return (

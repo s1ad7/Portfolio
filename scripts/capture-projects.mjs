@@ -56,6 +56,9 @@ async function launch() {
   }
 }
 
+/** One place defining the capture viewport, since the clip below depends on it. */
+const VIEWPORT = { width: 1440, height: 900 }
+
 const browser = await launch()
 let ok = 0
 let failed = 0
@@ -70,7 +73,7 @@ const manifest = existsSync(manifestPath)
 
 for (const { slug, href } of targets) {
   const ctx = await browser.newContext({
-    viewport: { width: 1440, height: 900 },
+    viewport: VIEWPORT,
     deviceScaleFactor: 1,
     /* Many sites skip their scroll-reveal animations entirely under this, which
        renders content in its final state. Cheapest possible fix for reveals,
@@ -133,15 +136,24 @@ for (const { slug, href } of targets) {
       return n
     })
 
-    // 2. Collapse animation and transition timings so anything triggered
-    //    completes instantly rather than being caught mid-flight.
+    /* 2. Collapse animation and transition timings so anything triggered
+     *    completes instantly rather than being caught mid-flight, and clip
+     *    horizontal overflow.
+     *
+     *    The overflow clip matters: a page that scrolls sideways even slightly
+     *    makes fullPage capture at its scrollWidth, so acscripts and acpins came
+     *    out 1800px wide instead of 1440. Squeezing that into the preview frame
+     *    left a wide empty margin down the right of both. */
     await page.addStyleTag({
-      content: `*,*::before,*::after{
-        animation-duration:0s !important;
-        animation-delay:0s !important;
-        transition-duration:0s !important;
-        transition-delay:0s !important;
-      }`,
+      content: `
+        *,*::before,*::after{
+          animation-duration:0s !important;
+          animation-delay:0s !important;
+          transition-duration:0s !important;
+          transition-delay:0s !important;
+        }
+        html,body{ overflow-x:hidden !important; max-width:100vw !important; }
+      `,
     })
 
     /* 3. Scroll, so lazy images load and scroll-triggered reveals fire.
@@ -164,8 +176,27 @@ for (const { slug, href } of targets) {
 
     await sweep()
     await page.waitForLoadState('networkidle', { timeout: 20000 }).catch(() => {})
+
+    // Promote every lazy image, then wait for them all to decode. Without this
+    // the taller pages capture half-painted images.
+    await page.evaluate(() => {
+      for (const img of document.images) {
+        img.loading = 'eager'
+        img.removeAttribute('data-src-hold')
+      }
+    })
+    await page
+      .evaluate(() =>
+        Promise.all(
+          [...document.images]
+            .filter((i) => !i.complete)
+            .map((i) => i.decode().catch(() => {}))
+        )
+      )
+      .catch(() => {})
+
     await sweep()
-    await page.waitForTimeout(900)
+    await page.waitForTimeout(1200)
 
     /* 4. Force anything still hidden into its revealed state. Sites whose
      *    reveals are driven by an IntersectionObserver that only fires once,
@@ -232,18 +263,29 @@ for (const { slug, href } of targets) {
     await page.waitForTimeout(900)
     process.stdout.write(`[-${dismissed} overlay, +${revealed} shown] `)
 
-    // JPEG, not PNG: these are photographic full-page shots and PNG runs to
-    // several MB each, which is a lot of repo weight for no visible gain.
+    /* Clip to the viewport width explicitly.
+     *
+     * A page that scrolls sideways even slightly captures at its scrollWidth,
+     * so acscripts and acpins came out 1800px wide rather than 1440 and the
+     * empty overflow showed as a wide margin down the right of the preview.
+     * CSS overflow-x:hidden does not reliably change what fullPage measures, so
+     * the clip is applied to the shot itself.
+     *
+     * JPEG rather than PNG: these are photographic full-page shots, and PNG ran
+     * to several MB each for no visible gain. */
+    const pageHeight = await page.evaluate(() =>
+      Math.max(document.body.scrollHeight, document.documentElement.scrollHeight)
+    )
+    const width = VIEWPORT.width
+    const height = pageHeight
+
     await page.screenshot({
       path: join(outDir, `${slug}.jpg`),
       fullPage: true,
+      clip: { x: 0, y: 0, width, height },
       type: 'jpeg',
       quality: 80,
     })
-    const { width, height } = await page.evaluate(() => ({
-      width: document.documentElement.scrollWidth,
-      height: document.body.scrollHeight,
-    }))
     manifest[slug] = { width, height }
     console.log(`ok  ${width}x${height}  (${(height / width).toFixed(2)}:1)`)
     ok++
