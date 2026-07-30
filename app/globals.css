@@ -1,63 +1,150 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-:root {
-  --ring: 0 0% 100%;
+/* ---------------------------------------------------------------------------
+   Design tokens, measured from the reference site (paul-hahn.com).
+   Tailwind v4 is CSS-first: everything in @theme becomes both a CSS variable
+   and a utility class, so this block is the single source of truth for colour,
+   type and shadow. There is no tailwind.config.js.
+--------------------------------------------------------------------------- */
+@theme {
+  /* Colour. Near-monochrome by design: the blue is a highlight, not a theme. */
+  --color-bg: #ffffff;
+  --color-panel: #f2f2f2;
+  --color-panel-2: #e8e8e8;
+  --color-line: #d1d1d1;
+  --color-ink: #191d21;
+  --color-accent: #4d80d1;
+
+  /* Translucent fills for the blurred nav. */
+  --color-glass: rgb(255 255 255 / 0.7);
+  --color-glass-panel: rgb(242 242 242 / 0.7);
+
+  /* Type. Bricolage Grotesque 600 for the display and every heading, Poppins
+     for body copy, nav, badges and eyebrow labels. Measured off the reference:
+     h1 96px/-0.04em, h2 32px, h3 20px, body 16px/1.8. */
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+
+  /* The reference's scale, with tracking baked in per step: display sizes are
+     tightened, small label sizes are left alone. */
+  --text-2xl: 1.375rem;
+  --text-4xl: 1.875rem;
+  --text-4xl--letter-spacing: -0.03em;
+  --text-5xl: 2rem;
+  --text-5xl--letter-spacing: -0.03em;
+  --text-6xl: 3rem;
+  --text-6xl--letter-spacing: -0.04em;
+  --text-7xl: 4.5rem;
+  --text-7xl--letter-spacing: -0.04em;
+  --text-8xl: 6rem;
+  --text-8xl--letter-spacing: -0.04em;
+
+  --radius-card: 1.25rem;
+  --radius-panel: 1.5rem;
+  /* The 40px radius shared by the nav bar and every section card. */
+  --radius-shell: 2.5rem;
+
+  /* The signature shadow is a three-stop ramp rather than one blur. That is
+     what gives the reference's cards their soft, grounded look. */
+  --shadow-ramp:
+    0 0.6px 0.6px -1.25px rgb(0 0 0 / 0.07), 0 2.29px 2.29px -2.5px rgb(0 0 0 / 0.06),
+    0 10px 10px -3.75px rgb(0 0 0 / 0.05);
+  --shadow-ramp-lg:
+    0 0.74px 0.74px -0.75px rgb(0 0 0 / 0.1), 0 2.02px 2.02px -1.5px rgb(0 0 0 / 0.09),
+    0 5.13px 5.13px -2.25px rgb(0 0 0 / 0.08), 0 16px 16px -3px rgb(0 0 0 / 0.05);
+  --shadow-ramp-accent:
+    0 0.6px 0.6px -1.25px rgb(77 128 209 / 0.4), 0 2.29px 2.29px -2.5px rgb(77 128 209 / 0.32),
+    0 10px 10px -3.75px rgb(77 128 209 / 0.24);
+
+  /* The reference's easing, used for every hover and colour transition. */
+  --ease-signature: cubic-bezier(0.44, 0, 0.56, 1);
 }
 
-html {
-  scroll-behavior: auto;
+@layer base {
+  /* Anchor offset lives on the sections themselves via `scroll-mt-28`. Setting
+     scroll-padding-top here as well would stack, landing anchors twice as far
+     down as intended. */
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  /* One consistent focus ring everywhere, in the accent colour. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: #fff;
+  }
 }
 
-body {
-  @apply bg-neutral-950 text-neutral-100 antialiased;
-  background-image: theme('backgroundImage.radial-faded');
+@layer components {
+  /* The dotted grid sitting behind the hero headline. */
+  .dot-grid {
+    background-image: radial-gradient(var(--color-line) 1.5px, transparent 1.5px);
+    background-size: 22px 22px;
+  }
+
+  /* Section label, e.g. "// PROJECTS". The reference sets these in the accent
+     blue at Poppins 14/600, which is where most of the colour on the page
+     comes from. */
+  .eyebrow {
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  /* Small uppercase label used for form fields and inline meta. */
+  .label-caps {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  }
+
+  /* Every section is a 40px-radius card inset from the viewport edges, sitting
+     on the white page. Alternating fills are what separate them. */
+  .shell {
+    margin-inline: 0.75rem;
+    border-radius: var(--radius-shell);
+  }
+
+  @media (width >= 48rem) {
+    .shell {
+      margin-inline: 1.5rem;
+    }
+  }
 }
 
-.glass {
-  @apply bg-white/5 border border-white/10 backdrop-blur-md shadow-soft;
-}
-
-.btn {
-  @apply inline-flex items-center gap-2 rounded-full px-5 py-2 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-brand-400;
-}
-
-.btn-primary {
-  @apply btn bg-brand-500 text-white hover:bg-brand-600;
-}
-
-.btn-ghost {
-  @apply btn bg-white/0 text-white hover:bg-white/10;
-}
-
-.container-pro {
-  @apply mx-auto max-w-[80rem] xl:max-w-[90rem] 2xl:max-w-[100rem] px-4 sm:px-6 lg:px-8;
-}
-
-.section {
-  @apply container-pro py-16 sm:py-20 lg:py-24 flex flex-col items-center gap-8 scroll-mt-28;
-}
-
-.section-hero {
-  @apply container-pro min-h-screen py-20 sm:py-24 flex items-center scroll-mt-28;
-}
-
-.heading {
-  @apply text-3xl sm:text-4xl font-semibold tracking-tight text-white;
-}
-
-.subheading {
-  @apply mt-2 max-w-2xl text-neutral-300;
-}
-
+/* Honour the OS reduce-motion setting. Every animation here is either a CSS
+   transition or a framer-motion spring, and both are neutralised below;
+   components additionally read useReducedMotion() so scroll-reveals mount in
+   their final state rather than staying invisible. */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
 }
-.scrollbar-hide::-webkit-scrollbar{display:none}
-.scrollbar-hide{-ms-overflow-style:none;scrollbar-width:none}
