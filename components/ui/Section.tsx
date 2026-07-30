@@ -23,8 +23,10 @@ export function Container({
   children: ReactNode
   className?: string
 }) {
+  /* 1280 outer minus 40px gutters gives a 1200px measure, which is exactly the
+     content width the reference uses at 1440. */
   return (
-    <div className={`mx-auto w-full max-w-[1200px] px-6 md:px-10 ${className}`}>{children}</div>
+    <div className={`mx-auto w-full max-w-[1280px] px-6 md:px-10 ${className}`}>{children}</div>
   )
 }
 

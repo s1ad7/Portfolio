@@ -76,62 +76,67 @@ export function Navbar() {
       <header className="fixed inset-x-0 top-0 z-50 px-3 md:px-6">
         <nav
           aria-label="Main"
-          className="flex h-16 w-full items-center justify-between gap-6 rounded-b-shell bg-glass px-5 shadow-ramp backdrop-blur-xl md:h-20 md:px-10"
+          className="rounded-b-shell bg-glass shadow-ramp backdrop-blur-xl"
         >
-          <Wordmark />
+          {/* Wordmark left, then links and the CTA as one right-aligned group on
+              a shared 32px rhythm. The reference groups them together rather
+              than centring the links. */}
+          <div className="mx-auto flex h-16 w-full max-w-[1280px] items-center justify-between gap-6 px-6 md:h-20 md:px-10">
+            <Wordmark />
 
-          <ul className="hidden items-center gap-8 md:flex">
-            {nav.map((item) => {
-              const isActive = active === item.href.slice(1)
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    aria-current={isActive ? 'true' : undefined}
-                    /* The reference has no active indicator at all, so scroll-spy
-                       is expressed purely as ink weight. A coloured underline
-                       read as noise against how restrained the rest of the
-                       chrome is. */
-                    className={`text-base transition-colors duration-200 ease-signature hover:text-ink ${
-                      isActive ? 'text-ink' : 'text-muted'
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              )
-            })}
-          </ul>
+            <div className="flex items-center gap-8">
+              <ul className="hidden items-center gap-8 md:flex">
+                {nav.map((item) => {
+                  const isActive = active === item.href.slice(1)
+                  return (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        aria-current={isActive ? 'true' : undefined}
+                        /* The reference has no active indicator at all, so
+                           scroll-spy is expressed purely as ink weight. A
+                           coloured underline read as noise against how
+                           restrained the rest of the chrome is. */
+                        className={`text-base transition-colors duration-200 ease-signature hover:text-ink ${
+                          isActive ? 'text-ink' : 'text-muted'
+                        }`}
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
 
-          <div className="flex items-center gap-3">
-            {/* Wrapped rather than given `hidden` directly: Pill's base class
-                already sets `inline-flex`, and two display utilities on one
-                element resolve by stylesheet order, not class order. */}
-            <span className="hidden md:block">
-              <Pill href="#contact" variant="dark">
-                Contact
-              </Pill>
-            </span>
+              {/* Wrapped rather than given `hidden` directly: Pill's base class
+                  already sets `inline-flex`, and two display utilities on one
+                  element resolve by stylesheet order, not class order. */}
+              <span className="hidden md:block">
+                <Pill href="#contact" variant="dark">
+                  Contact
+                </Pill>
+              </span>
 
-            <button
-              type="button"
-              onClick={() => setOpen((v) => !v)}
-              aria-expanded={open}
-              aria-controls="mobile-menu"
-              aria-label={open ? 'Close menu' : 'Open menu'}
-              className="flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-full border border-line bg-white md:hidden"
-            >
-              <motion.span
-                animate={open ? { rotate: 45, y: 3.5 } : { rotate: 0, y: 0 }}
-                transition={{ duration: 0.2, ease }}
-                className="block h-[1.5px] w-4 rounded-full bg-ink"
-              />
-              <motion.span
-                animate={open ? { rotate: -45, y: -3.5 } : { rotate: 0, y: 0 }}
-                transition={{ duration: 0.2, ease }}
-                className="block h-[1.5px] w-4 rounded-full bg-ink"
-              />
-            </button>
+              <button
+                type="button"
+                onClick={() => setOpen((v) => !v)}
+                aria-expanded={open}
+                aria-controls="mobile-menu"
+                aria-label={open ? 'Close menu' : 'Open menu'}
+                className="flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-full border border-line bg-white md:hidden"
+              >
+                <motion.span
+                  animate={open ? { rotate: 45, y: 3.5 } : { rotate: 0, y: 0 }}
+                  transition={{ duration: 0.2, ease }}
+                  className="block h-[1.5px] w-4 rounded-full bg-ink"
+                />
+                <motion.span
+                  animate={open ? { rotate: -45, y: -3.5 } : { rotate: 0, y: 0 }}
+                  transition={{ duration: 0.2, ease }}
+                  className="block h-[1.5px] w-4 rounded-full bg-ink"
+                />
+              </button>
+            </div>
           </div>
         </nav>
       </header>

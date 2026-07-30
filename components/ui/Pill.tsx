@@ -4,9 +4,13 @@ import type { ReactNode } from 'react'
 type Variant = 'badge' | 'dark' | 'light'
 
 const variants: Record<Variant, string> = {
-  /** The hero badge: soft grey fill with a hairline outline, wide-tracked caps. */
+  /**
+   * The hero badge. The reference fills this with a top-to-bottom
+   * #f2f2f2 -> #e6e6e6 gradient rather than a flat tint, which is what gives it
+   * the slightly recessed look.
+   */
   badge:
-    'bg-panel-2/70 border border-line/80 text-ink text-[0.8125rem] md:text-base tracking-[0.09em] uppercase px-5 py-2',
+    'bg-gradient-to-b from-panel to-[#e6e6e6] border border-line/70 text-ink text-[0.8125rem] md:text-base tracking-[0.09em] uppercase px-5 py-2',
   /** The primary call to action: solid near-black capsule. */
   dark: 'bg-ink text-white text-sm font-medium px-6 py-3 hover:bg-ink/85 shadow-ramp',
   /** Secondary capsule on tinted panels. */

@@ -106,10 +106,17 @@
 }
 
 @layer components {
-  /* The dotted grid sitting behind the hero headline. */
+  /* The dotted grid behind the hero headline. Measured off the reference at
+     2x zoom: large soft blobs roughly 10px across on a 40px grid, at very low
+     contrast. Fine hard dots read as speckle and look nothing like it. */
   .dot-grid {
-    background-image: radial-gradient(var(--color-line) 1.5px, transparent 1.5px);
-    background-size: 22px 22px;
+    background-image: radial-gradient(
+      circle 5px at 50% 50%,
+      rgb(25 29 33 / 0.07) 0%,
+      rgb(25 29 33 / 0.045) 55%,
+      transparent 100%
+    );
+    background-size: 40px 40px;
   }
 
   /* Section label, e.g. "// PROJECTS". The reference sets these in the accent
