@@ -14,7 +14,7 @@
  * install with:  npx playwright install chromium
  */
 import { chromium } from 'playwright'
-import { mkdirSync, existsSync, writeFileSync } from 'node:fs'
+import { mkdirSync, existsSync, writeFileSync, rmSync } from 'node:fs'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
@@ -258,6 +258,21 @@ for (const { slug, href } of targets) {
 await browser.close()
 
 writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n')
+
+/* Drop Next's optimised-image cache.
+ *
+ * next/image caches derivatives under .next/cache/images keyed by the source
+ * path, and these screenshots keep the same path every time they are
+ * recaptured. The cache therefore keeps serving the previous shot, and it looks
+ * as though the capture silently did nothing. Clearing it here means a
+ * recapture is always visible after a dev-server restart. */
+const imageCache = join(root, '.next', 'cache', 'images')
+if (existsSync(imageCache)) {
+  rmSync(imageCache, { recursive: true, force: true })
+  console.log('cleared .next/cache/images')
+}
+
 console.log(`\n${ok} captured, ${failed} failed -> public/projects/`)
 console.log('manifest written -> public/projects/manifest.json')
+console.log('\nRestart the dev server and hard-reload (Ctrl+Shift+R) to see the new shots.')
 if (failed) process.exit(1)
