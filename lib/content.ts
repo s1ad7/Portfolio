@@ -44,42 +44,75 @@ export const hero = {
 } as const
 
 export interface Project {
-  /** Small label above the title, e.g. "Web App, Odoo Module". */
+  /** Short slug. Also the screenshot filename: /projects/<slug>.png */
+  slug: string
+  /** Small label above the title, e.g. "Web Design & Development". */
   category: string
   title: string
   description: string
-  /** Path under /public. 16:10 renders best in the card. */
+  /**
+   * Tall full-page screenshot under /public/projects. The showcase pans down it
+   * as you scroll, so height matters: aim for at least 3x the width. Generate
+   * them with `npm run capture:projects`.
+   */
   image: string
-  /** Optional outbound link. Cards without one render as non-interactive. */
-  href?: string
+  /** Live site. */
+  href: string
 }
 
 /**
- * TODO: replace all three with real projects from the CV. The card layout is
- * count-agnostic, so entries can be appended one at a time without touching
- * any component.
+ * The five sites, in the order they appear.
+ *
+ * TODO (Saad): the descriptions below are drafts. Only the Marbio one is based
+ * on the live site; the rest were written without access (this environment
+ * cannot reach those domains), so correct anything that is wrong rather than
+ * assuming it reads right.
  */
 export const projects: Project[] = [
   {
-    category: 'Web App, Full-Stack',
-    title: 'Placeholder Project One',
+    slug: 'everstead',
+    category: 'Web Design & Development',
+    title: 'Everstead',
     description:
-      'Replace this with a real project. Describe the problem it solved, the stack you reached for, and what you personally built.',
-    image: '/projects/placeholder-1.png',
+      'Design and build of the company site, from layout and content structure through to a responsive front-end and launch.',
+    image: '/projects/everstead.jpg',
+    href: 'https://www.everstead.llc/',
   },
   {
-    category: 'Odoo Module, ERP',
-    title: 'Placeholder Project Two',
+    slug: 'marbio',
+    category: 'WordPress, Corporate Site',
+    title: 'Marbio',
     description:
-      'Replace this with a real project. A custom Odoo module is a good fit here: name the business process it automated and the outcome.',
-    image: '/projects/placeholder-2.png',
+      'Corporate site for a vaccine bioproduction company, covering governance, partners, services and production across a deep multi-section structure. Built on WordPress, in French.',
+    image: '/projects/marbio.jpg',
+    href: 'https://marbio.com/',
   },
   {
-    category: 'Web Design, Front-End',
-    title: 'Placeholder Project Three',
+    slug: 'ac-scripts',
+    category: 'E-commerce, Product Catalogue',
+    title: 'AC Scripts',
     description:
-      'Replace this with a real project. Front-end work reads best when you mention the interface challenge and how you resolved it.',
-    image: '/projects/placeholder-3.png',
+      'Storefront for a digital product catalogue, with product pages, previews and a purchase flow designed to keep browsing quick.',
+    image: '/projects/ac-scripts.jpg',
+    href: 'https://scripts.aczone.xyz/',
+  },
+  {
+    slug: 'ac-peds',
+    category: 'Catalogue, Multilingual',
+    title: 'AC Peds',
+    description:
+      'A browsable catalogue site served in more than one language, built so a large, image-heavy library stays fast and easy to scan.',
+    image: '/projects/ac-peds.jpg',
+    href: 'https://peds.aczone.xyz/fr',
+  },
+  {
+    slug: 'premium-stream-iptv',
+    category: 'Web Design & Development',
+    title: 'Premium Stream IPTV',
+    description:
+      'Marketing and subscription site for a streaming service, with plan comparison and a sign-up path as the primary journey.',
+    image: '/projects/premium-stream-iptv.jpg',
+    href: 'https://www.premiumstreamiptv.com/',
   },
 ]
 

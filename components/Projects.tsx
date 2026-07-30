@@ -1,22 +1,32 @@
-import { projects, projectsSection } from '@/lib/content'
-import { ProjectCard } from './ProjectCard'
-import { Section } from './ui/Section'
+import { projectsSection } from '@/lib/content'
+import { ProjectShowcase } from './ProjectShowcase'
+import { Container } from './ui/Section'
+import { Eyebrow } from './ui/Eyebrow'
+import { Reveal } from './ui/Reveal'
 
+/**
+ * Written out rather than using <Section> because the showcase needs the full
+ * width of the card and its own vertical rhythm: the pinned variant is several
+ * screens tall, so the usual `mt-16` spacing under the header does not apply.
+ *
+ * Note there is no `overflow-hidden` anywhere on the way down to the showcase.
+ * A sticky element stops sticking the moment any ancestor clips overflow, which
+ * is the usual reason a pinned section silently stops pinning.
+ */
 export function Projects() {
   return (
-    <Section
-      id="projects"
-      eyebrow={projectsSection.eyebrow}
-      heading={projectsSection.heading}
-      intro={projectsSection.intro}
-    >
-      {/* Two columns from md up. An odd final card simply spans one column and
-          sits left, which keeps the grid honest at any project count. */}
-      <div className="grid gap-6 md:grid-cols-2 md:gap-8">
-        {projects.map((project, i) => (
-          <ProjectCard key={project.title} project={project} index={i} />
-        ))}
+    <section id="projects" className="shell scroll-mt-28 bg-white pt-24 md:pt-32">
+      <Container>
+        <Reveal className="flex flex-col items-center gap-4 text-center">
+          <Eyebrow>{projectsSection.eyebrow}</Eyebrow>
+          <h2 className="max-w-3xl text-4xl md:text-5xl">{projectsSection.heading}</h2>
+          <p className="max-w-2xl text-base leading-[1.8] text-body">{projectsSection.intro}</p>
+        </Reveal>
+      </Container>
+
+      <div className="mt-16 md:mt-0">
+        <ProjectShowcase />
       </div>
-    </Section>
+    </section>
   )
 }
