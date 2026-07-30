@@ -20,7 +20,9 @@ export function About() {
             </Reveal>
 
             <Reveal delay={0.05}>
-              <h2 className="text-4xl md:text-5xl">
+              {/* Heavier than every other heading: w900 on the reference, 800 here as
+                  that is the heaviest weight Google Fonts ships for this family. */}
+              <h2 className="text-4xl font-extrabold md:text-5xl">
                 <span className="block">{about.headingLineOne}</span>
                 <span className="block text-faint">{about.headingLineTwo}</span>
               </h2>

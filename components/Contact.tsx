@@ -104,7 +104,7 @@ export function Contact() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="message" className="label-caps">
+              <label htmlFor="message" className="label-field">
                 {contactSection.fields.message}
               </label>
               <textarea
@@ -127,7 +127,7 @@ export function Contact() {
               <button
                 type="submit"
                 disabled={busy}
-                className="inline-flex items-center rounded-full bg-ink px-6 py-3 text-sm font-medium text-white shadow-ramp transition-colors duration-200 ease-signature hover:bg-ink/85 disabled:opacity-60"
+                className="inline-flex items-center rounded-full bg-ink-cta px-6 py-3 font-display text-sm font-semibold text-white shadow-ramp transition-colors duration-200 ease-signature hover:bg-ink-cta-hover disabled:opacity-60"
               >
                 {busy ? 'Sending…' : contactSection.submit}
               </button>
@@ -164,7 +164,7 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="label-caps">
+      <label htmlFor={id} className="label-field">
         {label}
       </label>
       <input

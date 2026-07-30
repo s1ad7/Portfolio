@@ -19,12 +19,12 @@ export const spring: Transition = {
 export const ease = [0.44, 0, 0.56, 1] as const
 
 /**
- * Fade and rise. The reference starts at opacity 0.001 rather than 0 so the
- * browser keeps the layer composited and the text does not re-rasterise
- * mid-animation.
+ * Fade and rise. Travel is 24px, measured by sampling a reveal on the reference
+ * frame by frame (see docs/reference-spec.md for the trace). The spring above
+ * fits that trace; only the distance was wrong here before.
  */
 export const reveal: Variants = {
-  hidden: { opacity: 0.001, y: 12 },
+  hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0, transition: spring },
 }
 

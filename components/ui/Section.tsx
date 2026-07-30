@@ -56,7 +56,7 @@ export function Section({
           <Eyebrow>{eyebrow}</Eyebrow>
           <h2 className="max-w-3xl text-4xl md:text-5xl">{heading}</h2>
           {intro && (
-            <p className="max-w-2xl text-base leading-[1.8] text-muted">{intro}</p>
+            <p className="max-w-2xl text-base leading-[1.8] text-body">{intro}</p>
           )}
         </Reveal>
         <div className="mt-16 md:mt-20">{children}</div>

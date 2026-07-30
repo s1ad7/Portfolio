@@ -49,7 +49,7 @@ export function Faq() {
                       {String(i + 1).padStart(2, '0')}.
                     </span>
 
-                    <span className="flex-1 text-base font-medium">
+                    <span className="flex-1 font-body text-base font-medium">
                       {item.question}
                     </span>
 

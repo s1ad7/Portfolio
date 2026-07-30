@@ -15,7 +15,7 @@ const variants: Record<Variant, string> = {
    * The primary call to action: solid near-black capsule. Bricolage Grotesque
    * 16px semibold with 12px/24px padding, measured off the reference's button.
    */
-  dark: 'bg-ink text-white font-display text-base font-semibold px-6 py-3 hover:bg-ink/85 shadow-ramp',
+  dark: 'bg-ink-cta text-white font-display text-base font-semibold px-6 py-3 hover:bg-ink-cta-hover shadow-ramp',
   /** Secondary capsule on tinted panels. */
   light:
     'bg-white text-ink font-display text-base font-semibold px-6 py-3 border border-line hover:bg-panel',

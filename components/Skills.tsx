@@ -79,7 +79,7 @@ export function Skills() {
               <SkillIcon name={card.icon} />
             </span>
 
-            <h3 className="text-xl">{card.title}</h3>
+            <h3 className="font-body text-base font-medium">{card.title}</h3>
             <p className="text-sm leading-relaxed text-muted">{card.body}</p>
 
             <ul className="mt-auto flex flex-wrap gap-2 pt-2">

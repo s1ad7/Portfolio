@@ -22,8 +22,15 @@
      mixes in oklab, which shifts this slightly-blue ink noticeably cooler; the
      reference uses plain sRGB alpha. */
   --color-muted: rgb(25 29 33 / 0.7);
-  --color-faint: rgb(25 29 33 / 0.55);
+  --color-faint: rgb(25 29 33 / 0.5);
   --color-wordmark: #5d6063;
+
+  /* The CTA capsule is #181818, which is deliberately not --color-ink, and it
+     lightens to #424242 on hover. Both measured off the reference. */
+  /* Solid grey used for section intro copy, distinct from --color-muted. */
+  --color-body: #3f444a;
+  --color-ink-cta: #181818;
+  --color-ink-cta-hover: #424242;
 
   /* Translucent fills for the blurred nav. */
   --color-glass: rgb(255 255 255 / 0.7);
@@ -34,14 +41,17 @@
      h1 96px/-0.04em, h2 32px, h3 20px, body 16px/1.8. */
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
   --font-body: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  /* Nav links only. The reference uses Work Sans 16/400 for these. */
+  --font-ui: var(--font-work-sans), ui-sans-serif, system-ui, sans-serif;
 
   /* The reference's scale, with tracking baked in per step: display sizes are
      tightened, small label sizes are left alone. */
   --text-2xl: 1.375rem;
   --text-4xl: 1.875rem;
   --text-4xl--letter-spacing: -0.03em;
+  /* 32px headings are set at normal tracking on the reference. Only the 96px
+     display is tightened. */
   --text-5xl: 2rem;
-  --text-5xl--letter-spacing: -0.03em;
   --text-6xl: 3rem;
   --text-6xl--letter-spacing: -0.04em;
   --text-7xl: 4.5rem;
@@ -67,6 +77,11 @@
   --shadow-portrait:
     0 1px 1px -0.5px rgb(0 0 0 / 0.1), 0 3px 3px -1px rgb(0 0 0 / 0.1),
     0 8px 8px -2px rgb(0 0 0 / 0.1), 0 20px 22px -4px rgb(0 0 0 / 0.12);
+  /* Card hover. The reference keeps the same ramp and only deepens it:
+     alpha 0.07 -> 0.25 with the spreads tightening a touch. */
+  --shadow-ramp-hover:
+    0 0.6px 0.6px -1.08px rgb(0 0 0 / 0.25), 0 2.29px 2.29px -2.17px rgb(0 0 0 / 0.22),
+    0 10px 10px -3.25px rgb(0 0 0 / 0.18);
   --shadow-ramp-accent:
     0 0.6px 0.6px -1.25px rgb(77 128 209 / 0.4), 0 2.29px 2.29px -2.5px rgb(77 128 209 / 0.32),
     0 10px 10px -3.75px rgb(77 128 209 / 0.24);
@@ -133,7 +148,15 @@
     color: var(--color-accent);
   }
 
-  /* Small uppercase label used for form fields and inline meta. */
+  /* Form field label: Poppins 12/400 at +0.03em in full ink, title case, as
+     measured on the reference. Not the uppercase treatment used for meta. */
+  .label-field {
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
+    color: var(--color-ink);
+  }
+
+  /* Small uppercase label used for inline meta. */
   .label-caps {
     font-size: 0.75rem;
     font-weight: 500;

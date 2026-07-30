@@ -85,16 +85,13 @@ export function Navbar() {
                       <Link
                         href={item.href}
                         aria-current={isActive ? 'true' : undefined}
-                        /* The reference has no active indicator at all, so
-                           scroll-spy is expressed purely as ink weight. A
-                           coloured underline read as noise against how
-                           restrained the rest of the chrome is. */
-                        /* Bricolage Grotesque 16px semibold, matching the CTA.
-                           These are set in the display face on the reference,
-                           not the body face, which is why they read heavier. */
-                        className={`font-display text-base font-semibold transition-colors duration-200 ease-signature hover:text-ink ${
-                          isActive ? 'text-ink' : 'text-muted'
-                        }`}
+                        /* Work Sans 16/400 at full ink, fading to 70% on
+                           hover. The reference loads a third family purely for
+                           these links, keeps them all at full ink, and has no
+                           active indicator, so scroll-spy is exposed only via
+                           aria-current for assistive tech rather than by
+                           dimming inactive items. */
+                        className="font-ui text-base text-ink transition-colors duration-200 ease-signature hover:text-muted"
                       >
                         {item.label}
                       </Link>
