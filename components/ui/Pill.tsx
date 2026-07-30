@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 
-type Variant = 'badge' | 'dark' | 'light'
+type Variant = 'badge' | 'dark' | 'light' | 'status'
 
 const variants: Record<Variant, string> = {
   /**
@@ -11,10 +11,16 @@ const variants: Record<Variant, string> = {
    */
   badge:
     'bg-gradient-to-b from-panel to-[#e6e6e6] border border-line/70 text-ink text-[0.8125rem] md:text-base tracking-[0.09em] uppercase px-5 py-2',
-  /** The primary call to action: solid near-black capsule. */
-  dark: 'bg-ink text-white text-sm font-medium px-6 py-3 hover:bg-ink/85 shadow-ramp',
+  /**
+   * The primary call to action: solid near-black capsule. Bricolage Grotesque
+   * 16px semibold with 12px/24px padding, measured off the reference's button.
+   */
+  dark: 'bg-ink text-white font-display text-base font-semibold px-6 py-3 hover:bg-ink/85 shadow-ramp',
   /** Secondary capsule on tinted panels. */
-  light: 'bg-white text-ink text-sm font-medium px-6 py-3 border border-line hover:bg-panel',
+  light:
+    'bg-white text-ink font-display text-base font-semibold px-6 py-3 border border-line hover:bg-panel',
+  /** Small status capsule sitting beside the wordmark. */
+  status: 'bg-white border border-line text-ink text-sm px-3 py-1.5',
 }
 
 type PillProps = {

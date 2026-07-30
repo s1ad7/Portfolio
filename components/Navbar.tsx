@@ -4,23 +4,10 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { ease } from '@/lib/motion'
-import { nav, site } from '@/lib/content'
+import { nav } from '@/lib/content'
+import { LanguageSwitcher } from './ui/LanguageSwitcher'
 import { Pill } from './ui/Pill'
-
-/** Two-line wordmark, tight leading. Used by the nav and the footer. */
-export function Wordmark({ className = '' }: { className?: string }) {
-  return (
-    <Link
-      href="#top"
-      className={`font-display text-[1.375rem] leading-[0.92] font-semibold tracking-[-0.03em] md:text-[1.5rem] ${className}`}
-      aria-label={`${site.name}, back to top`}
-    >
-      {/* Two-tone, as on the reference: given name in grey, surname in full ink. */}
-      <span className="block text-wordmark">{site.firstName}</span>
-      <span className="block text-ink">{site.lastName}</span>
-    </Link>
-  )
-}
+import { Wordmark } from './ui/Wordmark'
 
 export function Navbar() {
   const [open, setOpen] = useState(false)
@@ -82,7 +69,12 @@ export function Navbar() {
               a shared 32px rhythm. The reference groups them together rather
               than centring the links. */}
           <div className="mx-auto flex h-16 w-full max-w-[1280px] items-center justify-between gap-6 px-6 md:h-20 md:px-10">
-            <Wordmark />
+            <div className="flex items-center gap-4">
+              <Wordmark />
+              <span className="hidden sm:block">
+                <LanguageSwitcher />
+              </span>
+            </div>
 
             <div className="flex items-center gap-8">
               <ul className="hidden items-center gap-8 md:flex">
@@ -97,7 +89,10 @@ export function Navbar() {
                            scroll-spy is expressed purely as ink weight. A
                            coloured underline read as noise against how
                            restrained the rest of the chrome is. */
-                        className={`text-base transition-colors duration-200 ease-signature hover:text-ink ${
+                        /* Bricolage Grotesque 16px semibold, matching the CTA.
+                           These are set in the display face on the reference,
+                           not the body face, which is why they read heavier. */
+                        className={`font-display text-base font-semibold transition-colors duration-200 ease-signature hover:text-ink ${
                           isActive ? 'text-ink' : 'text-muted'
                         }`}
                       >

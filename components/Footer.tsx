@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { site } from '@/lib/content'
 import { Container } from './ui/Section'
-import { Wordmark } from './Navbar'
+import { Wordmark } from './ui/Wordmark'
 
 const social = [
   { label: 'GitHub', href: site.links.github },
