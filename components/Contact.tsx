@@ -10,7 +10,7 @@ import { Section } from './ui/Section'
 type Errors = Partial<Record<'name' | 'email' | 'message', string>>
 
 const inputClasses =
-  'w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-ink placeholder:text-ink/35 transition-colors duration-200 ease-signature focus:border-accent focus-visible:outline-none'
+  'w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-ink placeholder:text-faint transition-colors duration-200 ease-signature focus:border-accent focus-visible:outline-none'
 
 export function Contact() {
   const [errors, setErrors] = useState<Errors>({})
@@ -132,7 +132,7 @@ export function Contact() {
                 {busy ? 'Sending…' : contactSection.submit}
               </button>
 
-              <p className="text-sm text-ink/50">
+              <p className="text-sm text-faint">
                 or{' '}
                 <a
                   href={`mailto:${site.email}`}

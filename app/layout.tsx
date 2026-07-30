@@ -35,8 +35,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={`${bricolage.variable} ${poppins.variable} font-body`}>
+    /* The font variables must land on <html>, not <body>. Tailwind emits the
+       @theme tokens (--font-display, --font-body) onto :root, and those tokens
+       reference these variables. Defined only on <body>, they are undefined at
+       :root, which makes the whole token invalid and silently drops every
+       heading and paragraph back to the default system sans. */
+    <html lang="en" className={`${bricolage.variable} ${poppins.variable}`}>
+      <body className="font-body">
         <SmoothScroll />
         {children}
       </body>

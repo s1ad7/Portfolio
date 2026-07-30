@@ -67,14 +67,14 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
             <motion.span
               variants={{ hover: { x: 3, y: -3 } }}
               transition={{ duration: 0.25, ease }}
-              className="text-ink/40 group-hover:text-accent"
+              className="text-faint group-hover:text-accent"
             >
               <ArrowIcon />
             </motion.span>
           )}
         </h3>
 
-        <p className="text-sm leading-relaxed text-ink/60">{project.description}</p>
+        <p className="text-sm leading-relaxed text-muted">{project.description}</p>
       </div>
     </motion.div>
   )

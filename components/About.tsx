@@ -22,12 +22,12 @@ export function About() {
             <Reveal delay={0.05}>
               <h2 className="text-4xl md:text-5xl">
                 <span className="block">{about.headingLineOne}</span>
-                <span className="block text-ink/40">{about.headingLineTwo}</span>
+                <span className="block text-faint">{about.headingLineTwo}</span>
               </h2>
             </Reveal>
 
             <Reveal delay={0.1} className="flex flex-col items-start gap-6">
-              <p className="max-w-xl text-base leading-relaxed text-ink/70">
+              <p className="max-w-xl text-base leading-relaxed text-muted">
                 {about.paragraphs[0]}
               </p>
 
@@ -36,7 +36,7 @@ export function About() {
                 {about.badge}
               </span>
 
-              <p className="max-w-xl text-base leading-relaxed text-ink/70">
+              <p className="max-w-xl text-base leading-relaxed text-muted">
                 {about.paragraphs[1]}
               </p>
             </Reveal>
@@ -58,7 +58,7 @@ export function About() {
                     </span>
                     <h3 className="text-lg">{item.title}</h3>
                   </div>
-                  <p className="text-sm leading-relaxed text-ink/60">{item.body}</p>
+                  <p className="text-sm leading-relaxed text-muted">{item.body}</p>
                 </li>
               ))}
             </ul>

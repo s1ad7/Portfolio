@@ -45,7 +45,7 @@ export function Faq() {
                     onClick={() => setOpen(isOpen ? null : i)}
                     className="flex w-full items-center gap-4 py-6 text-left transition-colors duration-200 ease-signature hover:text-accent"
                   >
-                    <span className="text-xs font-semibold text-ink/35">
+                    <span className="text-xs font-semibold text-faint">
                       {String(i + 1).padStart(2, '0')}.
                     </span>
 
@@ -78,7 +78,7 @@ export function Faq() {
                       transition={{ duration: 0.3, ease }}
                       className="overflow-hidden"
                     >
-                      <p className="pb-6 pl-8 text-sm leading-relaxed text-ink/60 md:pl-9">
+                      <p className="pb-6 pl-8 text-sm leading-relaxed text-muted md:pl-9">
                         {item.answer}
                       </p>
                     </motion.div>

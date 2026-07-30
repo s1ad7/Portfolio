@@ -15,6 +15,13 @@
   --color-ink: #191d21;
   --color-accent: #4d80d1;
 
+  /* Explicit alpha variants rather than Tailwind's `/70` modifier. The modifier
+     mixes in oklab, which shifts this slightly-blue ink noticeably cooler; the
+     reference uses plain sRGB alpha. */
+  --color-muted: rgb(25 29 33 / 0.7);
+  --color-faint: rgb(25 29 33 / 0.55);
+  --color-wordmark: #5d6063;
+
   /* Translucent fills for the blurred nav. */
   --color-glass: rgb(255 255 255 / 0.7);
   --color-glass-panel: rgb(242 242 242 / 0.7);
@@ -52,6 +59,11 @@
   --shadow-ramp-lg:
     0 0.74px 0.74px -0.75px rgb(0 0 0 / 0.1), 0 2.02px 2.02px -1.5px rgb(0 0 0 / 0.09),
     0 5.13px 5.13px -2.25px rgb(0 0 0 / 0.08), 0 16px 16px -3px rgb(0 0 0 / 0.05);
+  /* The inline hero portrait carries a heavier ramp than the cards: on the
+     reference it lifts clearly off the panel. */
+  --shadow-portrait:
+    0 1px 1px -0.5px rgb(0 0 0 / 0.1), 0 3px 3px -1px rgb(0 0 0 / 0.1),
+    0 8px 8px -2px rgb(0 0 0 / 0.1), 0 20px 22px -4px rgb(0 0 0 / 0.12);
   --shadow-ramp-accent:
     0 0.6px 0.6px -1.25px rgb(77 128 209 / 0.4), 0 2.29px 2.29px -2.5px rgb(77 128 209 / 0.32),
     0 10px 10px -3.75px rgb(77 128 209 / 0.24);
@@ -117,7 +129,7 @@
     font-weight: 500;
     letter-spacing: 0.09em;
     text-transform: uppercase;
-    color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+    color: var(--color-faint);
   }
 
   /* Every section is a 40px-radius card inset from the viewport edges, sitting

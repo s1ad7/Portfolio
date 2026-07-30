@@ -15,7 +15,7 @@ function ScrollCue() {
       initial={reduced ? undefined : { opacity: 0.001, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ ...spring, delay: reduced ? 0 : 2.5 }}
-      className="flex flex-col items-center text-ink/30"
+      className="flex flex-col items-center text-faint"
       aria-hidden="true"
     >
       {[0, 1].map((i) => (
@@ -92,7 +92,7 @@ export function Hero() {
             /* Sized to the line box rather than the cap height, which is what
                makes it read as part of the headline. 12px radius, white frame,
                layered shadow, as measured on the reference. */
-            className="relative inline-block h-[1.5em] w-[1.44em] shrink-0 overflow-hidden rounded-[0.13em] border-[0.04em] border-white bg-white shadow-ramp-lg"
+            className="relative inline-block h-[1.5em] w-[1.44em] shrink-0 overflow-hidden rounded-[0.13em] border-[0.045em] border-white bg-white shadow-portrait"
           >
             <Image
               src="/portrait.png"
@@ -109,7 +109,7 @@ export function Hero() {
 
         <motion.p
           {...rise(0.25)}
-          className="max-w-xl text-base leading-[1.8] text-ink/70"
+          className="max-w-xl text-base leading-[1.8] text-muted"
         >
           {hero.subline}
         </motion.p>

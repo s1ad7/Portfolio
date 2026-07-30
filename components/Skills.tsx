@@ -80,13 +80,13 @@ export function Skills() {
             </span>
 
             <h3 className="text-xl">{card.title}</h3>
-            <p className="text-sm leading-relaxed text-ink/60">{card.body}</p>
+            <p className="text-sm leading-relaxed text-muted">{card.body}</p>
 
             <ul className="mt-auto flex flex-wrap gap-2 pt-2">
               {card.tags.map((tag) => (
                 <li
                   key={tag}
-                  className="rounded-full border border-line bg-panel px-3 py-1 text-[11px] tracking-[0.03em] text-ink/60"
+                  className="rounded-full border border-line bg-panel px-3 py-1 text-[11px] tracking-[0.03em] text-muted"
                 >
                   {tag}
                 </li>

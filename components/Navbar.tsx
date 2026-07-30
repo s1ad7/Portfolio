@@ -15,8 +15,9 @@ export function Wordmark({ className = '' }: { className?: string }) {
       className={`font-display text-[1.375rem] leading-[0.92] font-semibold tracking-[-0.03em] md:text-[1.5rem] ${className}`}
       aria-label={`${site.name}, back to top`}
     >
-      <span className="block">{site.firstName}</span>
-      <span className="block">{site.lastName}</span>
+      {/* Two-tone, as on the reference: given name in grey, surname in full ink. */}
+      <span className="block text-wordmark">{site.firstName}</span>
+      <span className="block text-ink">{site.lastName}</span>
     </Link>
   )
 }
@@ -87,19 +88,15 @@ export function Navbar() {
                   <Link
                     href={item.href}
                     aria-current={isActive ? 'true' : undefined}
-                    className={`relative text-base transition-colors duration-200 ease-signature hover:text-ink ${
-                      isActive ? 'text-ink' : 'text-ink/65'
+                    /* The reference has no active indicator at all, so scroll-spy
+                       is expressed purely as ink weight. A coloured underline
+                       read as noise against how restrained the rest of the
+                       chrome is. */
+                    className={`text-base transition-colors duration-200 ease-signature hover:text-ink ${
+                      isActive ? 'text-ink' : 'text-muted'
                     }`}
                   >
                     {item.label}
-                    {isActive && (
-                      /* Shared layoutId slides the indicator between links. */
-                      <motion.span
-                        layoutId="nav-active"
-                        className="absolute -bottom-1.5 left-0 h-[2px] w-full rounded-full bg-accent"
-                        transition={{ duration: 0.3, ease }}
-                      />
-                    )}
                   </Link>
                 </li>
               )
