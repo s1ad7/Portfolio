@@ -72,36 +72,165 @@ for (const { slug, href } of targets) {
   const ctx = await browser.newContext({
     viewport: { width: 1440, height: 900 },
     deviceScaleFactor: 1,
+    /* Many sites skip their scroll-reveal animations entirely under this, which
+       renders content in its final state. Cheapest possible fix for reveals,
+       and it costs nothing on sites that ignore it. */
+    reducedMotion: 'reduce',
   })
   const page = await ctx.newPage()
 
   try {
     process.stdout.write(`${slug.padEnd(22)} ${href} ... `)
     await page.goto(href, { waitUntil: 'domcontentloaded', timeout: 60000 })
+    await page.waitForTimeout(2500)
 
-    // Scroll the whole page so lazy images load and scroll-triggered content
-    // reveals before the capture. Otherwise the tall shot is full of gaps.
-    await page.evaluate(async () => {
-      const step = window.innerHeight * 0.8
-      for (let y = 0; y < document.body.scrollHeight; y += step) {
-        window.scrollTo(0, y)
-        await new Promise((r) => setTimeout(r, 350))
+    /* 1. Clear intro modals, cookie banners and consent gates.
+     *
+     * This has to happen BEFORE scrolling. A modal typically locks body scroll,
+     * and if scrolling is locked the scroll-through below silently does nothing,
+     * so no scroll-reveal ever fires and the capture comes out full of blank
+     * bands. That single cause produced both the overlay and the empty sections
+     * on carently.net. */
+    const dismissed = await page.evaluate(() => {
+      const kill = (el) => el?.parentElement && el.remove()
+      let n = 0
+
+      for (const el of document.querySelectorAll(
+        '[role="dialog"],[aria-modal="true"],dialog[open]'
+      )) {
+        kill(el)
+        n++
       }
-      window.scrollTo(0, 0)
-      await new Promise((r) => setTimeout(r, 600))
+
+      for (const el of document.querySelectorAll(
+        '[class*="cookie" i],[id*="cookie" i],[class*="consent" i],[id*="consent" i],[class*="gdpr" i],[class*="backdrop" i],[class*="overlay" i]'
+      )) {
+        const s = getComputedStyle(el)
+        if (s.position === 'fixed' || s.position === 'absolute') {
+          kill(el)
+          n++
+        }
+      }
+
+      // Any remaining fixed element covering most of the viewport is a backdrop.
+      for (const el of document.querySelectorAll('body *')) {
+        const s = getComputedStyle(el)
+        if (s.position !== 'fixed') continue
+        const r = el.getBoundingClientRect()
+        const covers = r.width * r.height > innerWidth * innerHeight * 0.5
+        if (covers && +s.zIndex > 5) {
+          kill(el)
+          n++
+        }
+      }
+
+      // Restore scrolling, which the modal almost certainly locked.
+      for (const el of [document.body, document.documentElement]) {
+        el.style.removeProperty('overflow')
+        el.style.removeProperty('position')
+        el.style.setProperty('overflow', 'visible', 'important')
+      }
+      return n
     })
 
-    // Hide cookie banners and other fixed overlays, which otherwise repeat all
-    // the way down a full-page capture.
+    // 2. Collapse animation and transition timings so anything triggered
+    //    completes instantly rather than being caught mid-flight.
     await page.addStyleTag({
-      content: `
-        [class*="cookie" i], [id*="cookie" i],
-        [class*="consent" i], [id*="consent" i],
-        [class*="gdpr" i] { display: none !important; }
-        *[style*="position: fixed"], .fixed { position: absolute !important; }
-      `,
+      content: `*,*::before,*::after{
+        animation-duration:0s !important;
+        animation-delay:0s !important;
+        transition-duration:0s !important;
+        transition-delay:0s !important;
+      }`,
     })
-    await page.waitForTimeout(800)
+
+    /* 3. Scroll, so lazy images load and scroll-triggered reveals fire.
+     *
+     * Two passes: sections whose content arrives from a fetch are often still
+     * empty when the first pass goes by, and a second pass gives observers that
+     * only bind after hydration another chance. Between them, wait for the
+     * network to settle so client-fetched content has actually landed. */
+    const sweep = async () => {
+      await page.evaluate(async () => {
+        const step = window.innerHeight * 0.6
+        for (let y = 0; y < document.body.scrollHeight; y += step) {
+          window.scrollTo(0, y)
+          await new Promise((r) => setTimeout(r, 380))
+        }
+        window.scrollTo(0, 0)
+        await new Promise((r) => setTimeout(r, 500))
+      })
+    }
+
+    await sweep()
+    await page.waitForLoadState('networkidle', { timeout: 20000 }).catch(() => {})
+    await sweep()
+    await page.waitForTimeout(900)
+
+    /* 4. Force anything still hidden into its revealed state. Sites whose
+     *    reveals are driven by an IntersectionObserver that only fires once,
+     *    or that were off-screen during the pass, are still at opacity 0.
+     *    Restricted to in-flow elements so genuinely hidden UI (dropdowns,
+     *    menus, which are positioned) is left alone. */
+    const revealed = await page.evaluate(() => {
+      const forced = []
+
+      for (const el of document.querySelectorAll('body *')) {
+        const s = getComputedStyle(el)
+        if (s.position === 'fixed' || s.position === 'absolute') continue
+        if (s.visibility === 'hidden' || s.display === 'none') continue
+        const r = el.getBoundingClientRect()
+        if (r.width < 8 || r.height < 8) continue
+
+        /* Only un-hide what is actually hidden, and only clear the transform of
+           something that was hidden. An element that is visible AND transformed
+           is positioned on purpose (a rotator offset, a centring translate), and
+           flattening those is what stacked two words of carently.net's rotating
+           headline into "DBRVE". */
+        if (parseFloat(s.opacity) >= 0.1) continue
+
+        el.style.setProperty('opacity', '1', 'important')
+        if (s.transform !== 'none' && !s.transform.startsWith('matrix(1, 0, 0, 1, 0, 0)')) {
+          el.style.setProperty('transform', 'none', 'important')
+        }
+        forced.push(el)
+      }
+
+      /* A text rotator keeps several alternates in the DOM at opacity 0, so
+         revealing them all overlaps them. Undo any forced element that now sits
+         on top of a sibling: whatever was already visible is the one to keep. */
+      let reverted = 0
+      for (const el of forced) {
+        const r = el.getBoundingClientRect()
+        for (const sib of el.parentElement?.children ?? []) {
+          if (sib === el || forced.includes(sib)) continue
+          const sr = sib.getBoundingClientRect()
+          const overlapX = Math.min(r.right, sr.right) - Math.max(r.left, sr.left)
+          const overlapY = Math.min(r.bottom, sr.bottom) - Math.max(r.top, sr.top)
+          if (overlapX <= 0 || overlapY <= 0) continue
+          if ((overlapX * overlapY) / (r.width * r.height) > 0.7) {
+            el.style.setProperty('opacity', '0', 'important')
+            reverted++
+            break
+          }
+        }
+      }
+      return forced.length - reverted
+    })
+
+    // 5. Pin whatever is left fixed or sticky, so headers appear once at the
+    //    top instead of repeating the whole way down a tall capture.
+    await page.evaluate(() => {
+      for (const el of document.querySelectorAll('body *')) {
+        const s = getComputedStyle(el)
+        if (s.position === 'fixed' || s.position === 'sticky') {
+          el.style.setProperty('position', 'absolute', 'important')
+        }
+      }
+    })
+
+    await page.waitForTimeout(900)
+    process.stdout.write(`[-${dismissed} overlay, +${revealed} shown] `)
 
     // JPEG, not PNG: these are photographic full-page shots and PNG runs to
     // several MB each, which is a lot of repo weight for no visible gain.
