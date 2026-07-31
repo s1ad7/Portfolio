@@ -12,6 +12,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { projects, type Project } from '@/lib/content'
+import { useNavHidden } from '@/lib/useNavHidden'
 import manifest from '@/public/projects/manifest.json'
 
 type Dims = { width: number; height: number }
@@ -97,6 +98,8 @@ function PinnedShowcase() {
    * section, leaving the first project faintly visible over every later slide.
    * Crossfading on state is predictable; the pan stays scrubbed because
    * transforms interpolate correctly. */
+  const navHidden = useNavHidden()
+
   const [active, setActive] = useState(0)
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
     const i = Math.min(count - 1, Math.max(0, Math.floor(v * count)))
@@ -105,7 +108,14 @@ function PinnedShowcase() {
 
   return (
     <div ref={ref} style={{ height: `${count * 100}vh` }} className="relative">
-      <div className="sticky top-0 flex h-svh flex-col gap-4 overflow-hidden px-3 pt-20 pb-5 md:px-6">
+      {/* Top padding tracks the navbar: while it is tucked away the frame takes
+          the 80px it would otherwise reserve, which is most of the time here
+          since reaching this section means scrolling down. */}
+      <motion.div
+        animate={{ paddingTop: navHidden ? 28 : 80 }}
+        transition={{ duration: 0.28, ease: [0.44, 0, 0.56, 1] }}
+        className="sticky top-0 flex h-svh flex-col gap-4 overflow-hidden px-3 pb-5 md:px-6"
+      >
         {/* Meta bar, one compact row. Kept deliberately short: every pixel it
             takes comes straight off the frame below, and the frame is the point. */}
         <div className="relative mx-auto h-14 w-full max-w-[1400px] shrink-0">
@@ -140,7 +150,7 @@ function PinnedShowcase() {
         </div>
 
         <ProgressDots count={count} active={active} />
-      </div>
+      </motion.div>
     </div>
   )
 }

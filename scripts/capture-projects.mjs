@@ -273,14 +273,31 @@ for (const { slug, url } of targets) {
       return forced.length - reverted
     })
 
-    // 5. Pin whatever is left fixed or sticky, so headers appear once at the
-    //    top instead of repeating the whole way down a tall capture.
+    /* 5. Pin whatever is left fixed or sticky, so headers appear once at the top
+     *    instead of repeating the whole way down a tall capture.
+     *
+     *    Measure each element BEFORE converting it and re-apply the geometry
+     *    afterwards. A fixed header is almost always `width: 100%`, which
+     *    resolves against the viewport while fixed but against the nearest
+     *    positioned ancestor once absolute, so a plain swap silently shrank
+     *    marbio.com's nav to about three-quarters of the page width. Freezing
+     *    the measured width in pixels sidesteps the containing-block change
+     *    entirely. */
     await page.evaluate(() => {
+      const pending = []
       for (const el of document.querySelectorAll('body *')) {
         const s = getComputedStyle(el)
         if (s.position === 'fixed' || s.position === 'sticky') {
-          el.style.setProperty('position', 'absolute', 'important')
+          const r = el.getBoundingClientRect()
+          pending.push({ el, width: r.width, height: r.height, left: r.left })
         }
+      }
+      for (const { el, width, height, left } of pending) {
+        el.style.setProperty('position', 'absolute', 'important')
+        el.style.setProperty('width', `${width}px`, 'important')
+        el.style.setProperty('max-width', 'none', 'important')
+        if (height) el.style.setProperty('min-height', `${height}px`, 'important')
+        if (left === 0) el.style.setProperty('left', '0px', 'important')
       }
     })
 

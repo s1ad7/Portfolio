@@ -2,8 +2,9 @@
 
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { ease } from '@/lib/motion'
+import { useNavHidden } from '@/lib/useNavHidden'
 import { nav } from '@/lib/content'
 import { LanguageSwitcher } from './ui/LanguageSwitcher'
 import { Pill } from './ui/Pill'
@@ -12,6 +13,21 @@ import { Wordmark } from './ui/Wordmark'
 export function Navbar() {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState<string>('')
+
+  /* Clicking a nav link scrolls the page down, which would immediately tuck the
+     bar away: you press something and it vanishes under your cursor. Pin it
+     briefly so the bar survives its own navigation. */
+  const [pinned, setPinned] = useState(false)
+  const pinTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const pin = useCallback(() => {
+    setPinned(true)
+    if (pinTimer.current) clearTimeout(pinTimer.current)
+    pinTimer.current = setTimeout(() => setPinned(false), 1400)
+  }, [])
+  useEffect(() => () => { if (pinTimer.current) clearTimeout(pinTimer.current) }, [])
+
+  // Never tuck the bar away while the mobile menu is open or just after a click.
+  const hidden = useNavHidden(open || pinned)
 
   /* Scroll-spy: highlight whichever section currently owns the viewport. The
      -45%/-50% margins collapse the observed area to a band near the middle of
@@ -60,7 +76,13 @@ export function Navbar() {
       {/* Flush to the top of the viewport, inset to match the section cards, with
           only the bottom corners rounded. This is the reference's geometry:
           1392x80 at x=24, radius 0 0 40px 40px. */}
-      <header className="fixed inset-x-0 top-0 z-50 px-3 md:px-6">
+      {/* Tucks away on downward scroll and returns on upward scroll, so reading
+          gets the whole viewport and navigation stays one flick away. */}
+      <motion.header
+        animate={{ y: hidden ? '-105%' : '0%' }}
+        transition={{ duration: 0.28, ease }}
+        className="fixed inset-x-0 top-0 z-50 px-3 md:px-6"
+      >
         <nav
           aria-label="Main"
           className="rounded-b-shell bg-glass shadow-ramp backdrop-blur-xl"
@@ -84,6 +106,7 @@ export function Navbar() {
                     <li key={item.href}>
                       <Link
                         href={item.href}
+                        onClick={pin}
                         aria-current={isActive ? 'true' : undefined}
                         /* Work Sans 16/400 at full ink, fading to 70% on
                            hover. The reference loads a third family purely for
@@ -131,7 +154,7 @@ export function Navbar() {
             </div>
           </div>
         </nav>
-      </header>
+      </motion.header>
 
       <AnimatePresence>
         {open && (
