@@ -65,13 +65,15 @@ async function launch() {
  * downscale. At 1440 into a 653px frame, 16px body copy landed at 7.3px, which
  * is below the legibility floor and reads as mush.
  *
- * deviceScaleFactor 1.5 gives a 1920px source. A frame up to ~960px CSS needs
- * 1920 device pixels on a 2x display, so this is sharp there without the ~4x
- * file-size penalty of a full 2x capture on pages that run 5000px tall.
+ * deviceScaleFactor 2 gives a 2560px source. The frame now runs up to 1400px
+ * CSS, which wants 2800 device pixels on a 2x display, so 2560 is close enough
+ * to stay crisp. Quality drops to 78 to offset the larger dimensions; on
+ * photographic screenshots that is not visible, and it keeps the six files to a
+ * sane repo weight.
  */
 const VIEWPORT = { width: 1280, height: 860 }
-const SCALE = 1.5
-const QUALITY = 85
+const SCALE = 2
+const QUALITY = 78
 
 const browser = await launch()
 let ok = 0

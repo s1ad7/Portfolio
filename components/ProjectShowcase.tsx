@@ -105,9 +105,10 @@ function PinnedShowcase() {
 
   return (
     <div ref={ref} style={{ height: `${count * 100}vh` }} className="relative">
-      <div className="sticky top-0 flex h-svh flex-col justify-center gap-7 overflow-hidden px-6 pt-24 pb-10 md:px-10">
-        {/* Meta bar. Each project's details crossfade in place above the frame. */}
-        <div className="relative mx-auto h-[8.5rem] w-full max-w-[1200px]">
+      <div className="sticky top-0 flex h-svh flex-col gap-4 overflow-hidden px-3 pt-20 pb-5 md:px-6">
+        {/* Meta bar, one compact row. Kept deliberately short: every pixel it
+            takes comes straight off the frame below, and the frame is the point. */}
+        <div className="relative mx-auto h-14 w-full max-w-[1400px] shrink-0">
           {projects.map((project, i) => (
             <SlideMeta
               key={project.slug}
@@ -119,10 +120,11 @@ function PinnedShowcase() {
           ))}
         </div>
 
-        {/* Browser frame at full content width, height clamped to the viewport. */}
+        {/* Browser frame takes every pixel left over. At 1440 this is roughly
+            1392x700, so a 1280px capture renders slightly ABOVE life size. */}
         <div
           ref={frameRef}
-          className="relative mx-auto h-[min(62svh,600px)] w-full max-w-[1200px] overflow-hidden rounded-panel border border-line/70 bg-white shadow-ramp-lg"
+          className="relative mx-auto w-full min-h-0 flex-1 max-w-[1400px] overflow-hidden rounded-panel border border-line/70 bg-white shadow-ramp-lg"
         >
           {projects.map((project, i) => (
             <SlidePreview
@@ -163,12 +165,28 @@ function SlideMeta({
       aria-hidden={!isActive}
       // @ts-expect-error -- `inert` is valid HTML; React types lag behind.
       inert={!isActive ? '' : undefined}
-      className="absolute inset-0 flex flex-col justify-end gap-3"
+      className="absolute inset-0 flex flex-wrap items-center justify-between gap-x-6 gap-y-2"
     >
-      <div className="flex items-baseline justify-between gap-6">
+      <div className="flex items-baseline gap-4">
         <p className="eyebrow">
           {String(index + 1).padStart(2, '0')} / {String(count).padStart(2, '0')}
         </p>
+        <h3 className="text-2xl md:text-3xl">{project.title}</h3>
+        <p className="text-base text-muted">{project.category}</p>
+      </div>
+
+      <div className="flex items-center gap-5">
+        <ul className="hidden flex-wrap items-center gap-2 xl:flex">
+          {project.stack.map((tech) => (
+            <li
+              key={tech}
+              className="rounded-full border border-hairline bg-panel px-3 py-1 text-[11px] tracking-[0.03em] text-muted"
+            >
+              {tech}
+            </li>
+          ))}
+        </ul>
+
         <Link
           href={project.href}
           target="_blank"
@@ -188,33 +206,6 @@ function SlideMeta({
         </Link>
       </div>
 
-      <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
-        <div className="flex items-baseline gap-4">
-          <h3 className="text-4xl md:text-5xl">{project.title}</h3>
-          <p className="text-base text-muted">{project.category}</p>
-        </div>
-
-        <ul className="flex flex-wrap items-center gap-2">
-          {project.stack.map((tech) => (
-            <li
-              key={tech}
-              className="rounded-full border border-hairline bg-panel px-3 py-1 text-[11px] tracking-[0.03em] text-muted"
-            >
-              {tech}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Rendered only when supplied, so an unfilled project simply shows less
-          rather than an empty row or placeholder text. */}
-      {(project.role || project.outcome) && (
-        <p className="text-sm text-body">
-          {project.role}
-          {project.role && project.outcome && <span className="px-2 text-faint">·</span>}
-          {project.outcome && <span className="text-ink">{project.outcome}</span>}
-        </p>
-      )}
     </motion.div>
   )
 }
