@@ -1,8 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { useState } from 'react'
-import { ease } from '@/lib/motion'
 import { contactSection, site } from '@/lib/content'
 import { Reveal } from './ui/Reveal'
 import { Section } from './ui/Section'
@@ -69,10 +67,7 @@ export function Contact() {
     >
       <Reveal className="mx-auto max-w-xl">
         {sent ? (
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, ease }}
+          <div
             role="status"
             className="rounded-panel border border-line bg-panel p-8 text-center"
           >
@@ -84,7 +79,7 @@ export function Contact() {
             >
               Send another
             </button>
-          </motion.div>
+          </div>
         ) : (
           <form onSubmit={onSubmit} noValidate className="flex flex-col gap-5">
             <div className="grid gap-5 sm:grid-cols-2">

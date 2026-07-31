@@ -1,8 +1,6 @@
 'use client'
 
-import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useId, useRef, useState } from 'react'
-import { ease } from '@/lib/motion'
 import { Flag } from './Flag'
 
 export type LocaleCode = 'en' | 'fr'
@@ -76,15 +74,15 @@ export function LanguageSwitcher({ current = 'en' }: { current?: LocaleCode }) {
         {/* ~10px wide and near-ink, matching the reference. A 12px box with the
             path inset to 3..9 rendered only 6px of visible chevron, which read
             as a much smaller, lighter mark than the original. */}
-        <motion.svg
+        <svg
           width="16"
           height="16"
           viewBox="0 0 16 16"
           fill="none"
           aria-hidden="true"
-          className="text-ink/85"
-          animate={{ rotate: open ? 180 : 0 }}
-          transition={{ duration: 0.2, ease }}
+          className={`text-ink/85 transition-transform duration-200 ease-signature ${
+            open ? 'rotate-180' : ''
+          }`}
         >
           <path
             d="M3 6L8 11L13 6"
@@ -93,52 +91,44 @@ export function LanguageSwitcher({ current = 'en' }: { current?: LocaleCode }) {
             strokeLinecap="round"
             strokeLinejoin="round"
           />
-        </motion.svg>
+        </svg>
       </button>
 
-      <AnimatePresence>
-        {open && (
-          <motion.ul
-            id={menuId}
-            role="menu"
-            initial={{ opacity: 0, y: -6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.18, ease }}
-            className="absolute left-0 top-full z-50 mt-2 min-w-[11rem] overflow-hidden rounded-[12px] border border-hairline bg-white py-1.5 shadow-ramp-lg"
-          >
-            {LOCALES.map((locale) => {
-              const isActive = locale.code === active.code
-              const available = locale.href !== null
+      {open && (
+        <ul
+          id={menuId}
+          role="menu"
+          className="animate-menu-in absolute top-full left-0 z-50 mt-2 min-w-[11rem] overflow-hidden rounded-[12px] border border-hairline bg-white py-1.5 shadow-ramp-lg"
+        >
+          {LOCALES.map((locale) => {
+            const isActive = locale.code === active.code
+            const available = locale.href !== null
 
-              return (
-                <li key={locale.code} role="none">
-                  <a
-                    role="menuitem"
-                    href={available ? locale.href! : undefined}
-                    aria-current={isActive ? 'true' : undefined}
-                    aria-disabled={available ? undefined : 'true'}
-                    onClick={(e) => {
-                      if (!available) e.preventDefault()
-                      else setOpen(false)
-                    }}
-                    className={`flex items-center gap-2.5 px-3.5 py-2 text-sm transition-colors duration-200 ease-signature ${
-                      available
-                        ? 'text-ink hover:bg-panel'
-                        : 'cursor-not-allowed text-faint'
-                    }`}
-                  >
-                    <Flag code={locale.flag} />
-                    <span className="flex-1">{locale.label}</span>
-                    {isActive && <span className="text-accent">&#10003;</span>}
-                    {!available && <span className="text-[11px] text-faint">soon</span>}
-                  </a>
-                </li>
-              )
-            })}
-          </motion.ul>
-        )}
-      </AnimatePresence>
+            return (
+              <li key={locale.code} role="none">
+                <a
+                  role="menuitem"
+                  href={available ? locale.href! : undefined}
+                  aria-current={isActive ? 'true' : undefined}
+                  aria-disabled={available ? undefined : 'true'}
+                  onClick={(e) => {
+                    if (!available) e.preventDefault()
+                    else setOpen(false)
+                  }}
+                  className={`flex items-center gap-2.5 px-3.5 py-2 text-sm transition-colors duration-200 ease-signature ${
+                    available ? 'text-ink hover:bg-panel' : 'cursor-not-allowed text-faint'
+                  }`}
+                >
+                  <Flag code={locale.flag} />
+                  <span className="flex-1">{locale.label}</span>
+                  {isActive && <span className="text-accent">&#10003;</span>}
+                  {!available && <span className="text-[11px] text-faint">soon</span>}
+                </a>
+              </li>
+            )
+          })}
+        </ul>
+      )}
     </div>
   )
 }

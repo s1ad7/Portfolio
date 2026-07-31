@@ -1,9 +1,11 @@
 /**
- * Captures a tall full-page screenshot of every site listed in lib/content.ts
- * and writes it to public/projects/<slug>.jpg.
+ * Captures the hero of every site listed in lib/content.ts and writes it to
+ * public/projects/<slug>.jpg.
  *
- * The Projects showcase pans down these images as you scroll, so they need to
- * be full-page captures rather than hero crops.
+ * The Projects showcase uses these full-bleed behind the text, so only the top
+ * of each site is ever visible. A viewport-sized shot is what is needed; the
+ * full-page captures this used to take ran to several megabytes each to serve
+ * a crop.
  *
  * Usage:
  *   npm run capture:projects              capture everything
@@ -14,7 +16,7 @@
  * install with:  npx playwright install chromium
  */
 import { chromium } from 'playwright'
-import { mkdirSync, existsSync, writeFileSync, rmSync } from 'node:fs'
+import { mkdirSync, existsSync, rmSync } from 'node:fs'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
@@ -73,27 +75,17 @@ async function launch() {
  * downscale. At 1440 into a 653px frame, 16px body copy landed at 7.3px, which
  * is below the legibility floor and reads as mush.
  *
- * deviceScaleFactor 2 gives a 2560px source. The frame now runs up to 1400px
- * CSS, which wants 2800 device pixels on a 2x display, so 2560 is close enough
- * to stay crisp. Quality drops to 78 to offset the larger dimensions; on
- * photographic screenshots that is not visible, and it keeps the six files to a
- * sane repo weight.
+ * deviceScaleFactor 2 gives a 2560px-wide source, which stays crisp full-bleed
+ * on a 2x display. Now that each file is one viewport rather than a whole page,
+ * quality can go back up to 88 and the set is still far smaller than before.
  */
 const VIEWPORT = { width: 1280, height: 860 }
 const SCALE = 2
-const QUALITY = 78
+const QUALITY = 88
 
 const browser = await launch()
 let ok = 0
 let failed = 0
-
-/* Records each capture's pixel dimensions. The showcase needs them to size the
-   pan: pages differ wildly in length (1.5:1 to over 4:1 here), so a hardcoded
-   pan distance either stops short of the footer or races past it. */
-const manifestPath = join(outDir, 'manifest.json')
-const manifest = existsSync(manifestPath)
-  ? JSON.parse(readFileSync(manifestPath, 'utf8'))
-  : {}
 
 for (const { slug, url } of targets) {
   const ctx = await browser.newContext({
@@ -304,34 +296,17 @@ for (const { slug, url } of targets) {
     await page.waitForTimeout(900)
     process.stdout.write(`[-${dismissed} overlay, +${revealed} shown] `)
 
-    /* Clip to the viewport width explicitly.
-     *
-     * A page that scrolls sideways even slightly captures at its scrollWidth,
-     * so acscripts and acpins came out 1800px wide rather than 1440 and the
-     * empty overflow showed as a wide margin down the right of the preview.
-     * CSS overflow-x:hidden does not reliably change what fullPage measures, so
-     * the clip is applied to the shot itself.
-     *
-     * JPEG rather than PNG: these are photographic full-page shots, and PNG ran
-     * to several MB each for no visible gain. */
-    const pageHeight = await page.evaluate(() =>
-      Math.max(document.body.scrollHeight, document.documentElement.scrollHeight)
-    )
-    const width = VIEWPORT.width
-    const height = pageHeight
+    /* Viewport-only shot: the panel shows the hero full-bleed, so that is all
+       that is needed. JPEG rather than PNG, since these are photographic. */
+    await page.evaluate(() => window.scrollTo(0, 0))
+    await page.waitForTimeout(600)
 
     await page.screenshot({
       path: join(outDir, `${slug}.jpg`),
-      fullPage: true,
-      clip: { x: 0, y: 0, width, height },
       type: 'jpeg',
       quality: QUALITY,
     })
-    // Manifest records the CSS-pixel aspect, which is what the pan maths needs.
-    manifest[slug] = { width, height }
-    console.log(
-      `ok  ${width}x${height} css @${SCALE}x = ${width * SCALE}x${Math.round(height * SCALE)}  (${(height / width).toFixed(2)}:1)`
-    )
+    console.log(`ok  ${VIEWPORT.width}x${VIEWPORT.height} css @${SCALE}x`)
     ok++
   } catch (e) {
     console.log(`FAILED  ${String(e).split('\n')[0].slice(0, 90)}`)
@@ -343,7 +318,6 @@ for (const { slug, url } of targets) {
 
 await browser.close()
 
-writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n')
 
 /* Drop Next's optimised-image cache.
  *
@@ -359,6 +333,5 @@ if (existsSync(imageCache)) {
 }
 
 console.log(`\n${ok} captured, ${failed} failed -> public/projects/`)
-console.log('manifest written -> public/projects/manifest.json')
 console.log('\nRestart the dev server and hard-reload (Ctrl+Shift+R) to see the new shots.')
 if (failed) process.exit(1)

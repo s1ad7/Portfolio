@@ -1,8 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import type { ReactNode } from 'react'
-import { revealStagger, useReveal, viewportOnce } from '@/lib/motion'
 import { skillsSection, type SkillCard } from '@/lib/content'
 import { Pill } from './ui/Pill'
 import { Reveal } from './ui/Reveal'
@@ -52,7 +50,6 @@ function SkillIcon({ name }: { name: SkillCard['icon'] }) {
 }
 
 export function Skills() {
-  const { variants, reduced } = useReveal()
 
   return (
     <Section
@@ -62,17 +59,10 @@ export function Skills() {
       intro={skillsSection.intro}
       tone="white"
     >
-      <motion.div
-        variants={revealStagger(reduced ? 0 : 0.1)}
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewportOnce}
-        className="grid gap-6 md:grid-cols-3"
-      >
+      <Reveal stagger={0.1} className="grid gap-6 md:grid-cols-3">
         {skillsSection.cards.map((card) => (
-          <motion.article
+          <article
             key={card.title}
-            variants={variants}
             className="flex flex-col gap-4 rounded-panel border border-line/70 bg-white p-7 shadow-ramp md:p-8"
           >
             <span className="flex h-11 w-11 items-center justify-center rounded-full bg-accent/10 text-accent">
@@ -92,9 +82,9 @@ export function Skills() {
                 </li>
               ))}
             </ul>
-          </motion.article>
+          </article>
         ))}
-      </motion.div>
+      </Reveal>
 
       <Reveal delay={0.1} className="mt-12 flex justify-center">
         <Pill href={skillsSection.cta.href} variant="dark">

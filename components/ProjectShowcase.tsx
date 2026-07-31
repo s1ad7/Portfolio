@@ -1,388 +1,218 @@
 'use client'
 
-import {
-  motion,
-  useMotionValueEvent,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-  type MotionValue,
-} from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { projects, type Project } from '@/lib/content'
-import { useNavHidden } from '@/lib/useNavHidden'
-import manifest from '@/public/projects/manifest.json'
-
-type Dims = { width: number; height: number }
-const dimsFor = (slug: string): Dims =>
-  (manifest as Record<string, Dims>)[slug] ?? { width: 1280, height: 3840 }
-
-/** Crossfade used when the active project changes. */
-const CROSSFADE = { duration: 0.35, ease: [0.44, 0, 0.56, 1] as const }
+import { gsap, prefersReducedMotion, SplitText, useGSAP } from '@/lib/gsap'
 
 /**
- * Fraction of each slide held still at its top and again at its bottom, before
- * and after the pan. This is what stops a project appearing mid-page: the
- * crossfade gets time to finish while the incoming site still shows its header,
- * and the outgoing one rests on its footer rather than being yanked away.
- */
-const HOLD = 0.18
-
-/**
- * Pinned, scroll-scrubbed project showcase.
+ * Pinned full-bleed project showcase.
  *
- * The outer section is N screens tall, which supplies the scroll distance. An
- * inner sticky panel holds still ("pinning") while that distance is consumed,
- * and scroll position drives the animation directly rather than a timer
- * ("scroll-scrubbing"). Each project occupies one screen of that distance: its
- * full-page screenshot pans down inside a browser frame, so it reads as someone
- * scrolling the real site, then crossfades to the next.
+ * Each project owns one screen of scroll. Its hero fills the panel behind a
+ * gradient scrim, with the narrative in front: who it was for, when it shipped,
+ * the title, the story, and the stack. The whole panel links to the live site.
  *
- * The frame spans the full content width on purpose. It previously sat beside
- * the text at 653px, which rendered a 1280px-wide site at 0.51x and put 16px
- * body copy at 8px, below the point where it reads as anything but mush. At the
- * full 1200px the same copy lands around 15px, so a visitor can actually read
- * the work. The project's details move to a bar above the frame to pay for it.
+ * Using the hero as a *background* rather than a readable page is the point.
+ * Earlier versions tried to show whole sites inside a frame and lost: a page
+ * scaled to fit is unreadable at any frame size that fits on screen. A scrimmed
+ * hero is impressionistic on purpose, and the reading is done by the copy in
+ * front of it, which is also where the argument for the work actually lives.
  *
- * Falls back to a plain stacked list under reduced motion or on narrow
- * viewports. Pinning hijacks the scroll, which is what reduced-motion asks you
- * not to do, and five pinned screens on a phone is a tunnel with no way out.
+ * Below `lg`, and under reduced motion, this degrades to a plain stack. Pinning
+ * hijacks the scroll, which is what reduced motion asks you not to do, and six
+ * pinned screens on a phone is a tunnel with no way out.
  */
 export function ProjectShowcase() {
-  const reduced = useReducedMotion()
-  const [isNarrow, setIsNarrow] = useState<boolean | null>(null)
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 1023px)')
-    const update = () => setIsNarrow(mq.matches)
-    update()
-    mq.addEventListener('change', update)
-    return () => mq.removeEventListener('change', update)
-  }, [])
-
-  // Render the fallback until the media query has been read, so the server and
-  // first client paint agree and hydration does not mismatch.
-  if (isNarrow === null || isNarrow || reduced) return <ProjectList />
-
-  return <PinnedShowcase />
-}
-
-function PinnedShowcase() {
-  const ref = useRef<HTMLDivElement>(null)
-  const frameRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
+  const root = useRef<HTMLDivElement>(null)
   const count = projects.length
 
-  /* The frame is measured rather than assumed a fixed aspect, because its
-     height is clamped against the viewport. The pan needs real pixels: how tall
-     the image renders at the frame's width, minus the frame's own height. */
-  const [frame, setFrame] = useState({ w: 0, h: 0 })
-  useLayoutEffect(() => {
-    const el = frameRef.current
-    if (!el) return
-    const measure = () => setFrame({ w: el.clientWidth, h: el.clientHeight })
-    measure()
-    const ro = new ResizeObserver(measure)
-    ro.observe(el)
-    return () => ro.disconnect()
-  }, [])
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return
+      if (!window.matchMedia('(min-width: 1024px)').matches) return
 
-  /* Which project is showing, as discrete state.
-   *
-   * Opacity is deliberately NOT scroll-scrubbed. framer-motion hands
-   * scroll-derived style values to the Web Animations API as a scroll timeline,
-   * and that hand-off misread the per-slide keyframe ranges here: inline styles
-   * were correct while the composited result was a linear ramp across the whole
-   * section, leaving the first project faintly visible over every later slide.
-   * Crossfading on state is predictable; the pan stays scrubbed because
-   * transforms interpolate correctly. */
-  const navHidden = useNavHidden()
+      const panels = gsap.utils.toArray<HTMLElement>('[data-panel]')
+      if (panels.length < 2) return
 
-  const [active, setActive] = useState(0)
-  useMotionValueEvent(scrollYProgress, 'change', (v) => {
-    const i = Math.min(count - 1, Math.max(0, Math.floor(v * count)))
-    setActive((prev) => (prev === i ? prev : i))
-  })
+      // Stack them: the first is visible, the rest wait their turn.
+      gsap.set(panels, { opacity: 0 })
+      gsap.set(panels[0], { opacity: 1 })
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: root.current,
+          start: 'top top',
+          end: () => `+=${(count - 1) * window.innerHeight}`,
+          pin: '[data-pin]',
+          scrub: 0.6,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      })
+
+      /* One unit of timeline per project, with the crossfade in the middle of
+         each. The hold either side is what keeps a project legible for most of
+         its screen rather than permanently mid-transition. */
+      panels.forEach((panel, i) => {
+        if (i === 0) return
+        tl.to(panels[i - 1], { opacity: 0, duration: 0.3, ease: 'none' }, i - 1 + 0.35)
+        tl.to(panel, { opacity: 1, duration: 0.3, ease: 'none' }, i - 1 + 0.35)
+      })
+
+      /* Slow drift on the heroes. Deliberately subtle: the reference site has no
+         parallax at all, and a background visibly racing the scroll reads as a
+         template rather than as craft. */
+      panels.forEach((panel) => {
+        const hero = panel.querySelector('[data-hero]')
+        if (!hero) return
+        gsap.fromTo(
+          hero,
+          { scale: 1.07, yPercent: -1.5 },
+          {
+            scale: 1,
+            yPercent: 1.5,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: root.current,
+              start: 'top top',
+              end: () => `+=${count * window.innerHeight}`,
+              scrub: true,
+            },
+          }
+        )
+      })
+
+      /* Character-level title reveal on the first panel. The others are already
+         composed by the time they crossfade in, so splitting them would fire
+         against an element nobody can see.
+
+         SplitText keeps the original string exposed to assistive tech rather
+         than leaving a pile of single-character spans, which is the usual cost
+         of this effect. */
+      const firstTitle = panels[0].querySelector<HTMLElement>('[data-title]')
+      if (!firstTitle) return
+
+      const split = SplitText.create(firstTitle, {
+        type: 'chars',
+        charsClass: 'inline-block',
+        onSplit: (self) =>
+          gsap.from(self.chars, {
+            opacity: 0,
+            yPercent: 60,
+            duration: 0.7,
+            ease: 'power3.out',
+            stagger: 0.025,
+            scrollTrigger: { trigger: panels[0], start: 'top 70%', once: true },
+          }),
+      })
+      return () => split.revert()
+    },
+    { scope: root, dependencies: [count] }
+  )
 
   return (
-    <div ref={ref} style={{ height: `${count * 100}vh` }} className="relative">
-      {/* Top padding tracks the navbar: while it is tucked away the frame takes
-          the 80px it would otherwise reserve, which is most of the time here
-          since reaching this section means scrolling down. */}
-      <motion.div
-        animate={{ paddingTop: navHidden ? 28 : 80 }}
-        transition={{ duration: 0.28, ease: [0.44, 0, 0.56, 1] }}
-        className="sticky top-0 flex h-svh flex-col gap-4 overflow-hidden px-3 pb-5 md:px-6"
-      >
-        {/* Meta bar, one compact row. Kept deliberately short: every pixel it
-            takes comes straight off the frame below, and the frame is the point. */}
-        <div className="relative mx-auto h-14 w-full max-w-[1400px] shrink-0">
-          {projects.map((project, i) => (
-            <SlideMeta
-              key={project.slug}
-              project={project}
-              index={i}
-              count={count}
-              isActive={i === active}
-            />
-          ))}
-        </div>
-
-        {/* Browser frame takes every pixel left over. At 1440 this is roughly
-            1392x700, so a 1280px capture renders slightly ABOVE life size. */}
-        <div
-          ref={frameRef}
-          className="relative mx-auto w-full min-h-0 flex-1 max-w-[1400px] overflow-hidden rounded-panel border border-line/70 bg-white shadow-ramp-lg"
-        >
-          {projects.map((project, i) => (
-            <SlidePreview
-              key={project.slug}
-              project={project}
-              index={i}
-              count={count}
-              isActive={i === active}
-              progress={scrollYProgress}
-              frame={frame}
-            />
-          ))}
-        </div>
-
-        <ProgressDots count={count} active={active} />
-      </motion.div>
+    <div ref={root} className="relative">
+      {/* `motion-safe` matters as much as the breakpoint here. The GSAP setup
+          bails out under reduced motion, but if the CSS still positioned the
+          panels absolutely they would all sit on top of each other, visible at
+          once. Gating on motion-safe means reduced motion gets the natural
+          stack at every width. */}
+      <div data-pin className="relative motion-safe:lg:h-svh motion-safe:lg:overflow-hidden">
+        {projects.map((project, i) => (
+          <Panel key={project.slug} project={project} index={i} count={count} first={i === 0} />
+        ))}
+      </div>
     </div>
   )
 }
 
-function SlideMeta({
+function Panel({
   project,
   index,
   count,
-  isActive,
+  first,
 }: {
   project: Project
   index: number
   count: number
-  isActive: boolean
+  first: boolean
 }) {
   return (
-    <motion.div
-      animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 16 }}
-      transition={CROSSFADE}
-      /* Inert while hidden, so keyboard focus and screen readers only ever
-         reach the project actually on screen. */
-      aria-hidden={!isActive}
-      // @ts-expect-error -- `inert` is valid HTML; React types lag behind.
-      inert={!isActive ? '' : undefined}
-      className="absolute inset-0 flex flex-wrap items-center justify-between gap-x-6 gap-y-2"
+    <Link
+      href={project.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-panel
+      aria-label={`${project.title}, ${project.category}. Opens the live site in a new tab.`}
+      className="group relative mt-4 block h-[88svh] overflow-hidden first:mt-0 motion-safe:lg:mt-0 motion-safe:lg:absolute motion-safe:lg:inset-0 motion-safe:lg:h-full"
     >
-      <div className="flex items-baseline gap-4">
-        <p className="eyebrow">
-          {String(index + 1).padStart(2, '0')} / {String(count).padStart(2, '0')}
-        </p>
-        <h3 className="text-2xl md:text-3xl">{project.title}</h3>
-        <p className="text-base text-muted">{project.category}</p>
-      </div>
-
-      <div className="flex items-center gap-5">
-        <ul className="hidden flex-wrap items-center gap-2 xl:flex">
-          {project.stack.map((tech) => (
-            <li
-              key={tech}
-              className="rounded-full border border-hairline bg-panel px-3 py-1 text-[11px] tracking-[0.03em] text-muted"
-            >
-              {tech}
-            </li>
-          ))}
-        </ul>
-
-        <Link
-          href={project.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 font-ui text-base text-ink transition-colors duration-200 ease-signature hover:text-muted"
-        >
-          Visit site
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path
-              d="M4 12L12 4M12 4H6M12 4V10"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </Link>
-      </div>
-
-    </motion.div>
-  )
-}
-
-function SlidePreview({
-  project,
-  index,
-  count,
-  isActive,
-  progress,
-  frame,
-}: {
-  project: Project
-  index: number
-  count: number
-  isActive: boolean
-  progress: MotionValue<number>
-  frame: { w: number; h: number }
-}) {
-  /* Pan distance in real pixels, from the measured frame and the capture's own
-     dimensions. Pages here run from 1.65:1 to 4.83:1, so a shared distance
-     either stops short of a footer or races past it.
-
-     The two HOLD stops are the brake: without them the pan is already moving
-     when a slide becomes active, so the incoming site is scrolled past its own
-     header before the crossfade finishes. */
-  const dims = dimsFor(project.slug)
-  const imageH = frame.w ? (frame.w * dims.height) / dims.width : 0
-  const travel = Math.max(0, imageH - frame.h)
-
-  const start = index / count
-  const end = (index + 1) / count
-  const hold = (end - start) * HOLD
-  const panY = useTransform(
-    progress,
-    [start, start + hold, end - hold, end],
-    [0, 0, -travel, -travel]
-  )
-
-  return (
-    <motion.div
-      animate={{ opacity: isActive ? 1 : 0 }}
-      transition={CROSSFADE}
-      aria-hidden={!isActive}
-      className="absolute inset-0"
-    >
-      <BrowserChrome href={project.href} />
-      <div className="absolute inset-x-0 bottom-0 top-10 overflow-hidden bg-white">
-        <motion.div
-          style={{ y: panY, height: imageH || '100%' }}
-          className="relative w-full"
-        >
-          <Image
-            src={project.image}
-            alt={`${project.title} website`}
-            fill
-            sizes="1200px"
-            className="object-fill"
-            priority={index === 0}
-          />
-        </motion.div>
-      </div>
-    </motion.div>
-  )
-}
-
-/** Minimal browser chrome, so the pan reads as a real site being scrolled. */
-function BrowserChrome({ href }: { href: string }) {
-  const host = href.replace(/^https?:\/\//, '').replace(/\/$/, '')
-  return (
-    <div className="absolute inset-x-0 top-0 z-10 flex h-10 items-center gap-2 border-b border-line/70 bg-panel px-4">
-      <span className="flex gap-1.5" aria-hidden="true">
-        <span className="h-2.5 w-2.5 rounded-full bg-line" />
-        <span className="h-2.5 w-2.5 rounded-full bg-line" />
-        <span className="h-2.5 w-2.5 rounded-full bg-line" />
-      </span>
-      <span className="mx-auto truncate rounded-full bg-white px-3 py-0.5 text-xs text-faint">
-        {host}
-      </span>
-    </div>
-  )
-}
-
-/** Position within the set, as a row of dots under the frame. */
-function ProgressDots({ count, active }: { count: number; active: number }) {
-  return (
-    <div className="flex justify-center gap-2" aria-hidden="true">
-      {Array.from({ length: count }, (_, i) => (
-        <motion.span
-          key={i}
-          animate={{
-            width: i === active ? 24 : 6,
-            backgroundColor: i === active ? 'var(--color-ink)' : 'var(--color-line)',
-          }}
-          transition={CROSSFADE}
-          className="h-1.5 rounded-full"
+      {/* Hero, full-bleed. object-top because these are viewport captures and
+          the interesting part is the top of the page. */}
+      <div data-hero className="absolute inset-0 will-change-transform">
+        <Image
+          src={project.image}
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover object-top"
+          priority={first}
         />
-      ))}
-    </div>
-  )
-}
+      </div>
 
-/**
- * Fallback for narrow viewports and reduced motion: the same content stacked,
- * each preview showing the top of the site rather than panning.
- */
-function ProjectList() {
-  return (
-    <div className="mx-auto flex max-w-[1200px] flex-col gap-16 px-6 md:px-10">
-      {projects.map((project, i) => (
-        <article key={project.slug} className="flex flex-col gap-5">
-          <Link
-            href={project.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block overflow-hidden rounded-panel border border-line/70 bg-white shadow-ramp transition-shadow duration-300 ease-signature hover:shadow-ramp-hover"
-          >
-            <div className="relative aspect-[16/11] w-full overflow-hidden">
-              <BrowserChrome href={project.href} />
-              <div className="absolute inset-x-0 bottom-0 top-10">
-                <Image
-                  src={project.image}
-                  alt={`${project.title} website`}
-                  fill
-                  sizes="100vw"
-                  className="object-cover object-top"
-                  priority={i === 0}
-                />
-              </div>
-            </div>
-          </Link>
+      {/* Scrim. One rule for all six rather than per-project tuning: these sites
+          run from near-black neon to a bright clinical photo, and only a strong
+          consistent gradient keeps the copy legible across all of them. */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/85 to-ink/40"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-ink/50"
+      />
 
-          <div className="flex flex-col gap-2">
-            <p className="eyebrow">
-              {String(i + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
+      <div className="relative flex h-full items-center">
+        <div className="mx-auto w-full max-w-[1280px] px-8 md:px-14">
+          <div className="flex max-w-2xl flex-col gap-5 text-white">
+            <p className="flex flex-wrap items-center gap-3 text-sm tracking-[0.14em] text-white/70 uppercase">
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <span className="h-px w-8 bg-white/40" aria-hidden="true" />
+              <span>{project.year}</span>
+              <span className="h-px w-8 bg-white/40" aria-hidden="true" />
+              <span>{project.client}</span>
             </p>
-            <h3 className="text-2xl">{project.title}</h3>
-            <p className="text-base text-muted">{project.category}</p>
-            <p className="text-base leading-[1.8] text-body">{project.description}</p>
 
-            <ul className="mt-1 flex flex-wrap gap-2">
+            <h3 data-title className="text-5xl leading-[1.05] md:text-7xl lg:text-8xl">
+              {project.title}
+            </h3>
+
+            <p className="text-lg text-white/85">{project.category}</p>
+            <p className="max-w-xl text-base leading-[1.8] text-white/75">{project.story}</p>
+
+            <ul className="flex flex-wrap gap-2 pt-1">
               {project.stack.map((tech) => (
                 <li
                   key={tech}
-                  className="rounded-full border border-hairline bg-panel px-3 py-1 text-[11px] tracking-[0.03em] text-muted"
+                  className="rounded-full border border-white/25 px-3 py-1 text-xs tracking-[0.03em] text-white/80"
                 >
                   {tech}
                 </li>
               ))}
             </ul>
 
-            {(project.role || project.outcome) && (
-              <p className="mt-1 text-sm text-body">
-                {project.role}
-                {project.role && project.outcome && <span className="px-2 text-faint">·</span>}
-                {project.outcome && <span className="text-ink">{project.outcome}</span>}
-              </p>
-            )}
-
-            <Link
-              href={project.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-2 inline-flex w-fit items-center gap-2 font-ui text-base text-ink transition-colors duration-200 ease-signature hover:text-muted"
-            >
-              Visit site
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <span className="mt-2 inline-flex items-center gap-2 font-ui text-base text-white">
+              <span className="border-b border-white/40 pb-0.5 transition-colors duration-300 group-hover:border-white">
+                View live site
+              </span>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                aria-hidden="true"
+                className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+              >
                 <path
                   d="M4 12L12 4M12 4H6M12 4V10"
                   stroke="currentColor"
@@ -391,10 +221,14 @@ function ProjectList() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </Link>
+            </span>
           </div>
-        </article>
-      ))}
-    </div>
+        </div>
+      </div>
+
+      <p className="absolute right-8 bottom-8 text-sm text-white/50 md:right-14">
+        {String(index + 1).padStart(2, '0')} / {String(count).padStart(2, '0')}
+      </p>
+    </Link>
   )
 }

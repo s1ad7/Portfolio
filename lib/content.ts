@@ -49,39 +49,34 @@ export interface Project {
   /** Small label above the title, e.g. "Booking Platform". */
   category: string
   title: string
-  description: string
+  /** Who it was for. TODO (Saad): fill these in. */
+  client: string
+  /** When it shipped. TODO (Saad): fill these in. */
+  year: string
   /**
-   * Tech chips. Detected from the running sites rather than assumed, so a
-   * visitor can match their stack to yours at a glance.
+   * Two or three sentences: the problem, the decision you took, what changed.
+   *
+   * TODO (Saad): this is the whole point of the section, and the part nobody
+   * else can write. It is what separates "builds websites" from "works out what
+   * the business actually needs first". Placeholders are marked below.
    */
+  story: string
+  /** One-line summary used by the stacked fallback and for search engines. */
+  description: string
+  /** Tech chips, detected from the running sites rather than assumed. */
   stack: readonly string[]
   /**
-   * What you actually did, and over what period. TODO (Saad): these are the
-   * parts only you know. "Design and build, solo, 6 weeks" reads far stronger
-   * than leaving it out, and it matters here because this list mixes client
-   * work with your own products.
-   */
-  role?: string
-  /**
-   * One concrete result: a load time, a conversion lift, a launch deadline hit,
-   * traffic. TODO (Saad): supply real figures. Every guide on portfolio
-   * conversion says the same thing, that numbers beat adjectives, and I am not
-   * going to invent them. Projects without one simply omit the line.
-   */
-  outcome?: string
-  /**
-   * Tall full-page screenshot under /public/projects. The showcase pans down it
-   * as you scroll. Generate with `npm run capture:projects`.
+   * Hero screenshot, used full-bleed behind the text. A single viewport-sized
+   * shot rather than a full-page capture: the panel only ever shows the top of
+   * the site, so the tall captures were several MB each for a crop.
    */
   image: string
-  /** Live site. This is what visitors click and what the browser frame shows. */
+  /** Live site. This is what visitors click and what the panel links to. */
   href: string
   /**
-   * Where to screenshot from, when that differs from `href`.
-   *
-   * Several of these custom domains do not resolve from every network, so the
-   * capture runs against the Vercel deployment while the portfolio still shows
-   * and links the real domain.
+   * Where to screenshot from, when that differs from `href`. Several custom
+   * domains do not resolve from every network, so the capture runs against the
+   * Vercel deployment while the portfolio still shows the real domain.
    */
   captureUrl?: string
 }
@@ -102,6 +97,10 @@ export interface Project {
 export const projects: Project[] = [
   {
     slug: 'carently',
+    client: 'TODO: client',
+    year: 'TODO: year',
+    story:
+      'TODO: replace. The problem they came with, the call you made, and what changed as a result. Two or three sentences is plenty.',
     stack: ['Tailwind CSS', 'Vercel', 'French'],
     category: 'Booking Platform',
     title: 'Carently',
@@ -112,6 +111,10 @@ export const projects: Project[] = [
   },
   {
     slug: 'streamelite',
+    client: 'TODO: client',
+    year: 'TODO: year',
+    story:
+      'TODO: replace. What made this hard, and how you solved it.',
     stack: ['Next.js', 'Tailwind CSS', 'Vercel', 'French'],
     category: 'Subscription Site',
     title: 'StreamElite',
@@ -123,6 +126,10 @@ export const projects: Project[] = [
   },
   {
     slug: 'marbio',
+    client: 'TODO: client',
+    year: 'TODO: year',
+    story:
+      'TODO: replace. An institutional client with a deep structure: what that demanded.',
     stack: ['WordPress', 'GSAP', 'French'],
     category: 'Corporate Site',
     title: 'Marbio',
@@ -133,6 +140,10 @@ export const projects: Project[] = [
   },
   {
     slug: 'acscripts',
+    client: 'TODO: client',
+    year: 'TODO: year',
+    story:
+      'TODO: replace. Why it needed building, and what you decided.',
     stack: ['Next.js', 'Tailwind CSS', 'Vercel'],
     category: 'E-commerce',
     title: 'ACScripts',
@@ -144,6 +155,10 @@ export const projects: Project[] = [
   },
   {
     slug: 'acpins',
+    client: 'TODO: client',
+    year: 'TODO: year',
+    story:
+      'TODO: replace. The gap in the market and how the site answers it.',
     stack: ['Next.js', 'Tailwind CSS', 'Vercel'],
     category: 'E-commerce',
     title: 'ACPins',
@@ -156,6 +171,10 @@ export const projects: Project[] = [
   },
   {
     slug: 'acpeds',
+    client: 'TODO: client',
+    year: 'TODO: year',
+    story:
+      'TODO: replace. The problem of scale here, and how you kept it fast.',
     stack: ['Next.js', 'Tailwind CSS', 'French'],
     category: 'Catalogue',
     title: 'ACPeds',

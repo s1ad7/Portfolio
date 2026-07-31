@@ -1,8 +1,7 @@
 'use client'
 
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { useId, useState } from 'react'
-import { ease } from '@/lib/motion'
+import { gsap, prefersReducedMotion, useGSAP, EASE_UI } from '@/lib/gsap'
+import { useId, useRef, useState } from 'react'
 import { faqSection } from '@/lib/content'
 import { Reveal } from './ui/Reveal'
 import { Section } from './ui/Section'
@@ -16,8 +15,31 @@ import { Section } from './ui/Section'
  */
 export function Faq() {
   const [open, setOpen] = useState<number | null>(0)
-  const reduced = useReducedMotion()
   const baseId = useId()
+  const panelRefs = useRef<(HTMLDivElement | null)[]>([])
+
+  /* Height is animated rather than toggled so the list does not jump. `auto` is
+     resolved by GSAP at tween time, then locked back to a number, which keeps
+     the closed state measurable for the next open. */
+  useGSAP(
+    () => {
+      const reduced = prefersReducedMotion()
+      panelRefs.current.forEach((el, i) => {
+        if (!el) return
+        const shouldOpen = open === i
+        if (reduced) {
+          gsap.set(el, { height: shouldOpen ? 'auto' : 0 })
+          return
+        }
+        gsap.to(el, {
+          height: shouldOpen ? 'auto' : 0,
+          duration: 0.32,
+          ease: EASE_UI,
+        })
+      })
+    },
+    { dependencies: [open] }
+  )
 
   return (
     <Section
@@ -57,33 +79,29 @@ export function Faq() {
                         while the vertical one turns, so it never looks doubled. */}
                     <span className="relative flex h-6 w-6 shrink-0 items-center justify-center">
                       <span className="absolute h-[1.5px] w-3.5 rounded-full bg-current" />
-                      <motion.span
-                        animate={{ rotate: isOpen ? 0 : 90 }}
-                        transition={{ duration: 0.25, ease }}
-                        className="absolute h-[1.5px] w-3.5 rounded-full bg-current"
+                      <span
+                        className={`absolute h-[1.5px] w-3.5 rounded-full bg-current transition-transform duration-250 ease-signature ${
+                          isOpen ? 'rotate-0' : 'rotate-90'
+                        }`}
                       />
                     </span>
                   </button>
                 </h3>
 
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      id={panelId}
-                      role="region"
-                      aria-labelledby={buttonId}
-                      initial={reduced ? { height: 'auto' } : { height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={reduced ? { height: 'auto' } : { height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease }}
-                      className="overflow-hidden"
-                    >
-                      <p className="pb-6 pl-8 text-sm leading-relaxed text-muted md:pl-9">
-                        {item.answer}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <div
+                  id={panelId}
+                  role="region"
+                  aria-labelledby={buttonId}
+                  ref={(el) => {
+                    panelRefs.current[i] = el
+                  }}
+                  className="overflow-hidden"
+                  style={{ height: 0 }}
+                >
+                  <p className="pb-6 pl-8 text-sm leading-relaxed text-muted md:pl-9">
+                    {item.answer}
+                  </p>
+                </div>
               </li>
             )
           })}
