@@ -49,19 +49,7 @@ export interface Project {
   /** Small label above the title, e.g. "Booking Platform". */
   category: string
   title: string
-  /** Who it was for. TODO (Saad): fill these in. */
-  client: string
-  /** When it shipped. TODO (Saad): fill these in. */
-  year: string
-  /**
-   * Two or three sentences: the problem, the decision you took, what changed.
-   *
-   * TODO (Saad): this is the whole point of the section, and the part nobody
-   * else can write. It is what separates "builds websites" from "works out what
-   * the business actually needs first". Placeholders are marked below.
-   */
-  story: string
-  /** One-line summary used by the stacked fallback and for search engines. */
+  /** Shown on the card, under the title. */
   description: string
   /** Tech chips, detected from the running sites rather than assumed. */
   stack: readonly string[]
@@ -97,10 +85,6 @@ export interface Project {
 export const projects: Project[] = [
   {
     slug: 'carently',
-    client: 'TODO: client',
-    year: 'TODO: year',
-    story:
-      'TODO: replace. The problem they came with, the call you made, and what changed as a result. Two or three sentences is plenty.',
     stack: ['Tailwind CSS', 'Vercel', 'French'],
     category: 'Booking Platform',
     title: 'Carently',
@@ -111,10 +95,6 @@ export const projects: Project[] = [
   },
   {
     slug: 'streamelite',
-    client: 'TODO: client',
-    year: 'TODO: year',
-    story:
-      'TODO: replace. What made this hard, and how you solved it.',
     stack: ['Next.js', 'Tailwind CSS', 'Vercel', 'French'],
     category: 'Subscription Site',
     title: 'StreamElite',
@@ -126,10 +106,6 @@ export const projects: Project[] = [
   },
   {
     slug: 'marbio',
-    client: 'TODO: client',
-    year: 'TODO: year',
-    story:
-      'TODO: replace. An institutional client with a deep structure: what that demanded.',
     stack: ['WordPress', 'GSAP', 'French'],
     category: 'Corporate Site',
     title: 'Marbio',
@@ -140,10 +116,6 @@ export const projects: Project[] = [
   },
   {
     slug: 'acscripts',
-    client: 'TODO: client',
-    year: 'TODO: year',
-    story:
-      'TODO: replace. Why it needed building, and what you decided.',
     stack: ['Next.js', 'Tailwind CSS', 'Vercel'],
     category: 'E-commerce',
     title: 'ACScripts',
@@ -155,10 +127,6 @@ export const projects: Project[] = [
   },
   {
     slug: 'acpins',
-    client: 'TODO: client',
-    year: 'TODO: year',
-    story:
-      'TODO: replace. The gap in the market and how the site answers it.',
     stack: ['Next.js', 'Tailwind CSS', 'Vercel'],
     category: 'E-commerce',
     title: 'ACPins',
@@ -171,10 +139,6 @@ export const projects: Project[] = [
   },
   {
     slug: 'acpeds',
-    client: 'TODO: client',
-    year: 'TODO: year',
-    story:
-      'TODO: replace. The problem of scale here, and how you kept it fast.',
     stack: ['Next.js', 'Tailwind CSS', 'French'],
     category: 'Catalogue',
     title: 'ACPeds',

@@ -56,6 +56,53 @@ if (targets.length === 0) {
 
 if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true })
 
+/**
+ * Builds the angled collage: three screenshots rotated to a common angle,
+ * overlapped along a diagonal, over a gradient drawn from the site's own
+ * average colour. Rendered as a page and screenshotted at 1600x1200, which is
+ * the 4:3 the card's 533x400 image slot expects.
+ */
+async function composeCard(browser, shots, tint, outPath) {
+  const [r, g, b] = tint
+  // Two stops either side of the sampled colour give the backdrop depth without
+  // drifting away from the site's own palette.
+  /* Push the sample away from grey before using it. Averaging a whole hero
+     tends toward mud, and a muddy backdrop makes the whole card look flat. */
+  const avg = (r + g + b) / 3
+  const sat = (c) => Math.max(0, Math.min(255, Math.round(avg + (c - avg) * 2.2)))
+  const [sr, sg, sb] = [sat(r), sat(g), sat(b)]
+  const shade = (c, amt) => Math.max(0, Math.min(255, Math.round(c * amt)))
+  const dark = `rgb(${shade(sr, 0.42)}, ${shade(sg, 0.42)}, ${shade(sb, 0.42)})`
+  const light = `rgb(${shade(sr, 0.95)}, ${shade(sg, 0.95)}, ${shade(sb, 0.95)})`
+
+  const html = `<!doctype html><html><head><meta charset="utf-8"><style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{width:1600px;height:1200px;overflow:hidden;
+         background:linear-gradient(135deg, ${dark} 0%, ${light} 100%)}
+    .stage{position:relative;width:1600px;height:1200px;
+           perspective:2200px;transform-style:preserve-3d}
+    .shot{position:absolute;width:880px;border-radius:12px;overflow:hidden;
+          box-shadow:0 40px 80px -20px rgba(0,0,0,.55), 0 8px 24px -8px rgba(0,0,0,.4);
+          transform-origin:center}
+    .shot img{display:block;width:100%;height:auto}
+    /* Common angle, staggered along a diagonal, back to front. */
+    .s1{left:-120px; top:-40px;  transform:rotate(-14deg) scale(.88); z-index:1}
+    .s2{left:330px;  top:250px;  transform:rotate(-14deg); z-index:3}
+    .s3{left:830px;  top:640px;  transform:rotate(-14deg) scale(.92); z-index:2}
+  </style></head><body><div class="stage">
+    <div class="shot s1"><img src="${shots[1]}"></div>
+    <div class="shot s3"><img src="${shots[2]}"></div>
+    <div class="shot s2"><img src="${shots[0]}"></div>
+  </div></body></html>`
+
+  const ctx = await browser.newContext({ viewport: { width: 1600, height: 1200 }, deviceScaleFactor: 1 })
+  const page = await ctx.newPage()
+  await page.setContent(html, { waitUntil: 'load' })
+  await page.waitForTimeout(600)
+  await page.screenshot({ path: outPath, type: 'jpeg', quality: 88 })
+  await ctx.close()
+}
+
 /** Prefer installed Chrome; fall back to bundled Chromium. */
 async function launch() {
   try {
@@ -79,14 +126,10 @@ async function launch() {
  * on a 2x display. Now that each file is one viewport rather than a whole page,
  * quality can go back up to 88 and the set is still far smaller than before.
  *
- * Height 1300, not 860. The showcase puts these in a column that is roughly as
- * tall as it is wide, and a 1.49:1 landscape capture dropped into that lost a
- * third of its width to cropping, cutting site headlines mid-word. At 1280x1300
- * the source is 0.98:1, so it very nearly matches the column and almost nothing
- * is cropped. The extra height also carries a little of the section below the
- * fold, which reads as more of the site rather than less.
+ * Landscape 1440x900: these become the panes of an angled collage, and a pane
+ * only reads as a browser window if it is wider than it is tall.
  */
-const VIEWPORT = { width: 1280, height: 1300 }
+const VIEWPORT = { width: 1440, height: 900 }
 const SCALE = 2
 const QUALITY = 88
 
@@ -303,17 +346,51 @@ for (const { slug, url } of targets) {
     await page.waitForTimeout(900)
     process.stdout.write(`[-${dismissed} overlay, +${revealed} shown] `)
 
-    /* Viewport-only shot: the panel shows the hero full-bleed, so that is all
-       that is needed. JPEG rather than PNG, since these are photographic. */
-    await page.evaluate(() => window.scrollTo(0, 0))
-    await page.waitForTimeout(600)
+    /* Three shots down the page, then composed into one angled collage.
+     *
+     * The reference's cards are not flat screenshots: each is three or four
+     * views of the site rotated to a common angle, overlapped along a diagonal,
+     * each with rounded corners and a drop shadow, over a gradient drawn from
+     * the site's own palette. A single flat capture next to that looks inert,
+     * so this reproduces the technique.
+     *
+     * Composition happens in the browser rather than through an image library:
+     * CSS already does rotation, radius and shadow, and Playwright is here
+     * anyway, so it costs no extra dependency. */
+    const pageHeight = await page.evaluate(() => document.body.scrollHeight)
+    const stops = [0, Math.round(pageHeight * 0.3), Math.round(pageHeight * 0.62)]
+    const shots = []
 
-    await page.screenshot({
-      path: join(outDir, `${slug}.jpg`),
-      type: 'jpeg',
-      quality: QUALITY,
-    })
-    console.log(`ok  ${VIEWPORT.width}x${VIEWPORT.height} css @${SCALE}x`)
+    for (const y of stops) {
+      await page.evaluate((yy) => window.scrollTo(0, yy), y)
+      await page.waitForTimeout(700)
+      const buf = await page.screenshot({ type: 'jpeg', quality: 90 })
+      shots.push(`data:image/jpeg;base64,${buf.toString('base64')}`)
+    }
+
+    // Average colour of the hero, used for the backdrop gradient.
+    await page.evaluate(() => window.scrollTo(0, 0))
+    await page.waitForTimeout(400)
+    const tint = await page.evaluate(async (dataUrl) => {
+      const img = new Image()
+      img.src = dataUrl
+      await img.decode()
+      const c = document.createElement('canvas')
+      c.width = 40
+      c.height = 40
+      const ctx = c.getContext('2d')
+      ctx.drawImage(img, 0, 0, 40, 40)
+      const d = ctx.getImageData(0, 0, 40, 40).data
+      let r = 0, g = 0, bl = 0
+      for (let i = 0; i < d.length; i += 4) {
+        r += d[i]; g += d[i + 1]; bl += d[i + 2]
+      }
+      const n = d.length / 4
+      return [Math.round(r / n), Math.round(g / n), Math.round(bl / n)]
+    }, shots[0])
+
+    await composeCard(browser, shots, tint, join(outDir, `${slug}.jpg`))
+    console.log(`ok  collage 1600x1200  tint rgb(${tint.join(',')})`)
     ok++
   } catch (e) {
     console.log(`FAILED  ${String(e).split('\n')[0].slice(0, 90)}`)

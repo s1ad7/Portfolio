@@ -1,34 +1,34 @@
-import { projectsSection } from '@/lib/content'
-import { ProjectShowcase } from './ProjectShowcase'
-import { Container } from './ui/Section'
+import { projects, projectsSection } from '@/lib/content'
+import { ProjectCard } from './ProjectCard'
 import { Eyebrow } from './ui/Eyebrow'
 import { Reveal } from './ui/Reveal'
 
 /**
- * Written out rather than using <Section> because the showcase needs the full
- * width of the card and its own vertical rhythm: the pinned variant is several
- * screens tall, so the usual `mt-16` spacing under the header does not apply.
+ * Projects, matching the reference's section (paul-hahn.com).
  *
- * Note there is no `overflow-hidden` anywhere on the way down to the showcase.
- * A sticky element stops sticking the moment any ancestor clips overflow, which
- * is the usual reason a pinned section silently stops pinning.
+ * The header is LEFT-aligned here, unlike the other sections which centre
+ * theirs. That is how the reference does it: eyebrow, heading and intro all sit
+ * flush at the container's left edge.
+ *
+ * Two containers, not one. The header runs to 1200px while the card grid is
+ * 1090px (two 533px cards plus a 24px gap), centred inside it. That inset is
+ * measured, not invented.
  */
 export function Projects() {
   return (
-    /* No `shell` here, unlike every other section. The panels are meant to run
-       edge to edge, and the shell's 24px inset plus 40px radius left a white
-       gutter down both sides of what should be a full-bleed image. */
-    <section id="projects" className="scroll-mt-28 bg-white pt-24 md:pt-32">
-      <Container>
-        <Reveal className="flex flex-col items-center gap-4 text-center">
+    <section id="projects" className="shell scroll-mt-28 bg-white py-16">
+      <div className="mx-auto w-full max-w-[1200px] px-6 lg:px-0">
+        <Reveal className="flex flex-col gap-4">
           <Eyebrow>{projectsSection.eyebrow}</Eyebrow>
-          <h2 className="max-w-3xl text-4xl md:text-5xl">{projectsSection.heading}</h2>
-          <p className="max-w-2xl text-base leading-[1.8] text-body">{projectsSection.intro}</p>
+          <h2 className="max-w-[745px] text-4xl md:text-5xl">{projectsSection.heading}</h2>
+          <p className="text-base leading-[1.8] text-muted">{projectsSection.intro}</p>
         </Reveal>
-      </Container>
 
-      <div className="mt-16 md:mt-0">
-        <ProjectShowcase />
+        <div className="mx-auto mt-14 grid w-full max-w-[1090px] gap-6 md:grid-cols-2">
+          {projects.map((project, i) => (
+            <ProjectCard key={project.slug} project={project} index={i} />
+          ))}
+        </div>
       </div>
     </section>
   )
