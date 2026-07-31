@@ -78,8 +78,15 @@ async function launch() {
  * deviceScaleFactor 2 gives a 2560px-wide source, which stays crisp full-bleed
  * on a 2x display. Now that each file is one viewport rather than a whole page,
  * quality can go back up to 88 and the set is still far smaller than before.
+ *
+ * Height 1300, not 860. The showcase puts these in a column that is roughly as
+ * tall as it is wide, and a 1.49:1 landscape capture dropped into that lost a
+ * third of its width to cropping, cutting site headlines mid-word. At 1280x1300
+ * the source is 0.98:1, so it very nearly matches the column and almost nothing
+ * is cropped. The extra height also carries a little of the section below the
+ * fold, which reads as more of the site rather than less.
  */
-const VIEWPORT = { width: 1280, height: 860 }
+const VIEWPORT = { width: 1280, height: 1300 }
 const SCALE = 2
 const QUALITY = 88
 

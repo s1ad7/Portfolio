@@ -68,10 +68,10 @@ export function ProjectShowcase() {
         if (!hero) return
         gsap.fromTo(
           hero,
-          { scale: 1.07, yPercent: -1.5 },
+          { scale: 1.03, yPercent: -1 },
           {
             scale: 1,
-            yPercent: 1.5,
+            yPercent: 1,
             ease: 'none',
             scrollTrigger: {
               trigger: root.current,
@@ -145,63 +145,45 @@ function Panel({
       rel="noopener noreferrer"
       data-panel
       aria-label={`${project.title}, ${project.category}. Opens the live site in a new tab.`}
-      className="group relative mt-4 block h-[88svh] overflow-hidden first:mt-0 motion-safe:lg:mt-0 motion-safe:lg:absolute motion-safe:lg:inset-0 motion-safe:lg:h-full"
+      className="group relative mt-4 block overflow-hidden bg-ink first:mt-0 motion-safe:lg:absolute motion-safe:lg:inset-0 motion-safe:lg:mt-0 motion-safe:lg:h-full"
     >
-      {/* Hero, full-bleed. object-top because these are viewport captures and
-          the interesting part is the top of the page. */}
-      <div data-hero className="absolute inset-0 will-change-transform">
-        <Image
-          src={project.image}
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover object-top"
-          priority={first}
-        />
-      </div>
-
-      {/* Scrim. One rule for all six rather than per-project tuning: these sites
-          run from near-black neon to a bright clinical photo, and only a strong
-          consistent gradient keeps the copy legible across all of them. */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/85 to-ink/40"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-ink/50"
-      />
-
-      <div className="relative flex h-full items-center">
-        <div className="mx-auto w-full max-w-[1280px] px-8 md:px-14">
-          <div className="flex max-w-2xl flex-col gap-5 text-white">
-            <p className="flex flex-wrap items-center gap-3 text-sm tracking-[0.14em] text-white/70 uppercase">
+      {/* Split rather than overlaid.
+       *
+       * Every one of these heroes carries its own display headline, so text laid
+       * over them was two typefaces fighting in one space, and it would happen
+       * on all six because that is what a hero is for. Giving the narrative a
+       * solid column of its own removes the competition entirely, and the
+       * screenshot stays sharp and uncropped so the work is still visible. */}
+      <div className="grid h-full lg:grid-cols-[38fr_62fr]">
+        <div className="order-2 flex items-center bg-ink px-8 py-12 lg:order-1 lg:px-14 lg:py-0">
+          <div className="flex w-full flex-col gap-5 text-white">
+            <p className="flex flex-wrap items-center gap-3 text-sm tracking-[0.14em] text-white/60 uppercase">
               <span>{String(index + 1).padStart(2, '0')}</span>
-              <span className="h-px w-8 bg-white/40" aria-hidden="true" />
+              <span className="h-px w-8 bg-white/30" aria-hidden="true" />
               <span>{project.year}</span>
-              <span className="h-px w-8 bg-white/40" aria-hidden="true" />
+              <span className="h-px w-8 bg-white/30" aria-hidden="true" />
               <span>{project.client}</span>
             </p>
 
-            <h3 data-title className="text-5xl leading-[1.05] md:text-7xl lg:text-8xl">
+            <h3 data-title className="text-4xl leading-[1.05] md:text-5xl xl:text-6xl">
               {project.title}
             </h3>
 
             <p className="text-lg text-white/85">{project.category}</p>
-            <p className="max-w-xl text-base leading-[1.8] text-white/75">{project.story}</p>
+            <p className="text-base leading-[1.8] text-white/70">{project.story}</p>
 
             <ul className="flex flex-wrap gap-2 pt-1">
               {project.stack.map((tech) => (
                 <li
                   key={tech}
-                  className="rounded-full border border-white/25 px-3 py-1 text-xs tracking-[0.03em] text-white/80"
+                  className="rounded-full border border-white/25 px-3 py-1 text-xs tracking-[0.03em] text-white/75"
                 >
                   {tech}
                 </li>
               ))}
             </ul>
 
-            <span className="mt-2 inline-flex items-center gap-2 font-ui text-base text-white">
+            <span className="mt-3 inline-flex items-center gap-2 font-ui text-base text-white">
               <span className="border-b border-white/40 pb-0.5 transition-colors duration-300 group-hover:border-white">
                 View live site
               </span>
@@ -224,9 +206,31 @@ function Panel({
             </span>
           </div>
         </div>
+
+        {/* Screenshot side. `object-left-top` rather than centred: this column is
+            taller than the capture's aspect, so something has to be cropped, and
+            the left is where a site's logo, navigation and headline live. */}
+        <div className="relative order-1 h-64 overflow-hidden sm:h-80 lg:order-2 lg:h-full">
+          <div data-hero className="absolute inset-0 will-change-transform">
+            <Image
+              src={project.image}
+              alt=""
+              fill
+              sizes="(max-width: 1023px) 100vw, 62vw"
+              className="object-cover object-left-top"
+              priority={first}
+            />
+          </div>
+          {/* Softens the seam so the screenshot meets the ink column rather than
+              butting against it. */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-ink to-transparent"
+          />
+        </div>
       </div>
 
-      <p className="absolute right-8 bottom-8 text-sm text-white/50 md:right-14">
+      <p className="absolute right-6 bottom-6 text-sm text-white/50 lg:right-10 lg:bottom-8">
         {String(index + 1).padStart(2, '0')} / {String(count).padStart(2, '0')}
       </p>
     </Link>

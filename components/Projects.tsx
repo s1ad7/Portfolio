@@ -15,7 +15,10 @@ import { Reveal } from './ui/Reveal'
  */
 export function Projects() {
   return (
-    <section id="projects" className="shell scroll-mt-28 bg-white pt-24 md:pt-32">
+    /* No `shell` here, unlike every other section. The panels are meant to run
+       edge to edge, and the shell's 24px inset plus 40px radius left a white
+       gutter down both sides of what should be a full-bleed image. */
+    <section id="projects" className="scroll-mt-28 bg-white pt-24 md:pt-32">
       <Container>
         <Reveal className="flex flex-col items-center gap-4 text-center">
           <Eyebrow>{projectsSection.eyebrow}</Eyebrow>
