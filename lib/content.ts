@@ -44,16 +44,34 @@ export const hero = {
 } as const
 
 export interface Project {
-  /** Short slug. Also the screenshot filename: /projects/<slug>.png */
+  /** Short slug. Also the screenshot filename: /projects/<slug>.jpg */
   slug: string
-  /** Small label above the title, e.g. "Web Design & Development". */
+  /** Small label above the title, e.g. "Booking Platform". */
   category: string
   title: string
   description: string
   /**
+   * Tech chips. Detected from the running sites rather than assumed, so a
+   * visitor can match their stack to yours at a glance.
+   */
+  stack: readonly string[]
+  /**
+   * What you actually did, and over what period. TODO (Saad): these are the
+   * parts only you know. "Design and build, solo, 6 weeks" reads far stronger
+   * than leaving it out, and it matters here because this list mixes client
+   * work with your own products.
+   */
+  role?: string
+  /**
+   * One concrete result: a load time, a conversion lift, a launch deadline hit,
+   * traffic. TODO (Saad): supply real figures. Every guide on portfolio
+   * conversion says the same thing, that numbers beat adjectives, and I am not
+   * going to invent them. Projects without one simply omit the line.
+   */
+  outcome?: string
+  /**
    * Tall full-page screenshot under /public/projects. The showcase pans down it
-   * as you scroll, so height matters: aim for at least 3x the width. Generate
-   * them with `npm run capture:projects`.
+   * as you scroll. Generate with `npm run capture:projects`.
    */
   image: string
   /** Live site. */
@@ -73,6 +91,7 @@ export interface Project {
 export const projects: Project[] = [
   {
     slug: 'carently',
+    stack: ['Tailwind CSS', 'Vercel', 'French'],
     category: 'Booking Platform',
     title: 'Carently',
     description:
@@ -82,7 +101,8 @@ export const projects: Project[] = [
   },
   {
     slug: 'streamelite',
-    category: 'Subscription Site, Next.js',
+    stack: ['Next.js', 'Tailwind CSS', 'Vercel', 'French'],
+    category: 'Subscription Site',
     title: 'StreamElite',
     description:
       'Subscription site for a streaming service, built in Next.js and served in French. Channel browser, tiered pricing, blog and FAQ, all pointed at getting a visitor to a plan.',
@@ -91,7 +111,8 @@ export const projects: Project[] = [
   },
   {
     slug: 'acscripts',
-    category: 'E-commerce, Next.js',
+    stack: ['Next.js', 'Tailwind CSS', 'Vercel'],
+    category: 'E-commerce',
     title: 'ACScripts',
     description:
       'Storefront for a premium software catalogue, covering individual products, bundles, custom-work enquiries and customer accounts behind a login.',
@@ -100,7 +121,8 @@ export const projects: Project[] = [
   },
   {
     slug: 'acpins',
-    category: 'E-commerce, Next.js',
+    stack: ['Next.js', 'Tailwind CSS', 'Vercel'],
+    category: 'E-commerce',
     title: 'ACPins',
     description:
       'Storefront for digital game cards, top-ups and subscriptions in Morocco, priced in dirhams with codes delivered over WhatsApp. Spans gift cards, pins, subscriptions and game keys.',
@@ -109,7 +131,8 @@ export const projects: Project[] = [
   },
   {
     slug: 'acpeds',
-    category: 'Catalogue, Next.js',
+    stack: ['Next.js', 'Tailwind CSS', 'French'],
+    category: 'Catalogue',
     title: 'ACPeds',
     description:
       'Catalogue for a large library of custom character models, split by category so an image-heavy collection stays quick to scan. Served in French.',
@@ -118,7 +141,8 @@ export const projects: Project[] = [
   },
   {
     slug: 'marbio',
-    category: 'WordPress, Corporate Site',
+    stack: ['WordPress', 'GSAP', 'French'],
+    category: 'Corporate Site',
     title: 'Marbio',
     description:
       'Corporate site for a vaccine bioproduction company, covering governance, partners, services and production across a deep multi-section structure. Built on WordPress, in French.',

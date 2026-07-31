@@ -56,8 +56,22 @@ async function launch() {
   }
 }
 
-/** One place defining the capture viewport, since the clip below depends on it. */
-const VIEWPORT = { width: 1440, height: 900 }
+/**
+ * Capture settings.
+ *
+ * Width 1280 rather than 1440: the preview frame is far narrower than the
+ * captured page, so everything is scaled down to fit. Capturing a narrower
+ * viewport means the site lays out more compactly and its text survives that
+ * downscale. At 1440 into a 653px frame, 16px body copy landed at 7.3px, which
+ * is below the legibility floor and reads as mush.
+ *
+ * deviceScaleFactor 1.5 gives a 1920px source. A frame up to ~960px CSS needs
+ * 1920 device pixels on a 2x display, so this is sharp there without the ~4x
+ * file-size penalty of a full 2x capture on pages that run 5000px tall.
+ */
+const VIEWPORT = { width: 1280, height: 860 }
+const SCALE = 1.5
+const QUALITY = 85
 
 const browser = await launch()
 let ok = 0
@@ -74,7 +88,7 @@ const manifest = existsSync(manifestPath)
 for (const { slug, href } of targets) {
   const ctx = await browser.newContext({
     viewport: VIEWPORT,
-    deviceScaleFactor: 1,
+    deviceScaleFactor: SCALE,
     /* Many sites skip their scroll-reveal animations entirely under this, which
        renders content in its final state. Cheapest possible fix for reveals,
        and it costs nothing on sites that ignore it. */
@@ -284,10 +298,13 @@ for (const { slug, href } of targets) {
       fullPage: true,
       clip: { x: 0, y: 0, width, height },
       type: 'jpeg',
-      quality: 80,
+      quality: QUALITY,
     })
+    // Manifest records the CSS-pixel aspect, which is what the pan maths needs.
     manifest[slug] = { width, height }
-    console.log(`ok  ${width}x${height}  (${(height / width).toFixed(2)}:1)`)
+    console.log(
+      `ok  ${width}x${height} css @${SCALE}x = ${width * SCALE}x${Math.round(height * SCALE)}  (${(height / width).toFixed(2)}:1)`
+    )
     ok++
   } catch (e) {
     console.log(`FAILED  ${String(e).split('\n')[0].slice(0, 90)}`)

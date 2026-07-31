@@ -1,26 +1,26 @@
 {
   "carently": {
-    "width": 1440,
-    "height": 4416
+    "width": 1280,
+    "height": 4544
   },
   "streamelite": {
-    "width": 1440,
+    "width": 1280,
     "height": 5995
   },
   "acscripts": {
-    "width": 1440,
-    "height": 4783
+    "width": 1280,
+    "height": 4765
   },
   "acpins": {
-    "width": 1440,
-    "height": 6219
+    "width": 1280,
+    "height": 6182
   },
   "acpeds": {
-    "width": 1440,
-    "height": 2188
+    "width": 1280,
+    "height": 2115
   },
   "marbio": {
-    "width": 1440,
-    "height": 4750
+    "width": 1280,
+    "height": 4749
   }
 }
