@@ -26,9 +26,17 @@ const outDir = join(root, 'public', 'projects')
    the site. Parsed with a regex rather than imported, because content.ts is
    TypeScript and this script runs in plain node. */
 const source = readFileSync(join(root, 'lib', 'content.ts'), 'utf8')
-const projects = [...source.matchAll(/slug:\s*'([^']+)'[\s\S]*?href:\s*'([^']+)'/g)].map(
-  ([, slug, href]) => ({ slug, href })
-)
+/* Each entry's block runs from its slug to the next one (or the array's end),
+   so an optional captureUrl is picked up without matching the next project's. */
+const projects = [...source.matchAll(/slug:\s*'([^']+)'([\s\S]*?)(?=slug:|\n\])/g)].map(
+  ([, slug, block]) => {
+    const href = block.match(/href:\s*'([^']+)'/)?.[1]
+    const captureUrl = block.match(/captureUrl:\s*'([^']+)'/)?.[1]
+    // Capture from captureUrl when present: several custom domains do not
+    // resolve everywhere, while the Vercel deployment always does.
+    return { slug, href, url: captureUrl || href }
+  }
+).filter((p) => p.url)
 
 if (projects.length === 0) {
   console.error('No projects found in lib/content.ts. Has the Project shape changed?')
@@ -87,7 +95,7 @@ const manifest = existsSync(manifestPath)
   ? JSON.parse(readFileSync(manifestPath, 'utf8'))
   : {}
 
-for (const { slug, href } of targets) {
+for (const { slug, url } of targets) {
   const ctx = await browser.newContext({
     viewport: VIEWPORT,
     deviceScaleFactor: SCALE,
@@ -99,8 +107,8 @@ for (const { slug, href } of targets) {
   const page = await ctx.newPage()
 
   try {
-    process.stdout.write(`${slug.padEnd(22)} ${href} ... `)
-    await page.goto(href, { waitUntil: 'domcontentloaded', timeout: 60000 })
+    process.stdout.write(`${slug.padEnd(22)} ${url} ... `)
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 })
     await page.waitForTimeout(2500)
 
     /* 1. Clear intro modals, cookie banners and consent gates.

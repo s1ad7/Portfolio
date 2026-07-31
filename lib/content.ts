@@ -74,8 +74,16 @@ export interface Project {
    * as you scroll. Generate with `npm run capture:projects`.
    */
   image: string
-  /** Live site. */
+  /** Live site. This is what visitors click and what the browser frame shows. */
   href: string
+  /**
+   * Where to screenshot from, when that differs from `href`.
+   *
+   * Several of these custom domains do not resolve from every network, so the
+   * capture runs against the Vercel deployment while the portfolio still shows
+   * and links the real domain.
+   */
+  captureUrl?: string
 }
 
 /**
@@ -84,9 +92,12 @@ export interface Project {
  *
  * Screenshots come from `npm run capture:projects`, which reads this list.
  *
- * Not included yet: everstead.llc, which would not resolve when this was
- * written, so there is nothing to capture or describe. Add an entry once it is
- * reachable and re-run the capture.
+ * Order is deliberate: Everstead, Carently, StreamElite, Marbio, then the rest.
+ *
+ * Everstead is the gap. It should sit first, but everstead.llc does not resolve
+ * from here and no Vercel deployment was given for it, so there is nothing to
+ * capture or describe honestly. Add an entry with a `captureUrl` and re-run the
+ * capture, and it will lead the list.
  */
 export const projects: Project[] = [
   {
@@ -105,39 +116,10 @@ export const projects: Project[] = [
     category: 'Subscription Site',
     title: 'StreamElite',
     description:
-      'Subscription site for a streaming service, built in Next.js and served in French. Channel browser, tiered pricing, blog and FAQ, all pointed at getting a visitor to a plan.',
+      'Subscription site for a streaming service, served in French. Channel browser, tiered pricing, blog and FAQ, all pointed at getting a visitor onto a plan.',
     image: '/projects/streamelite.jpg',
-    href: 'https://streamelite-two.vercel.app/',
-  },
-  {
-    slug: 'acscripts',
-    stack: ['Next.js', 'Tailwind CSS', 'Vercel'],
-    category: 'E-commerce',
-    title: 'ACScripts',
-    description:
-      'Storefront for a premium software catalogue, covering individual products, bundles, custom-work enquiries and customer accounts behind a login.',
-    image: '/projects/acscripts.jpg',
-    href: 'https://acsripts.vercel.app/',
-  },
-  {
-    slug: 'acpins',
-    stack: ['Next.js', 'Tailwind CSS', 'Vercel'],
-    category: 'E-commerce',
-    title: 'ACPins',
-    description:
-      'Storefront for digital game cards, top-ups and subscriptions in Morocco, priced in dirhams with codes delivered over WhatsApp. Spans gift cards, pins, subscriptions and game keys.',
-    image: '/projects/acpins.jpg',
-    href: 'https://ac-pins.vercel.app/',
-  },
-  {
-    slug: 'acpeds',
-    stack: ['Next.js', 'Tailwind CSS', 'French'],
-    category: 'Catalogue',
-    title: 'ACPeds',
-    description:
-      'Catalogue for a large library of custom character models, split by category so an image-heavy collection stays quick to scan. Served in French.',
-    image: '/projects/acpeds.jpg',
-    href: 'https://ac-peds.vercel.app/',
+    href: 'https://www.premiumstreamiptv.com/',
+    captureUrl: 'https://streamelite-two.vercel.app/',
   },
   {
     slug: 'marbio',
@@ -148,6 +130,40 @@ export const projects: Project[] = [
       'Corporate site for a vaccine bioproduction company, covering governance, partners, services and production across a deep multi-section structure. Built on WordPress, in French.',
     image: '/projects/marbio.jpg',
     href: 'https://marbio.com/',
+  },
+  {
+    slug: 'acscripts',
+    stack: ['Next.js', 'Tailwind CSS', 'Vercel'],
+    category: 'E-commerce',
+    title: 'ACScripts',
+    description:
+      'Storefront for a premium software catalogue, covering individual products, bundles, custom-work enquiries and customer accounts behind a login.',
+    image: '/projects/acscripts.jpg',
+    href: 'https://scripts.aczone.xyz/',
+    captureUrl: 'https://acsripts.vercel.app/',
+  },
+  {
+    slug: 'acpins',
+    stack: ['Next.js', 'Tailwind CSS', 'Vercel'],
+    category: 'E-commerce',
+    title: 'ACPins',
+    description:
+      'Storefront for digital game cards, top-ups and subscriptions in Morocco, priced in dirhams with codes delivered over WhatsApp. Spans gift cards, pins, subscriptions and game keys.',
+    image: '/projects/acpins.jpg',
+    // TODO (Saad): no custom domain was given for this one, so it still points
+    // at the Vercel deployment. Swap it in if there is one.
+    href: 'https://ac-pins.vercel.app/',
+  },
+  {
+    slug: 'acpeds',
+    stack: ['Next.js', 'Tailwind CSS', 'French'],
+    category: 'Catalogue',
+    title: 'ACPeds',
+    description:
+      'Catalogue for a large library of custom character models, split by category so an image-heavy collection stays quick to scan. Served in French.',
+    image: '/projects/acpeds.jpg',
+    href: 'https://peds.aczone.xyz/',
+    captureUrl: 'https://ac-peds.vercel.app/',
   },
 ]
 
