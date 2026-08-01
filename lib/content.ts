@@ -84,6 +84,30 @@ export interface Project {
  */
 export const projects: Project[] = [
   {
+    /* TODO (Saad): everstead.llc did not resolve from the machine this was
+       written on, so this entry is staged but unfinished. Two things are needed:
+
+         1. The artwork. Run `npm run capture:projects -- everstead` locally,
+            where the domain resolves for you. If it does not resolve there
+            either, add `captureUrl` below pointing at a Vercel deployment, the
+            way the other entries do, and the capture will use that while the
+            card still links to the real domain.
+         2. The category and description. Both are placeholders: the site could
+            not be read, so anything specific here would be invented.
+
+       Until then it ships a neutral placeholder image rather than a screenshot
+       of work that is not this project. */
+    slug: 'everstead',
+    category: 'TODO: category',
+    title: 'Everstead',
+    description:
+      'TODO: replace. One or two sentences on what the site is and what you built.',
+    stack: ['TODO: stack'],
+    image: '/projects/everstead.jpg',
+    href: 'https://www.everstead.llc/',
+    // captureUrl: 'https://<vercel-deployment>.vercel.app/',
+  },
+  {
     slug: 'carently',
     stack: ['Tailwind CSS', 'Vercel', 'French'],
     category: 'Booking Platform',
