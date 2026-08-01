@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "capture:projects": "node scripts/capture-projects.mjs"
+    "capture:projects": "node scripts/capture-projects.mjs",
+    "compose:card": "node scripts/compose-card.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

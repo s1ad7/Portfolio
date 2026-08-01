@@ -75,20 +75,13 @@ export interface Project {
  *
  * Order is deliberate: Everstead, Carently, StreamElite, Marbio, then the rest.
  *
- * Everstead is the gap. It should sit first, but everstead.llc does not resolve
- * from here and no Vercel deployment was given for it, so there is nothing to
- * capture or describe honestly. Add an entry with a `captureUrl` and re-run the
- * capture, and it will lead the list.
+ * Order is deliberate: strongest work first.
  */
 export const projects: Project[] = [
   {
-    /* TODO (Saad): artwork only. everstead.llc does not resolve from the machine
-       this was written on, so the card still ships the neutral placeholder.
-       Run `npm run capture:projects -- everstead` with your VPN on and it will
-       be replaced with a real collage like the others.
-
-       The copy below is written from screenshots of the running site, so it is
-       accurate rather than guessed. */
+    /* everstead.llc does not resolve from every network, so this card's collage
+       was built from supplied screenshots via `npm run compose:card` rather than
+       the automated capture. Same composer, same output. */
     slug: 'everstead',
     category: 'Agency Site',
     title: 'Everstead',
@@ -96,7 +89,6 @@ export const projects: Project[] = [
       'Site for a digital studio, built on a near-black identity with heavy condensed display type and a single gold accent. Runs from a scroll-driven six-stage process, discovery through to launch, into a grid of the industries they build for.',
     image: '/projects/everstead.jpg',
     href: 'https://www.everstead.llc/',
-    // captureUrl: 'https://<vercel-deployment>.vercel.app/',
   },
   {
     slug: 'carently',
