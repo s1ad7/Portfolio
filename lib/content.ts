@@ -213,25 +213,31 @@ export const skillsSection = {
   cta: { label: 'Start a project', href: '#contact' },
   /* Organised by the client's problem, not by stack layer. Research on services
      pages is consistent: buyers shop by outcome, and jargon in the sentences
-     loses them. The tech lives in the chips, where scanners look for it. */
+     loses them. The tech lives in the chips, where scanners look for it.
+
+     Chips are CURATED, five at most, strongest names only. The Presenter's
+     Paradox: evaluators average a list rather than sum it, so a filler chip
+     next to Stripe lowers the row's perceived value instead of raising it.
+     Resist appending everything Saad can use; the intro already says he works
+     into existing stacks. */
   cards: [
     {
       icon: 'layout',
       title: 'Websites that sell',
       body: 'Marketing sites and landing pages where design, speed and copy all point at one goal: turning visitors into enquiries.',
-      tags: ['Next.js', 'WordPress', 'Tailwind CSS', 'GSAP', 'SEO'],
+      tags: ['React', 'Next.js', 'WordPress', 'GSAP', 'SEO'],
     },
     {
       icon: 'cart',
       title: 'Stores & bookings',
       body: 'Shops, subscriptions and booking flows measured by one number: how many people finish checkout.',
-      tags: ['Next.js', 'Payments', 'WhatsApp API', 'Multilingual'],
+      tags: ['Stripe', 'Next.js', 'WhatsApp API', 'Multilingual'],
     },
     {
       icon: 'workflow',
       title: 'Automation',
       body: 'The task that eats an hour of your day becomes a tool that does it in seconds. Connected systems, synced data, no copy-pasting.',
-      tags: ['Python', 'REST APIs', 'Odoo', 'Docker'],
+      tags: ['Node.js', 'Python', 'REST APIs', 'Odoo', 'Docker'],
     },
   ] satisfies SkillCard[],
 } as const
