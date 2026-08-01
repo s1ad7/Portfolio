@@ -179,9 +179,15 @@ export const about = {
    * can never drift from what the grid above shows.
    */
   stats: [
+    /* "Worldwide" is folded into the label rather than faked as a number:
+       the band only animates figures that can be counted. */
+    { value: 30, suffix: '+', label: 'projects delivered worldwide' },
     { value: 'projects', suffix: '', label: 'live sites, all linked above' },
     { value: 3, suffix: '+', label: 'years building for the web' },
-    { value: 'industries', suffix: '', label: 'industries shipped into' },
+    /* Measured with Lighthouse 12 (desktop preset) on 2026-08-01, not asserted:
+       ac-peds scored 99 and acscripts 98. Labelled "top" because it is the
+       best shipped site, not an average. Re-measure before raising it. */
+    { value: 99, suffix: '', label: 'top Lighthouse performance score' },
   ],
   portraitAlt: 'Portrait of Saad Ifli',
 } as const

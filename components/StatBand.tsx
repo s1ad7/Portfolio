@@ -10,9 +10,14 @@ import { about, projects, type AboutStat } from '@/lib/content'
  * number is taken as-is.
  */
 function resolve(value: AboutStat['value']): number {
-  if (value === 'projects') return projects.length
-  if (value === 'industries') return new Set(projects.map((p) => p.category)).size
-  return value
+  /* Typed against string, not the current union of tokens: the tokens in use
+     narrow as stats are edited (removing the last 'industries' entry narrowed
+     the union and broke the old comparison at compile time), and the resolver
+     should not need touching every time the data does. */
+  const v: number | string = value
+  if (v === 'projects') return projects.length
+  if (v === 'industries') return new Set(projects.map((p) => p.category)).size
+  return typeof v === 'number' ? v : 0
 }
 
 /**
@@ -55,7 +60,7 @@ export function StatBand() {
   return (
     <div
       ref={scope}
-      className="mt-16 grid grid-cols-1 gap-10 border-t border-line pt-10 sm:grid-cols-3"
+      className="mt-16 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-line pt-10 lg:grid-cols-4"
     >
       {about.stats.map((stat) => {
         const value = resolve(stat.value)
