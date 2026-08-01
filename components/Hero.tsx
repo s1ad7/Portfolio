@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useRef } from 'react'
-import { gsap, prefersReducedMotion, SplitText, useGSAP } from '@/lib/gsap'
+import { DURATION, EASE, gsap, prefersReducedMotion, REVEAL_Y, useGSAP } from '@/lib/gsap'
 import { hero } from '@/lib/content'
 import { Pill } from './ui/Pill'
 
@@ -15,42 +15,46 @@ export function Hero() {
       const badge = '[data-hero-badge]'
       const portrait = '[data-hero-portrait]'
       const sub = '[data-hero-sub]'
-      const title = scope.current?.querySelector<HTMLElement>('[data-hero-title]')
+      const title = '[data-hero-title]'
+      const cue = '[data-hero-cue]'
 
       if (reduced) {
-        gsap.set([badge, portrait, sub], { opacity: 1, y: 0, scale: 1, rotate: -4 })
+        gsap.set([badge, portrait, sub, cue], { opacity: 1, y: 0, scale: 1 })
         return
       }
 
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+      /* The reference reveals whole elements on a single spring: opacity 0->1
+         and y 24->0, no character split and no overshoot. A per-character
+         stagger and a back.out portrait read as a different, showier site, so
+         both are gone in favour of the measured curve. */
+      gsap.from([badge, title, portrait, sub], {
+        opacity: 0,
+        y: REVEAL_Y,
+        duration: DURATION,
+        ease: EASE,
+        stagger: 0.09,
+        /* The portrait's resting tilt and its hover straightening are CSS. An
+           inline transform left behind by GSAP would outrank both, so hand the
+           element back to the stylesheet once the reveal lands. */
+        clearProps: 'transform',
+      })
 
-      tl.from(badge, { opacity: 0, y: 14, duration: 0.7 })
-
-      /* The headline splits per character. SplitText keeps the original text
-         available to assistive tech, so this does not cost the h1 its meaning. */
-      let split: SplitText | undefined
-      if (title) {
-        split = SplitText.create(title, {
-          type: 'chars',
-          charsClass: 'inline-block',
-          onSplit: (self) =>
-            tl.from(
-              self.chars,
-              { opacity: 0, yPercent: 55, duration: 0.7, stagger: 0.022 },
-              '-=0.45'
-            ),
-        })
-      }
-
-      // The portrait settles into its resting tilt rather than starting there.
-      tl.from(
-        portrait,
-        { opacity: 0, scale: 0.88, rotate: -12, duration: 0.85, ease: 'back.out(1.4)' },
-        '-=0.5'
+      /* The reference's one page-load flourish: a double chevron at the foot of
+         the hero, appearing on a 2.5s delay, then breathing. */
+      gsap.fromTo(
+        cue,
+        { opacity: 0, y: -6 },
+        { opacity: 1, y: 0, duration: DURATION, ease: EASE, delay: 2.5 }
       )
-      tl.from(sub, { opacity: 0, y: 14, duration: 0.7 }, '-=0.55')
+      gsap.to(cue, {
+        y: 6,
+        duration: 1.4,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true,
+        delay: 2.5 + DURATION,
+      })
 
-      return () => split?.revert()
     },
     { scope }
   )
@@ -81,16 +85,18 @@ export function Hero() {
 
           <span
             data-hero-portrait
-            /* Sized to the line box rather than the cap height, which is what
-               makes it read as part of the headline. */
-            className="relative inline-block h-[1.5em] w-[1.44em] shrink-0 -rotate-4 overflow-hidden rounded-[0.13em] border-[0.045em] border-white bg-white shadow-portrait transition-transform duration-500 ease-signature hover:rotate-0"
+            /* Measured off the reference: 169x175 against a 96px headline, so
+               1.76em x 1.82em, tilted +4deg (matrix sin 0.0698), radius 12px at
+               that size. It overflows the line box by ~30px top and bottom,
+               which is what gives it presence next to the type. */
+            className="relative inline-block h-[1.82em] w-[1.76em] shrink-0 rotate-4 overflow-hidden rounded-[0.125em] border-[0.045em] border-white bg-white shadow-portrait transition-transform duration-500 ease-signature hover:rotate-0"
           >
             <Image
               src="/hero-portrait.jpg"
               alt={hero.portraitAlt}
               fill
               priority
-              sizes="220px"
+              sizes="(max-width: 768px) 130px, 220px"
               className="object-cover object-[48%_32%]"
             />
           </span>
@@ -101,6 +107,18 @@ export function Hero() {
         <p data-hero-sub className="max-w-xl text-base leading-[1.8] text-muted">
           {hero.subline}
         </p>
+      </div>
+
+      {/* Kept faint: on the reference this is a whisper, not a call to action. */}
+      <div
+        data-hero-cue
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-10 left-1/2 -translate-x-1/2 text-line opacity-0"
+      >
+        <svg width="34" height="26" viewBox="0 0 34 26" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m3 3 14 9 14-9" />
+          <path d="m3 13 14 9 14-9" />
+        </svg>
       </div>
     </section>
   )
