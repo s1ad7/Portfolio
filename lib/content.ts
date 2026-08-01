@@ -304,4 +304,8 @@ export const contactSection = {
   },
   submit: 'Submit',
   success: "Thanks, your message is on its way. I'll reply soon.",
+  /* Shown when the server has no email provider configured and the message was
+     handed to the visitor's own mail client instead. It must not claim the
+     message was sent: at this point it has only been drafted. */
+  successViaMail: 'Your email app should be open with the message ready. Press send and it reaches me.',
 } as const

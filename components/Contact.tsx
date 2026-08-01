@@ -19,8 +19,22 @@ const inputClasses =
  */
 export function Contact() {
   const [errors, setErrors] = useState<Errors>({})
-  const [sent, setSent] = useState(false)
+  const [sent, setSent] = useState<'server' | 'mail' | null>(null)
   const [busy, setBusy] = useState(false)
+  const [failed, setFailed] = useState<string | null>(null)
+
+  /**
+   * Builds the mailto used when no email provider is configured on the server.
+   * The visitor's own client sends it, so a message can still reach Saad on a
+   * deploy with no environment variables set. The confirmation for this path is
+   * worded differently on purpose: at that point the mail is drafted, not sent.
+   */
+  const mailtoFallback = (name: string, email: string, message: string) => {
+    const body = [message, '', '--', name, email].join('\n')
+    return `mailto:${site.email}?subject=${encodeURIComponent(
+      `New enquiry from ${name}`
+    )}&body=${encodeURIComponent(body)}`
+  }
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -41,28 +55,51 @@ export function Contact() {
     else if (message.length < 10) next.message = 'A little more detail would help.'
 
     setErrors(next)
+    setFailed(null)
     if (Object.keys(next).length > 0) return
 
     setBusy(true)
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          message,
+          company: String(data.get('company') ?? ''),
+        }),
+      })
 
-    /* ---------------------------------------------------------------------
-       TODO: no endpoint is wired up yet, so nothing is actually delivered.
-       Replace this block with a real submission, for example:
+      if (response.ok) {
+        setSent('server')
+        form.reset()
+        return
+      }
 
-         const res = await fetch('/api/contact', {
-           method: 'POST',
-           headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify({ name, email, message }),
-         })
-         if (!res.ok) throw new Error('Send failed')
+      /* 503 means the server has no provider configured. Hand the message to
+         the visitor's own mail client rather than claiming it was sent. */
+      if (response.status === 503) {
+        window.location.href = mailtoFallback(name, email, message)
+        setSent('mail')
+        form.reset()
+        return
+      }
 
-       Until then the email chip on the left is the path that genuinely works.
-    --------------------------------------------------------------------- */
-    await new Promise((resolve) => setTimeout(resolve, 600))
+      if (response.status === 422) {
+        const payload = (await response.json()) as { errors?: Errors }
+        setErrors(payload.errors ?? {})
+        return
+      }
 
-    setBusy(false)
-    setSent(true)
-    form.reset()
+      const payload = (await response.json().catch(() => ({}))) as { error?: string }
+      setFailed(payload.error ?? 'Something went wrong. Please email me directly.')
+    } catch {
+      /* Offline, or the request never left the device. */
+      setFailed('Could not reach the server. Please email me directly.')
+    } finally {
+      setBusy(false)
+    }
   }
 
   return (
@@ -111,12 +148,14 @@ export function Contact() {
           {/* The form: the grey glass panel, inset 24px from the card edge. */}
           <div className="p-4 lg:p-6 lg:pl-0">
             <div className="h-full rounded-[16px] bg-glass-panel p-6 backdrop-blur-[5px]">
-              {sent ? (
+              {sent !== null ? (
                 <div role="status" className="flex h-full flex-col items-start justify-center gap-4">
-                  <p className="text-lg">{contactSection.success}</p>
+                  <p className="text-lg">
+                    {sent === 'mail' ? contactSection.successViaMail : contactSection.success}
+                  </p>
                   <button
                     type="button"
-                    onClick={() => setSent(false)}
+                    onClick={() => setSent(null)}
                     className="label-caps !text-accent"
                   >
                     Send another
@@ -124,6 +163,13 @@ export function Contact() {
                 </div>
               ) : (
                 <form onSubmit={onSubmit} noValidate className="flex h-full flex-col gap-4">
+                  {/* Honeypot. Hidden from people and from assistive tech, so
+                      anything filled in here came from a bot. */}
+                  <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+                    <label htmlFor="company">Company</label>
+                    <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" />
+                  </div>
+
                   <Field
                     id="name"
                     label={contactSection.fields.name}
@@ -162,6 +208,15 @@ export function Contact() {
                       </p>
                     )}
                   </div>
+
+                  {failed && (
+                    <p role="alert" className="text-xs text-accent">
+                      {failed}{' '}
+                      <a href={`mailto:${site.email}`} className="underline">
+                        {site.email}
+                      </a>
+                    </p>
+                  )}
 
                   <button
                     type="submit"
