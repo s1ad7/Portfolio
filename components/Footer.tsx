@@ -13,11 +13,11 @@ export function Footer() {
     <footer className="flex flex-col items-center gap-2 px-6 py-14 text-center">
       <Link
         href="#top"
-        aria-label={`${site.name}, back to top`}
-        className="font-display text-2xl font-semibold tracking-[-0.03em]"
+        className="-my-2 py-2 font-display text-2xl font-semibold tracking-[-0.03em]"
       >
         <span className="text-wordmark">{site.firstName}</span>{' '}
         <span className="text-ink">{site.lastName}</span>
+        <span className="sr-only">, back to top</span>
       </Link>
       <p className="text-sm text-ink">{site.tagline}</p>
     </footer>

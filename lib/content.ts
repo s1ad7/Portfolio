@@ -15,9 +15,11 @@ export const site = {
   description:
     'Full-stack developer in Morocco building websites, online stores and automations that turn visitors into customers. Next.js, WordPress, GSAP.',
   /** TODO: replace with the real production domain once deployed. */
-  url: 'https://saadifli.dev',
+  /* Not yet registered. Everything canonical, OG and sitemap flows from
+     this one string, so buying the domain needs no other edit. */
+  url: 'https://saadifli.com',
   tagline: 'Built with structure, shipped with care.',
-  email: 'contact@saadifli.dev',
+  email: 'iflisaad17@gmail.com',
   location: 'Morocco',
   links: {
     /* Drives both the footer link and the contribution calendar in About. */

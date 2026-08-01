@@ -67,12 +67,15 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
           src={src}
           alt={`Thumbnail for ${project.title}`}
           fill
-          sizes="(max-width: 767px) 100vw, 533px"
+          sizes="(max-width: 767px) 92vw, (max-width: 1199px) 45vw, 533px"
           /* Slow settle rather than a pop: same easing family as the portrait
              tilt, clipped by the frame. The global reduce-motion rule collapses
              the transition, so this is a CSS-only effect with a11y for free. */
           className="object-cover transition-transform duration-700 ease-signature group-hover:scale-[1.04]"
-          priority={index < 2}
+          /* No priority: the hero fills the viewport, so no card is ever the
+             LCP element. Marking these eager pulled bandwidth away from the
+             fonts that gate first paint on mobile. */
+          loading="lazy"
         />
       </div>
 

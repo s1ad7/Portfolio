@@ -96,7 +96,9 @@ export function GithubActivity() {
           href={site.links.github}
           target="_blank"
           rel="noopener noreferrer"
-          className="font-ui text-sm text-ink transition-colors duration-200 ease-signature hover:text-muted"
+          /* -my-3 cancels the padding: the hit area reaches 44px without shifting
+             the baseline alignment with the total on the left. */
+          className="-my-3 py-3 font-ui text-sm text-ink transition-colors duration-200 ease-signature hover:text-muted"
         >
           @{USERNAME} &#8599;
         </a>

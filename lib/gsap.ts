@@ -3,14 +3,13 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { CustomEase } from 'gsap/CustomEase'
-import { SplitText } from 'gsap/SplitText'
 import { useGSAP } from '@gsap/react'
 
 /* Registered once at module scope. Registering inside a component re-runs on
    every mount, which GSAP warns about. */
-gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText, useGSAP)
+gsap.registerPlugin(CustomEase, ScrollTrigger, useGSAP)
 
-export { CustomEase, gsap, ScrollTrigger, SplitText, useGSAP }
+export { CustomEase, gsap, ScrollTrigger, useGSAP }
 
 /**
  * The site's motion signature, carried over from the measurements taken off the

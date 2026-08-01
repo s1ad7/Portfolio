@@ -2,42 +2,24 @@
 
 import Image from 'next/image'
 import { useRef } from 'react'
-import { DURATION, EASE, gsap, prefersReducedMotion, REVEAL_Y, useGSAP } from '@/lib/gsap'
+import { DURATION, EASE, gsap, prefersReducedMotion, useGSAP } from '@/lib/gsap'
 import { hero } from '@/lib/content'
 import { Pill } from './ui/Pill'
+
+const cue = '[data-hero-cue]'
 
 export function Hero() {
   const scope = useRef<HTMLElement>(null)
 
+  /* Only the scroll cue is animated from JS. The hero's own reveal is CSS (see
+     globals.css): it is above the fold, and gating it on GSAP cost 3.7s of
+     Largest Contentful Paint on a throttled phone. */
   useGSAP(
     () => {
-      const reduced = prefersReducedMotion()
-      const badge = '[data-hero-badge]'
-      const portrait = '[data-hero-portrait]'
-      const sub = '[data-hero-sub]'
-      const title = '[data-hero-title]'
-      const cue = '[data-hero-cue]'
-
-      if (reduced) {
-        gsap.set([badge, portrait, sub, cue], { opacity: 1, y: 0, scale: 1 })
+      if (prefersReducedMotion()) {
+        gsap.set(cue, { opacity: 1, y: 0 })
         return
       }
-
-      /* The reference reveals whole elements on a single spring: opacity 0->1
-         and y 24->0, no character split and no overshoot. A per-character
-         stagger and a back.out portrait read as a different, showier site, so
-         both are gone in favour of the measured curve. */
-      gsap.from([badge, title, portrait, sub], {
-        opacity: 0,
-        y: REVEAL_Y,
-        duration: DURATION,
-        ease: EASE,
-        stagger: 0.09,
-        /* The portrait's resting tilt and its hover straightening are CSS. An
-           inline transform left behind by GSAP would outrank both, so hand the
-           element back to the stylesheet once the reveal lands. */
-        clearProps: 'transform',
-      })
 
       /* The reference's one page-load flourish: a double chevron at the foot of
          the hero, appearing on a 2.5s delay, then breathing. */
@@ -54,7 +36,6 @@ export function Hero() {
         yoyo: true,
         delay: 2.5 + DURATION,
       })
-
     },
     { scope }
   )

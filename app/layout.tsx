@@ -1,7 +1,8 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Bricolage_Grotesque, Poppins, Work_Sans } from 'next/font/google'
 import './globals.css'
 import { SmoothScroll } from '@/components/SmoothScroll'
+import { StructuredData } from '@/components/StructuredData'
 import { site } from '@/lib/content'
 
 /* Two faces, matching the reference's measured usage: Bricolage Grotesque at
@@ -12,7 +13,7 @@ const bricolage = Bricolage_Grotesque({
   /* The About headline computes to w900 on the reference, but Google Fonts
      caps Bricolage Grotesque at 800, so 800 is the heaviest real weight
      available. The difference is imperceptible at 32px. */
-  weight: ['600', '700', '800'],
+  weight: ['600', '800'],
   variable: '--font-bricolage',
   display: 'swap',
 })
@@ -21,7 +22,7 @@ const bricolage = Bricolage_Grotesque({
    third family. */
 const workSans = Work_Sans({
   subsets: ['latin'],
-  weight: ['400', '500'],
+  weight: ['400'],
   variable: '--font-work-sans',
   display: 'swap',
 })
@@ -34,16 +35,52 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: `${site.name}, ${site.role}`,
+  /* Makes every relative URL below (canonical, OG image, sitemap) resolve
+     against the real domain instead of localhost. */
+  metadataBase: new URL(site.url),
+  title: {
+    default: `${site.name}, ${site.role} in Morocco`,
+    template: `%s | ${site.name}`,
+  },
   description: site.description,
+  /* Not a ranking factor for Google, but still read by some crawlers and by
+     the AI search engines that increasingly send this kind of traffic. */
+  keywords: [
+    'web developer Morocco',
+    'freelance web developer',
+    'Next.js developer',
+    'React developer Morocco',
+    'website for small business',
+    'e-commerce website developer',
+    'booking website developer',
+    'business automation developer',
+    site.name,
+  ],
+  authors: [{ name: site.name, url: site.url }],
+  creator: site.name,
+  alternates: { canonical: '/' },
   openGraph: {
-    title: `${site.name}, ${site.role}`,
+    title: `${site.name}, ${site.role} in Morocco`,
     description: site.description,
     url: site.url,
     siteName: site.name,
+    locale: 'en',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: `${site.name}, ${site.role}`,
+    description: site.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
+  },
 }
+
+/* Matches the page background, so mobile browsers tint their chrome to suit. */
+export const viewport: Viewport = { themeColor: '#ffffff' }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -61,6 +98,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           tree is still reported. */}
       <body className="font-body" suppressHydrationWarning>
         <SmoothScroll />
+        <StructuredData />
         {children}
       </body>
     </html>
