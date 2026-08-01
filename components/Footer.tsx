@@ -1,46 +1,25 @@
 import Link from 'next/link'
 import { site } from '@/lib/content'
-import { Container } from './ui/Section'
-import { Wordmark } from './ui/Wordmark'
 
-const social = [
-  { label: 'GitHub', href: site.links.github },
-  { label: 'LinkedIn', href: site.links.linkedin },
-  { label: 'Email', href: `mailto:${site.email}` },
-]
-
+/**
+ * Footer, matching the reference's: a centred wordmark and the tagline, and
+ * nothing else. No link columns, no copyright row; the social links live in the
+ * contact card directly above, so repeating them here was noise. The tagline
+ * deliberately echoes the Projects heading, which is exactly what the
+ * reference does with its own.
+ */
 export function Footer() {
   return (
-    <footer className="border-t border-line bg-panel/50 py-14">
-      <Container>
-        <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
-          <div className="flex flex-col gap-3">
-            <Wordmark />
-            <p className="max-w-xs text-sm leading-relaxed text-faint">{site.tagline}</p>
-          </div>
-
-          <nav aria-label="Social" className="flex flex-col gap-3">
-            {social.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-muted transition-colors duration-200 ease-signature hover:text-accent"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-
-        <div className="mt-12 flex flex-col gap-2 border-t border-line pt-6 text-xs text-faint sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {new Date().getFullYear()} {site.name}
-          </p>
-          <p>{site.location}</p>
-        </div>
-      </Container>
+    <footer className="flex flex-col items-center gap-2 px-6 py-14 text-center">
+      <Link
+        href="#top"
+        aria-label={`${site.name}, back to top`}
+        className="font-display text-2xl font-semibold tracking-[-0.03em]"
+      >
+        <span className="text-wordmark">{site.firstName}</span>{' '}
+        <span className="text-ink">{site.lastName}</span>
+      </Link>
+      <p className="text-sm text-ink">{site.tagline}</p>
     </footer>
   )
 }
