@@ -140,7 +140,7 @@ export function Contact() {
                     autoComplete="email"
                   />
 
-                  <div className="flex flex-1 flex-col gap-1.5">
+                  <div className="flex flex-col gap-1.5">
                     <label htmlFor="message" className="label-field">
                       {contactSection.fields.message}
                     </label>
@@ -150,7 +150,10 @@ export function Contact() {
                       rows={6}
                       aria-invalid={Boolean(errors.message)}
                       aria-describedby={errors.message ? 'message-error' : undefined}
-                      className={`${inputClasses} min-h-[180px] flex-1 resize-y`}
+                      /* No flex sizing here: flex-1 made the flex algorithm own
+                         the height, so the resize drag wrote a height flex then
+                         ignored. The handle moved nothing. */
+                      className={`${inputClasses} min-h-[180px] resize-y`}
                       placeholder="Your message goes here..."
                     />
                     {errors.message && (
