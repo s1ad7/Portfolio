@@ -159,30 +159,34 @@ export const projectsSection = {
 
 export const about = {
   eyebrow: 'About Me',
-  /* Two lines, stacked. The first carries the full ink, the second is muted,
-     matching the reference's split-headline treatment. */
-  headingLineOne: 'You do not need a website.',
-  headingLineTwo: 'You need customers.',
+  /* Two lines, stacked. The first carries full ink, the second is muted. */
+  headingLineOne: 'I studied why businesses make money',
+  headingLineTwo: 'before I learned to build websites.',
   badge: 'Economics first, code second',
+  /* One short paragraph, deliberately. Research on this section is blunt:
+     visitors scan, and friction becomes hesitation. The proof is carried by
+     the numbers and the portrait, not by prose. */
   paragraphs: [
-    'Most people who come to me have been burned once: a site that looks fine and does nothing. My background is management and economics, so I start where you do, with the numbers. What does a lead cost you today? What is one new client worth? We build backwards from that.',
-    'Clean code and sharp design are table stakes. The real work is making a stranger trust you in thirty seconds, and making the next step obvious.',
+    'That order changed everything. I do not sell pages. I build the shortest path between a stranger and your revenue, and every choice on this site and on yours has one job: getting the right person to act.',
   ],
-  focus: [
-    {
-      title: 'Numbers first',
-      body: 'What a visitor is worth decides what we build. Every page has a job, and we agree on it before anything gets designed.',
-    },
-    {
-      title: 'Users decide',
-      body: 'If visitors are confused, the design is wrong, not the visitors. I test against real behaviour, not my own taste.',
-    },
-    {
-      title: 'Honest scope',
-      body: 'I will tell you when a feature will not pay its rent. Saying no early is cheaper than removing it later.',
-    },
+  cta: { label: 'Tell me about your project', href: '#contact' },
+  /**
+   * The stat band. Values must be TRUE: they animate, they draw the eye, and a
+   * client who catches one lie discounts everything else on the page.
+   *
+   * `value: 'projects'` and `value: 'industries'` are derived from the projects
+   * list at render time, so they update themselves when entries are added and
+   * can never drift from what the grid above shows.
+   */
+  stats: [
+    { value: 'projects', suffix: '', label: 'live sites, all linked above' },
+    { value: 3, suffix: '+', label: 'years building for the web' },
+    { value: 'industries', suffix: '', label: 'industries shipped into' },
   ],
+  portraitAlt: 'Portrait of Saad Ifli',
 } as const
+
+export type AboutStat = (typeof about.stats)[number]
 
 export interface SkillCard {
   title: string
