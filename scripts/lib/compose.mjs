@@ -1,20 +1,41 @@
+import { createHash } from 'node:crypto'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { basename, dirname, join } from 'node:path'
+
+/**
+ * Records a content hash for each generated image.
+ *
+ * The card appends it to the src as `?v=`, so the URL changes whenever the
+ * picture does. Without that the filename is stable forever, and both the
+ * browser cache and next/image keep serving the previous collage long after it
+ * was regenerated: the recapture looks like it silently did nothing. Clearing
+ * .next/cache/images fixes the server side but cannot touch a browser cache.
+ */
+export function recordVersion(outPath) {
+  const dir = dirname(outPath)
+  const slug = basename(outPath, '.jpg')
+  const versionsPath = join(dir, 'versions.json')
+  const versions = existsSync(versionsPath)
+    ? JSON.parse(readFileSync(versionsPath, 'utf8'))
+    : {}
+  versions[slug] = createHash('sha1').update(readFileSync(outPath)).digest('hex').slice(0, 8)
+  writeFileSync(versionsPath, `${JSON.stringify(versions, null, 2)}\n`)
+  return versions[slug]
+}
+
 /**
  * Shared collage composer.
  *
  * Used by both capture-projects.mjs (screenshots it takes itself) and
  * compose-card.mjs (screenshots you supply), so a hand-made card is identical
  * to an automated one.
- */
-/**
- * Builds the angled collage: three screenshots rotated to a common angle,
- * overlapped along a diagonal, over a gradient drawn from the site's own
- * average colour. Rendered as a page and screenshotted at 1600x1200, which is
- * the 4:3 the card's 533x400 image slot expects.
+ *
+ * Three screenshots rotated to a common angle, overlapped along a diagonal, over
+ * a gradient drawn from the site's dominant brand colour. Rendered as a page and
+ * screenshotted at 1600x1200, the 4:3 the card's 533x400 slot expects.
  */
 export async function composeCard(browser, shots, tint, outPath) {
   const [r, g, b] = tint
-  // Two stops either side of the sampled colour give the backdrop depth without
-  // drifting away from the site's own palette.
   /* The tint arrives as a dominant brand colour, not an average. Sampling the
      reference's own cards shows strongly saturated backdrops (a warm brown at
      rgb(124,71,3), a blue at rgb(42,103,184)), whereas averaging a whole hero
@@ -33,8 +54,7 @@ export async function composeCard(browser, shots, tint, outPath) {
           box-shadow:0 40px 80px -20px rgba(0,0,0,.55), 0 8px 24px -8px rgba(0,0,0,.4);
           transform-origin:center}
     .shot img{display:block;width:100%;height:auto}
-    /* Common angle, staggered along a diagonal, back to front. */
-    /* Sized and placed so the panes run off every edge, the way the
+    /* Common angle, staggered along a diagonal, back to front. Sized and placed so the panes run off every edge, the way the
        reference's do: the backdrop should only show through in the corner
        gaps, not frame the composition. */
     .s1{left:-330px; top:-260px; transform:rotate(-14deg) scale(.92); z-index:1}
@@ -52,6 +72,7 @@ export async function composeCard(browser, shots, tint, outPath) {
   await page.waitForTimeout(600)
   await page.screenshot({ path: outPath, type: 'jpeg', quality: 88 })
   await ctx.close()
+  recordVersion(outPath)
 }
 
 /**

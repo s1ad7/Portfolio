@@ -53,7 +53,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
        :root, which makes the whole token invalid and silently drops every
        heading and paragraph back to the default system sans. */
     <html lang="en" className={`${bricolage.variable} ${poppins.variable} ${workSans.variable}`}>
-      <body className="font-body">
+      {/* suppressHydrationWarning is scoped to <body> on purpose. Extensions in
+          the Bitdefender family inject attributes (`bis_register`,
+          `__processed_<uuid>__`) into <body> before React hydrates, which React
+          reports as a mismatch even though the app rendered correctly. It is
+          set here and nowhere else, so a genuine mismatch anywhere inside the
+          tree is still reported. */}
+      <body className="font-body" suppressHydrationWarning>
         <SmoothScroll />
         {children}
       </body>

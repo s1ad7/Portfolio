@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRef } from 'react'
 import { gsap, prefersReducedMotion, useGSAP, DURATION, EASE } from '@/lib/gsap'
 import type { Project } from '@/lib/content'
+import versions from '@/public/projects/versions.json'
 
 /**
  * Project card, built to the reference's measurements (paul-hahn.com), taken
@@ -22,6 +23,14 @@ import type { Project } from '@/lib/content'
  */
 export function ProjectCard({ project, index }: { project: Project; index: number }) {
   const scope = useRef<HTMLAnchorElement>(null)
+
+  /* Content hash appended to the src, written by the capture and compose
+     scripts. The filename never changes, so without this both the browser cache
+     and next/image happily serve the previous collage after a regenerate, and it
+     looks as though the script did nothing. Clearing .next/cache/images handles
+     the server; only a changed URL handles the browser. */
+  const version = (versions as Record<string, string>)[project.slug]
+  const src = version ? `${project.image}?v=${version}` : project.image
 
   useGSAP(
     () => {
@@ -55,7 +64,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
     >
       <div className="relative aspect-[533/400] w-full shrink-0">
         <Image
-          src={project.image}
+          src={src}
           alt={`Thumbnail for ${project.title}`}
           fill
           sizes="(max-width: 767px) 100vw, 533px"
