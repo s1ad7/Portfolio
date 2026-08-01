@@ -67,6 +67,7 @@ export const en = {
        client boundary, and functions cannot be serialised into an RSC payload. */
     countAnnouncement: 'Showing {shown} of {total} projects.',
     visit: 'Visit site',
+    opensInNewTab: '(opens the live site in a new tab)',
   },
 
   /** Keyed by project slug. Titles and URLs live in lib/site.ts. */
@@ -118,6 +119,15 @@ export const en = {
     ],
     cta: { label: 'Tell me about your project', href: '#contact' },
     portraitAlt: 'Portrait of Saad Ifli',
+    /* Deadpan on purpose: the surprise is the joke, and anyone who does not
+       click loses nothing. */
+    easterEgg: {
+      trigger: 'or watch my video résumé',
+      dialogTitle: 'Video résumé',
+      close: 'Close',
+      /* Shown under the player, the only place the joke is admitted. */
+      caption: 'Not actually me. Nightcrawler (2014), and still the most committed job application ever filmed.',
+    },
     /**
      * Labels only. The VALUES live in lib/content/index.ts because they are
      * facts, not copy: translating a number would let the two languages claim

@@ -6,6 +6,7 @@ import { Eyebrow } from './ui/Eyebrow'
 import { Pill } from './ui/Pill'
 import { Reveal } from './ui/Reveal'
 import { StatBand } from './StatBand'
+import { VideoResume } from './VideoResume'
 import { GithubActivity } from './GithubActivity'
 
 /**
@@ -43,9 +44,15 @@ export function About({ locale }: { locale: Locale }) {
                   {para}
                 </p>
               ))}
-              <Pill href={about.cta.href} variant="dark">
-                {about.cta.label}
-              </Pill>
+              {/* The real CTA, and beside it the easter egg. Text only and
+                  muted, so it reads as an aside rather than a second call to
+                  action competing with the first. */}
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+                <Pill href={about.cta.href} variant="dark">
+                  {about.cta.label}
+                </Pill>
+                <VideoResume />
+              </div>
             </Reveal>
           </div>
 
@@ -60,6 +67,11 @@ export function About({ locale }: { locale: Locale }) {
                   alt={about.portraitAlt}
                   fill
                   sizes="288px"
+                  /* Explicitly lazy. It sits well below the fold, and letting
+                     the browser fetch it early made it the LCP element on
+                     desktop, pushing LCP from 0.7s to 1.1s for a picture
+                     nobody has scrolled to yet. */
+                  loading="lazy"
                   className="object-cover object-[50%_38%]"
                 />
               </div>

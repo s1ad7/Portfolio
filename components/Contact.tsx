@@ -159,7 +159,7 @@ export function Contact() {
                   <button
                     type="button"
                     onClick={() => setSent(null)}
-                    className="label-caps !text-accent"
+                    className="label-caps !text-accent-text"
                   >
                     {contactSection.sendAnother}
                   </button>
@@ -206,14 +206,14 @@ export function Contact() {
                       placeholder={contactSection.placeholders.message}
                     />
                     {errors.message && (
-                      <p id="message-error" className="text-xs text-accent">
+                      <p id="message-error" className="text-xs text-accent-text">
                         {errors.message}
                       </p>
                     )}
                   </div>
 
                   {failed && (
-                    <p role="alert" className="text-xs text-accent">
+                    <p role="alert" className="text-xs text-accent-text">
                       {failed}{' '}
                       <a href={`mailto:${site.email}`} className="underline">
                         {site.email}
@@ -269,7 +269,7 @@ function Field({
         className={inputClasses}
       />
       {error && (
-        <p id={`${id}-error`} className="text-xs text-accent">
+        <p id={`${id}-error`} className="text-xs text-accent-text">
           {error}
         </p>
       )}

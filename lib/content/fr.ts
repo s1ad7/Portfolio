@@ -64,6 +64,7 @@ export const fr = {
     loadMore: 'Voir plus',
     countAnnouncement: '{shown} projets affichés sur {total}.',
     visit: 'Voir le site',
+    opensInNewTab: '(ouvre le site dans un nouvel onglet)',
   },
 
   projects: {
@@ -114,6 +115,13 @@ export const fr = {
     ],
     cta: { label: 'Parlez-moi de votre projet', href: '#contact' },
     portraitAlt: 'Portrait de Saad Ifli',
+    easterEgg: {
+      trigger: 'ou regardez mon CV vidéo',
+      dialogTitle: 'CV vidéo',
+      close: 'Fermer',
+      caption:
+        'Ce n’est pas moi. Nightcrawler (2014), et toujours la candidature la plus motivée jamais filmée.',
+    },
     statLabels: {
       delivered: 'projets livrés à l’international',
       featured: 'présentés ci-dessus, tous en ligne',

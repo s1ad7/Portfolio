@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRef } from 'react'
 import { gsap, prefersReducedMotion, useGSAP, DURATION, EASE } from '@/lib/gsap'
 import type { ProjectCardData } from '@/lib/content'
+import { useContent } from './ContentProvider'
 import versions from '@/public/projects/versions.json'
 
 /**
@@ -22,6 +23,8 @@ import versions from '@/public/projects/versions.json'
  * image scale, no colour change.
  */
 export function ProjectCard({ project, index }: { project: ProjectCardData; index: number }) {
+  const { content } = useContent()
+  const copy = content.projectsSection
   const scope = useRef<HTMLAnchorElement>(null)
 
   /* Content hash appended to the src, written by the capture and compose
@@ -59,7 +62,6 @@ export function ProjectCard({ project, index }: { project: ProjectCardData; inde
       href={project.href}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={`${project.title}. Opens the live site in a new tab.`}
       className="group flex h-full flex-col overflow-hidden rounded-[24px] bg-white shadow-ramp transition-shadow duration-300 ease-signature hover:shadow-ramp-hover"
     >
       <div className="relative aspect-[533/400] w-full shrink-0 overflow-hidden">
@@ -85,6 +87,12 @@ export function ProjectCard({ project, index }: { project: ProjectCardData; inde
         </span>
         <h3 className="mb-2 text-xl leading-[1.5]">{project.title}</h3>
         <p className="text-base leading-[1.6] text-muted">{project.description}</p>
+        {/* The "new tab" warning as content rather than an aria-label. An
+            aria-label REPLACES the accessible name, and one that did not
+            contain the card's own visible text failed WCAG 2.5.3 (Label in
+            Name). Built from content, the name always includes what is on
+            screen. */}
+        <span className="sr-only">{copy.opensInNewTab}</span>
       </div>
     </Link>
   )

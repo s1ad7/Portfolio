@@ -17,6 +17,13 @@
   --color-hairline: #ededed;
   --color-ink: #191d21;
   --color-accent: #4d80d1;
+  /* The same blue darkened until it clears WCAG AA on both surfaces it is used
+     on. The reference's #4d80d1 measures 3.94:1 on white and 3.52:1 on the
+     grey panel, against a 4.5:1 requirement for body-size text, so eyebrow
+     labels and error messages use this instead: 5.11:1 and 4.56:1. The
+     undarkened accent is kept for borders, focus rings and the shadow tint,
+     where contrast rules do not apply. */
+  --color-accent-text: #336cc7;
 
   /* Explicit alpha variants rather than Tailwind's `/70` modifier. The modifier
      mixes in oklab, which shifts this slightly-blue ink noticeably cooler; the
@@ -155,7 +162,7 @@
     font-weight: 600;
     letter-spacing: 0.03em;
     text-transform: uppercase;
-    color: var(--color-accent);
+    color: var(--color-accent-text);
   }
 
   /* Form field label: Poppins 12/400 at +0.03em in full ink, title case, as
@@ -184,6 +191,28 @@
     from {
       opacity: 0;
       transform: translateY(-6px);
+    }
+  }
+
+  /* Modal scrim and panel enter, used by the video dialog. */
+  .animate-scrim-in {
+    animation: scrim-in 0.2s cubic-bezier(0.44, 0, 0.56, 1) both;
+  }
+
+  .animate-panel-in {
+    animation: panel-in 0.28s cubic-bezier(0.44, 0, 0.56, 1) both;
+  }
+
+  @keyframes scrim-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
     }
   }
 
