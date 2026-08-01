@@ -12,10 +12,10 @@ const inputClasses =
   'w-full rounded-[8px] border border-line/60 bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-faint transition-colors duration-200 ease-signature focus:border-accent focus-visible:outline-none'
 
 /**
- * Get in touch, rebuilt to the reference's measured layout: a grey card
- * (radius 24, shadow ramp) inside the white section, pitch on the left with a
- * dot-grid flourish and social chips, and the form on the right as a lighter
- * glass panel (radius 16) with a full-width black pill Submit.
+ * Get in touch, rebuilt to the reference's measured layout: a WHITE card
+ * (radius 24, shadow ramp) with the pitch, dot-grid flourish and grey social
+ * chips on the left, and the form on the right as a GREY glass panel
+ * (radius 16, blur 5) with a full-width black pill Submit.
  */
 export function Contact() {
   const [errors, setErrors] = useState<Errors>({})
@@ -68,9 +68,12 @@ export function Contact() {
   return (
     <section id="contact" className="shell scroll-mt-28 bg-white py-10">
       <Reveal className="mx-auto w-full max-w-[1000px] px-4 lg:px-0">
-        <div className="grid overflow-hidden rounded-[24px] bg-panel shadow-ramp lg:grid-cols-[1fr_488px]">
+        {/* White card with the shadow ramp; the grey lives on the form panel.
+            Right column is 488px of panel plus the 24px insets, per the audit:
+            form at x=708 width 488 inside a card ending at x=1220. */}
+        <div className="grid overflow-hidden rounded-[24px] bg-white shadow-ramp lg:grid-cols-[1fr_536px]">
           {/* The pitch. */}
-          <div className="relative flex flex-col p-6 lg:p-10">
+          <div className="relative flex flex-col p-6">
             <div className="flex flex-col gap-3">
               <Eyebrow>{contactSection.eyebrow}</Eyebrow>
               {/* w900 on the reference; 800 is the heaviest the family ships. */}
@@ -96,7 +99,7 @@ export function Contact() {
                     target={item.icon === 'mail' ? undefined : '_blank'}
                     rel="noopener noreferrer"
                     aria-label={item.label}
-                    className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-white text-ink shadow-ramp transition-colors duration-200 ease-signature hover:text-accent"
+                    className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-panel text-ink transition-colors duration-200 ease-signature hover:bg-panel-2"
                   >
                     <SocialIcon name={item.icon} />
                   </a>
@@ -105,9 +108,9 @@ export function Contact() {
             </ul>
           </div>
 
-          {/* The form: a lighter glass panel sitting on the grey card. */}
-          <div className="p-4 lg:p-6">
-            <div className="h-full rounded-[16px] bg-white/60 p-6 backdrop-blur-sm">
+          {/* The form: the grey glass panel, inset 24px from the card edge. */}
+          <div className="p-4 lg:p-6 lg:pl-0">
+            <div className="h-full rounded-[16px] bg-glass-panel p-6 backdrop-blur-[5px]">
               {sent ? (
                 <div role="status" className="flex h-full flex-col items-start justify-center gap-4">
                   <p className="text-lg">{contactSection.success}</p>
@@ -144,10 +147,10 @@ export function Contact() {
                     <textarea
                       id="message"
                       name="message"
-                      rows={5}
+                      rows={6}
                       aria-invalid={Boolean(errors.message)}
                       aria-describedby={errors.message ? 'message-error' : undefined}
-                      className={`${inputClasses} min-h-32 flex-1 resize-none`}
+                      className={`${inputClasses} min-h-[180px] flex-1 resize-y`}
                       placeholder="Your message goes here..."
                     />
                     {errors.message && (
@@ -229,17 +232,8 @@ function SocialIcon({ name }: { name: 'github' | 'linkedin' | 'mail' }) {
     )
   }
   return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      aria-hidden="true"
-    >
-      <rect x="2.75" y="4.75" width="18.5" height="14.5" rx="2.5" />
-      <path d="m3.5 6.5 8.5 6.5 8.5-6.5" />
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M2 6.2v11.6c0 .5.4.9.9.9h2.8V10l6.3 4.7L18.3 10v8.7h2.8c.5 0 .9-.4.9-.9V6.2c0-1-1.2-1.6-2-1L12 10.4 4 5.2c-.8-.6-2 0-2 1Z" />
     </svg>
   )
 }
