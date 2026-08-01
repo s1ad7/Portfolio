@@ -182,7 +182,10 @@ export const about = {
     /* "Worldwide" is folded into the label rather than faked as a number:
        the band only animates figures that can be counted. */
     { value: 30, suffix: '+', label: 'projects delivered worldwide' },
-    { value: 'projects', suffix: '', label: 'live sites, all linked above' },
+    /* Reads as the curated selection, not a career total (that is the 30+).
+       Still derived from the projects list, and still the one claim a visitor
+       can verify in one click, which is what earns the other three. */
+    { value: 'projects', suffix: '', label: 'featured above, every one live' },
     { value: 3, suffix: '+', label: 'years building for the web' },
     /* Measured with Lighthouse 12 (desktop preset) on 2026-08-01, not asserted:
        ac-peds scored 99 and acscripts 98. Labelled "top" because it is the
