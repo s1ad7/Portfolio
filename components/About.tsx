@@ -5,6 +5,7 @@ import { Eyebrow } from './ui/Eyebrow'
 import { Pill } from './ui/Pill'
 import { Reveal } from './ui/Reveal'
 import { StatBand } from './StatBand'
+import { GithubActivity } from './GithubActivity'
 
 /**
  * About, rebuilt around three findings from conversion research rather than the
@@ -64,6 +65,10 @@ export function About() {
         <Reveal delay={0.1}>
           <StatBand />
         </Reveal>
+
+        {/* Client-fetched; renders nothing until data arrives, and nothing at
+            all if the profile cannot be reached. */}
+        <GithubActivity />
       </Container>
     </section>
   )
