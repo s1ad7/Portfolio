@@ -15,7 +15,7 @@ import { StatBand } from './StatBand'
  *      portrait sits in the right column, where the reading eye lands.
  *   2. Numbers beat adjectives, and these are verifiable one scroll up: two of
  *      the three stats are derived from the projects list itself.
- *   3. Visitors scan. One short paragraph, a badge, a CTA. No essay.
+ *   3. Visitors scan. One short paragraph and a CTA. No essay.
  */
 export function About() {
   return (
@@ -32,18 +32,23 @@ export function About() {
             </Reveal>
 
             <Reveal delay={0.08} className="flex flex-col items-start gap-6">
-              <p className="max-w-xl text-base leading-[1.8] text-body">{about.paragraphs[0]}</p>
+              {about.paragraphs.map((para) => (
+                <p key={para.slice(0, 24)} className="max-w-xl text-base leading-[1.8] text-body">
+                  {para}
+                </p>
+              ))}
               <Pill href={about.cta.href} variant="dark">
                 {about.cta.label}
               </Pill>
             </Reveal>
           </div>
 
-          {/* The face. Slight tilt, echoing the hero portrait, straightening on
-              hover the same way. */}
+          {/* The face, as the reference does it: a framed photo, tilted a few
+              degrees, and nothing else. No caption; the name is everywhere
+              already and the positioning line lives in the headline. */}
           <Reveal delay={0.12} className="justify-self-center lg:justify-self-end">
-            <figure className="w-64 -rotate-2 rounded-panel bg-white p-3 pb-5 shadow-ramp-lg transition-transform duration-500 ease-signature hover:rotate-0 sm:w-72">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-card">
+            <div className="w-64 rotate-3 rounded-panel bg-white p-3 shadow-ramp-lg transition-transform duration-500 ease-signature hover:rotate-0 sm:w-72">
+              <div className="relative aspect-square overflow-hidden rounded-card">
                 <Image
                   src="/portrait.png"
                   alt={about.portraitAlt}
@@ -52,11 +57,7 @@ export function About() {
                   className="object-cover object-[50%_28%]"
                 />
               </div>
-              <figcaption className="flex flex-col gap-1 px-2 pt-4">
-                <span className="font-display text-xl text-ink">Saad Ifli</span>
-                <span className="text-sm text-muted">{about.badge}</span>
-              </figcaption>
-            </figure>
+            </div>
           </Reveal>
         </div>
 

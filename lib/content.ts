@@ -162,12 +162,12 @@ export const about = {
   /* Two lines, stacked. The first carries full ink, the second is muted. */
   headingLineOne: 'I studied why businesses make money',
   headingLineTwo: 'before I learned to build websites.',
-  badge: 'Economics first, code second',
   /* One short paragraph, deliberately. Research on this section is blunt:
      visitors scan, and friction becomes hesitation. The proof is carried by
      the numbers and the portrait, not by prose. */
   paragraphs: [
     'That order changed everything. I do not sell pages. I build the shortest path between a stranger and your revenue, and every choice on this site and on yours has one job: getting the right person to act.',
+    'The habit is older than my client work: I have always taken slow, manual tasks and made them digital and fast. Business or individual, if a process eats your hours, I would rather build the tool that gives them back.',
   ],
   cta: { label: 'Tell me about your project', href: '#contact' },
   /**
