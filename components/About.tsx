@@ -26,7 +26,9 @@ export function About() {
           <div className="flex flex-col items-start gap-6">
             <Reveal className="flex flex-col gap-4">
               <Eyebrow>{about.eyebrow}</Eyebrow>
-              <h2 className="text-4xl md:text-5xl">
+              {/* The one heading heavier than the rest, as on the reference
+                  (w900 there; 800 is the heaviest Google Fonts ships). */}
+              <h2 className="text-4xl font-extrabold md:text-5xl">
                 <span className="block">{about.headingLineOne}</span>
                 <span className="block text-faint">{about.headingLineTwo}</span>
               </h2>

@@ -66,7 +66,7 @@ export function StatBand() {
         const value = resolve(stat.value)
         return (
           <div key={stat.label} className="flex flex-col gap-1">
-            <p className="text-6xl text-ink md:text-7xl">
+            <p className="font-display text-6xl text-ink md:text-7xl">
               <span data-count={value}>{value}</span>
               {stat.suffix}
             </p>

@@ -60,15 +60,18 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`${project.title}. Opens the live site in a new tab.`}
-      className="flex h-full flex-col overflow-hidden rounded-[24px] bg-white shadow-ramp transition-shadow duration-300 ease-signature hover:shadow-ramp-hover"
+      className="group flex h-full flex-col overflow-hidden rounded-[24px] bg-white shadow-ramp transition-shadow duration-300 ease-signature hover:shadow-ramp-hover"
     >
-      <div className="relative aspect-[533/400] w-full shrink-0">
+      <div className="relative aspect-[533/400] w-full shrink-0 overflow-hidden">
         <Image
           src={src}
           alt={`Thumbnail for ${project.title}`}
           fill
           sizes="(max-width: 767px) 100vw, 533px"
-          className="object-cover"
+          /* Slow settle rather than a pop: same easing family as the portrait
+             tilt, clipped by the frame. The global reduce-motion rule collapses
+             the transition, so this is a CSS-only effect with a11y for free. */
+          className="object-cover transition-transform duration-700 ease-signature group-hover:scale-[1.04]"
           priority={index < 2}
         />
       </div>
