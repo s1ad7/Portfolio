@@ -40,6 +40,8 @@ export const fr = {
   navCta: 'Contact',
   menu: { open: 'Ouvrir le menu', close: 'Fermer le menu' },
   backToTop: ', retour en haut',
+  seeAllWork: 'Voir tous les projets',
+  areasServed: 'Zones desservies',
   tagline: 'Pensé avec méthode, livré avec soin.',
 
   hero: {

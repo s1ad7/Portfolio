@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { gsap, useGSAP, DURATION_UI, EASE_UI } from '@/lib/gsap'
 import { useNavHidden } from '@/lib/useNavHidden'
@@ -12,6 +13,13 @@ import { Wordmark } from './ui/Wordmark'
 export function Navbar() {
   const { content, locale } = useContent()
   const { nav } = content
+
+  /* Section anchors exist on the homepage only. Everywhere else they have to
+     carry the homepage path or they resolve to nothing at all. Kept relative on
+     the homepage so the smooth-scroll handler still claims them. */
+  const pathname = usePathname()
+  const onHome = pathname === `/${locale}`
+  const to = (hash: string) => (onHome ? hash : `/${locale}${hash}`)
 
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState<string>('')
@@ -150,7 +158,7 @@ export function Navbar() {
                   return (
                     <li key={item.href}>
                       <Link
-                        href={item.href}
+                        href={to(item.href)}
                         onClick={pin}
                         aria-current={isActive ? 'true' : undefined}
                         /* Work Sans 16/400 at full ink, fading to 70% on hover.
@@ -171,7 +179,7 @@ export function Navbar() {
                   already sets `inline-flex`, and two display utilities on one
                   element resolve by stylesheet order, not class order. */}
               <span className="hidden md:block">
-                <Pill href="#contact" variant="dark">
+                <Pill href={to('#contact')} variant="dark">
                   {content.navCta}
                 </Pill>
               </span>
@@ -214,7 +222,7 @@ export function Navbar() {
         <ul className="flex flex-col gap-2">
           {[...nav, { label: content.navCta, href: '#contact' }].map((item) => (
             <li key={item.href}>
-              <Link href={item.href} onClick={() => setOpen(false)} className="block py-3 text-4xl">
+              <Link href={to(item.href)} onClick={() => setOpen(false)} className="block py-3 text-4xl">
                 {item.label}
               </Link>
             </li>

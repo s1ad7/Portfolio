@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { getContent } from '@/lib/content'
 import type { Locale } from '@/lib/i18n'
+import { cityPages, offerPages } from '@/lib/landing/pages'
 import { site } from '@/lib/site'
 
 /**
@@ -24,6 +25,38 @@ export function Footer({ locale }: { locale: Locale }) {
         <span className="sr-only">{content.backToTop}</span>
       </Link>
       <p className="text-sm text-ink">{content.tagline}</p>
+
+      {/* Every city page linked from every page. Crawlers reach pages through
+          links, and a page nothing links to neither gets crawled reliably nor
+          receives any of the site's authority. */}
+      <nav aria-label={content.areasServed} className="mt-4 flex flex-col items-center gap-2">
+        <span className="label-caps">{content.areasServed}</span>
+        <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+          {cityPages.map((page) => (
+            <li key={page.id}>
+              <Link
+                href={`/${locale}/${page.copy[locale].slug}`}
+                className="-my-2 block py-2 font-ui text-sm text-muted transition-colors duration-200 ease-signature hover:text-ink"
+              >
+                {page.city}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* The lead magnet, given its own line: it is an offer, not a place, and
+          it is the lowest-commitment way for a stranger to start a
+          conversation. */}
+      {offerPages.map((page) => (
+        <Link
+          key={page.id}
+          href={`/${locale}/${page.copy[locale].slug}`}
+          className="mt-2 font-ui text-sm text-accent-text underline-offset-4 hover:underline"
+        >
+          {page.copy[locale].eyebrow}
+        </Link>
+      ))}
     </footer>
   )
 }

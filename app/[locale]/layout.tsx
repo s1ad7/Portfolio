@@ -4,7 +4,6 @@ import { Bricolage_Grotesque, Poppins, Work_Sans } from 'next/font/google'
 import '../globals.css'
 import { ContentProvider } from '@/components/ContentProvider'
 import { SmoothScroll } from '@/components/SmoothScroll'
-import { StructuredData } from '@/components/StructuredData'
 import { getContent } from '@/lib/content'
 import { htmlLang, isLocale, locales } from '@/lib/i18n'
 import { site } from '@/lib/site'
@@ -133,7 +132,6 @@ export default async function LocaleLayout({
       <body className="font-body" suppressHydrationWarning>
         <ContentProvider content={content} locale={locale}>
           <SmoothScroll />
-          <StructuredData locale={locale} />
           {children}
         </ContentProvider>
       </body>

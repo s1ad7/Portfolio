@@ -7,6 +7,7 @@ import { Hero } from '@/components/Hero'
 import { Navbar } from '@/components/Navbar'
 import { Projects } from '@/components/Projects'
 import { Skills } from '@/components/Skills'
+import { StructuredData } from '@/components/StructuredData'
 import { isLocale } from '@/lib/i18n'
 
 /* Section order follows the reference: hero, work, who, what, questions, contact.
@@ -18,6 +19,10 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 
   return (
     <>
+      {/* Homepage only. Its FAQPage describes the FAQ on THIS page, and a
+          landing page carrying it as well would put two conflicting FAQPage
+          entities on one URL. Landing pages emit their own. */}
+      <StructuredData locale={locale} />
       <Navbar />
       <main>
         <Hero />

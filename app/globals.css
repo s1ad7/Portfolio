@@ -211,13 +211,17 @@
     color: var(--color-ink);
   }
 
-  /* Small uppercase label used for inline meta. */
+  /* Small uppercase label used for inline meta.
+     --color-muted, not --color-faint: faint measures 3.28:1 on white, under
+     the 4.5:1 floor for text this size. The class was previously only used
+     where nothing rendered it, so the failure surfaced when the footer started
+     showing one. */
   .label-caps {
     font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.09em;
     text-transform: uppercase;
-    color: var(--color-faint);
+    color: var(--color-muted);
   }
 
   /* Dropdown enter, used by the language switcher. */

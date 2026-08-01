@@ -44,6 +44,8 @@ export const en = {
   navCta: 'Contact',
   menu: { open: 'Open menu', close: 'Close menu' },
   backToTop: ', back to top',
+  seeAllWork: 'See all work',
+  areasServed: 'Areas served',
   tagline: 'Built with structure, shipped with care.',
 
   hero: {
