@@ -51,8 +51,6 @@ export interface Project {
   title: string
   /** Shown on the card, under the title. */
   description: string
-  /** Tech chips, detected from the running sites rather than assumed. */
-  stack: readonly string[]
   /**
    * Hero screenshot, used full-bleed behind the text. A single viewport-sized
    * shot rather than a full-page capture: the panel only ever shows the top of
@@ -84,32 +82,24 @@ export interface Project {
  */
 export const projects: Project[] = [
   {
-    /* TODO (Saad): everstead.llc did not resolve from the machine this was
-       written on, so this entry is staged but unfinished. Two things are needed:
+    /* TODO (Saad): artwork only. everstead.llc does not resolve from the machine
+       this was written on, so the card still ships the neutral placeholder.
+       Run `npm run capture:projects -- everstead` with your VPN on and it will
+       be replaced with a real collage like the others.
 
-         1. The artwork. Run `npm run capture:projects -- everstead` locally,
-            where the domain resolves for you. If it does not resolve there
-            either, add `captureUrl` below pointing at a Vercel deployment, the
-            way the other entries do, and the capture will use that while the
-            card still links to the real domain.
-         2. The category and description. Both are placeholders: the site could
-            not be read, so anything specific here would be invented.
-
-       Until then it ships a neutral placeholder image rather than a screenshot
-       of work that is not this project. */
+       The copy below is written from screenshots of the running site, so it is
+       accurate rather than guessed. */
     slug: 'everstead',
-    category: 'TODO: category',
+    category: 'Agency Site',
     title: 'Everstead',
     description:
-      'TODO: replace. One or two sentences on what the site is and what you built.',
-    stack: ['TODO: stack'],
+      'Site for a digital studio, built on a near-black identity with heavy condensed display type and a single gold accent. Runs from a scroll-driven six-stage process, discovery through to launch, into a grid of the industries they build for.',
     image: '/projects/everstead.jpg',
     href: 'https://www.everstead.llc/',
     // captureUrl: 'https://<vercel-deployment>.vercel.app/',
   },
   {
     slug: 'carently',
-    stack: ['Tailwind CSS', 'Vercel', 'French'],
     category: 'Booking Platform',
     title: 'Carently',
     description:
@@ -119,7 +109,6 @@ export const projects: Project[] = [
   },
   {
     slug: 'streamelite',
-    stack: ['Next.js', 'Tailwind CSS', 'Vercel', 'French'],
     category: 'Subscription Site',
     title: 'StreamElite',
     description:
@@ -130,7 +119,6 @@ export const projects: Project[] = [
   },
   {
     slug: 'marbio',
-    stack: ['WordPress', 'GSAP', 'French'],
     category: 'Corporate Site',
     title: 'Marbio',
     description:
@@ -140,7 +128,6 @@ export const projects: Project[] = [
   },
   {
     slug: 'acscripts',
-    stack: ['Next.js', 'Tailwind CSS', 'Vercel'],
     category: 'E-commerce',
     title: 'ACScripts',
     description:
@@ -151,7 +138,6 @@ export const projects: Project[] = [
   },
   {
     slug: 'acpins',
-    stack: ['Next.js', 'Tailwind CSS', 'Vercel'],
     category: 'E-commerce',
     title: 'ACPins',
     description:
@@ -163,7 +149,6 @@ export const projects: Project[] = [
   },
   {
     slug: 'acpeds',
-    stack: ['Next.js', 'Tailwind CSS', 'French'],
     category: 'Catalogue',
     title: 'ACPeds',
     description:
