@@ -159,26 +159,27 @@ export const projectsSection = {
 
 export const about = {
   eyebrow: 'About Me',
-  /** Two lines, stacked, mirroring the reference's split headline. */
-  headingLineOne: 'Turning spreadsheets',
-  headingLineTwo: 'into software since 2023.',
-  badge: 'Economics grad turned developer',
+  /* Two lines, stacked. The first carries the full ink, the second is muted,
+     matching the reference's split-headline treatment. */
+  headingLineOne: 'You do not need a website.',
+  headingLineTwo: 'You need customers.',
+  badge: 'Economics first, code second',
   paragraphs: [
-    "I'm a full-stack developer based in Morocco, working across the MERN stack and Odoo/ERP development. My background is in economics, which means I tend to start with the workflow and the numbers behind a problem before I start writing code.",
-    'That mix is the useful part. I read a business process, find where it actually breaks, and build something modular and maintainable around it, rather than shipping features that look right but fight the way people work.',
+    'Most people who come to me have been burned once: a site that looks fine and does nothing. My background is management and economics, so I start where you do, with the numbers. What does a lead cost you today? What is one new client worth? We build backwards from that.',
+    'Clean code and sharp design are table stakes. The real work is making a stranger trust you in thirty seconds, and making the next step obvious.',
   ],
   focus: [
     {
-      title: 'Technical focus',
-      body: 'Custom Odoo modules, Docker environments, and interactive web applications built on modern frameworks.',
+      title: 'Numbers first',
+      body: 'What a visitor is worth decides what we build. Every page has a job, and we agree on it before anything gets designed.',
     },
     {
-      title: 'Business edge',
-      body: 'Economics training used to map workflows, spot inefficiency, and connect technical decisions to what the business needs.',
+      title: 'Users decide',
+      body: 'If visitors are confused, the design is wrong, not the visitors. I test against real behaviour, not my own taste.',
     },
     {
-      title: 'Where this is going',
-      body: 'Short term, shipping complete Odoo modules end to end. Longer term, working as an ERP consultant.',
+      title: 'Honest scope',
+      body: 'I will tell you when a feature will not pay its rent. Saying no early is cheaper than removing it later.',
     },
   ],
 } as const
