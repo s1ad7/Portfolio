@@ -1,17 +1,22 @@
 import type { MetadataRoute } from 'next'
+import { htmlLang, locales } from '@/lib/i18n'
 import { siteUrl } from '@/lib/site-url'
 
 /**
- * One page, so one entry. `lastModified` is stamped at build time, which is the
- * honest signal: it changes when the content is redeployed.
+ * One entry per locale, each declaring the others as alternates.
+ *
+ * `alternates.languages` is the sitemap half of hreflang: it tells Google the
+ * two URLs are translations rather than duplicates, which is what stops them
+ * competing with each other in search results.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      url: siteUrl,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 1,
-    },
-  ]
+  const languages = Object.fromEntries(locales.map((l) => [htmlLang[l], `${siteUrl}/${l}`]))
+
+  return locales.map((locale) => ({
+    url: `${siteUrl}/${locale}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 1,
+    alternates: { languages },
+  }))
 }

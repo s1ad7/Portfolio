@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { contactSection, site } from '@/lib/content'
+import { site } from '@/lib/site'
+import { useContent } from './ContentProvider'
 import { Eyebrow } from './ui/Eyebrow'
 import { Reveal } from './ui/Reveal'
 
@@ -18,6 +19,8 @@ const inputClasses =
  * (radius 16, blur 5) with a full-width black pill Submit.
  */
 export function Contact() {
+  const { content } = useContent()
+  const { contactSection } = content
   const [errors, setErrors] = useState<Errors>({})
   const [sent, setSent] = useState<'server' | 'mail' | null>(null)
   const [busy, setBusy] = useState(false)
@@ -48,11 +51,11 @@ export function Contact() {
     const message = String(data.get('message') ?? '').trim()
 
     const next: Errors = {}
-    if (!name) next.name = 'Please enter your name.'
-    if (!email) next.email = 'Please enter your email.'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = 'That email does not look right.'
-    if (!message) next.message = 'Please enter a message.'
-    else if (message.length < 10) next.message = 'A little more detail would help.'
+    if (!name) next.name = contactSection.errors.name
+    if (!email) next.email = contactSection.errors.email
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = contactSection.errors.emailInvalid
+    if (!message) next.message = contactSection.errors.message
+    else if (message.length < 10) next.message = contactSection.errors.messageShort
 
     setErrors(next)
     setFailed(null)
@@ -93,10 +96,10 @@ export function Contact() {
       }
 
       const payload = (await response.json().catch(() => ({}))) as { error?: string }
-      setFailed(payload.error ?? 'Something went wrong. Please email me directly.')
+      setFailed(payload.error ?? contactSection.errors.generic)
     } catch {
       /* Offline, or the request never left the device. */
-      setFailed('Could not reach the server. Please email me directly.')
+      setFailed(contactSection.errors.offline)
     } finally {
       setBusy(false)
     }
@@ -158,7 +161,7 @@ export function Contact() {
                     onClick={() => setSent(null)}
                     className="label-caps !text-accent"
                   >
-                    Send another
+                    {contactSection.sendAnother}
                   </button>
                 </div>
               ) : (
@@ -173,7 +176,7 @@ export function Contact() {
                   <Field
                     id="name"
                     label={contactSection.fields.name}
-                    placeholder="Sara Amrani"
+                    placeholder={contactSection.placeholders.name}
                     error={errors.name}
                     autoComplete="name"
                   />
@@ -181,7 +184,7 @@ export function Contact() {
                     id="email"
                     type="email"
                     label={contactSection.fields.email}
-                    placeholder="sara@company.com"
+                    placeholder={contactSection.placeholders.email}
                     error={errors.email}
                     autoComplete="email"
                   />
@@ -200,7 +203,7 @@ export function Contact() {
                          the height, so the resize drag wrote a height flex then
                          ignored. The handle moved nothing. */
                       className={`${inputClasses} min-h-[180px] resize-y`}
-                      placeholder="Your message goes here..."
+                      placeholder={contactSection.placeholders.message}
                     />
                     {errors.message && (
                       <p id="message-error" className="text-xs text-accent">
@@ -223,7 +226,7 @@ export function Contact() {
                     disabled={busy}
                     className="w-full rounded-full bg-ink py-2.5 font-display text-sm font-semibold text-white transition-colors duration-200 ease-signature hover:bg-ink-cta-hover disabled:opacity-60"
                   >
-                    {busy ? 'Sending…' : contactSection.submit}
+                    {busy ? contactSection.sending : contactSection.submit}
                   </button>
                 </form>
               )}

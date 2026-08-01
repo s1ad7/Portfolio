@@ -1,5 +1,6 @@
 import Image from 'next/image'
-import { about } from '@/lib/content'
+import { getContent } from '@/lib/content'
+import type { Locale } from '@/lib/i18n'
 import { Container } from './ui/Section'
 import { Eyebrow } from './ui/Eyebrow'
 import { Pill } from './ui/Pill'
@@ -18,7 +19,9 @@ import { GithubActivity } from './GithubActivity'
  *      the three stats are derived from the projects list itself.
  *   3. Visitors scan. One short paragraph and a CTA. No essay.
  */
-export function About() {
+export function About({ locale }: { locale: Locale }) {
+  const { about } = getContent(locale)
+
   return (
     <section id="about" className="shell scroll-mt-28 bg-panel py-24 md:py-32">
       <Container>
@@ -35,7 +38,7 @@ export function About() {
             </Reveal>
 
             <Reveal delay={0.08} className="flex flex-col items-start gap-6">
-              {about.paragraphs.map((para) => (
+              {about.paragraphs.map((para: string) => (
                 <p key={para.slice(0, 24)} className="max-w-xl text-base leading-[1.8] text-body">
                   {para}
                 </p>

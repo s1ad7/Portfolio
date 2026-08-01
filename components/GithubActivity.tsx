@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { gsap, prefersReducedMotion, useGSAP } from '@/lib/gsap'
-import { site } from '@/lib/content'
+import { format } from '@/lib/content'
+import { site } from '@/lib/site'
+import { useContent } from './ContentProvider'
 
 type Day = { date: string; count: number; level: 0 | 1 | 2 | 3 | 4 }
 type ApiResponse = { total: Record<string, number>; contributions: Day[] }
@@ -38,6 +40,8 @@ const LEVELS = [
  */
 export function GithubActivity() {
   const scope = useRef<HTMLDivElement>(null)
+  const { content } = useContent()
+  const copy = content.about.github
   const [days, setDays] = useState<Day[] | null>(null)
   const [total, setTotal] = useState(0)
 
@@ -90,7 +94,7 @@ export function GithubActivity() {
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <p className="text-base text-ink">
           <span className="font-display text-xl">{total.toLocaleString('en-US')}</span>{' '}
-          <span className="text-muted">GitHub contributions in the last year</span>
+          <span className="text-muted">{copy.contributions}</span>
         </p>
         <a
           href={site.links.github}
@@ -106,7 +110,7 @@ export function GithubActivity() {
 
       <div
         role="img"
-        aria-label={`GitHub contribution calendar: ${total} contributions in the last year`}
+        aria-label={format(copy.calendarLabel, { total })}
         className="flex gap-[3px] overflow-hidden"
       >
         {weeks.map((week, w) => (

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { site } from '@/lib/content'
+import { site } from '@/lib/site'
 import { siteUrl } from '@/lib/site-url'
 
 /**

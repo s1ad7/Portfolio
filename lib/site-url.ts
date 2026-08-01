@@ -1,4 +1,4 @@
-import { site } from './content'
+import { site } from './site'
 
 /**
  * The origin this deployment actually answers on.

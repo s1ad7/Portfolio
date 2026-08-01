@@ -3,12 +3,15 @@
 import Image from 'next/image'
 import { useRef } from 'react'
 import { DURATION, EASE, gsap, prefersReducedMotion, useGSAP } from '@/lib/gsap'
-import { hero } from '@/lib/content'
+import { useContent } from './ContentProvider'
 import { Pill } from './ui/Pill'
 
 const cue = '[data-hero-cue]'
 
 export function Hero() {
+  const { content } = useContent()
+  const { hero } = content
+
   const scope = useRef<HTMLElement>(null)
 
   /* Only the scroll cue is animated from JS. The hero's own reveal is CSS (see

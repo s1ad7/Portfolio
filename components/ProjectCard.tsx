@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRef } from 'react'
 import { gsap, prefersReducedMotion, useGSAP, DURATION, EASE } from '@/lib/gsap'
-import type { Project } from '@/lib/content'
+import type { ProjectCardData } from '@/lib/content'
 import versions from '@/public/projects/versions.json'
 
 /**
@@ -21,7 +21,7 @@ import versions from '@/public/projects/versions.json'
  * provoking the reference's own hover and diffing computed styles: no lift, no
  * image scale, no colour change.
  */
-export function ProjectCard({ project, index }: { project: Project; index: number }) {
+export function ProjectCard({ project, index }: { project: ProjectCardData; index: number }) {
   const scope = useRef<HTMLAnchorElement>(null)
 
   /* Content hash appended to the src, written by the capture and compose

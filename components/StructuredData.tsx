@@ -1,4 +1,6 @@
-import { about, faqSection, projects, site, skillsSection } from '@/lib/content'
+import { getContent, getProjectCards } from '@/lib/content'
+import { htmlLang, locales, type Locale } from '@/lib/i18n'
+import { site } from '@/lib/site'
 import { siteUrl } from '@/lib/site-url'
 
 /**
@@ -19,15 +21,22 @@ import { siteUrl } from '@/lib/site-url'
  *                     generated from the same content module rather than
  *                     hand-written.
  */
-export function StructuredData() {
+export function StructuredData({ locale }: { locale: Locale }) {
+  const content = getContent(locale)
+  const { about, faqSection, skillsSection, meta } = content
+  const projects = getProjectCards(content)
+  /* Per-locale ids, so the two language versions are distinct entities rather
+     than one entity described twice with conflicting text. */
+  const base = `${siteUrl}/${locale}`
+
   const graph = [
     {
       '@type': 'Person',
-      '@id': `${siteUrl}/#person`,
+      '@id': `${base}/#person`,
       name: site.name,
-      url: siteUrl,
+      url: base,
       image: `${siteUrl}/about-portrait.jpg`,
-      jobTitle: site.role,
+      jobTitle: meta.role,
       email: `mailto:${site.email}`,
       address: { '@type': 'PostalAddress', addressCountry: 'MA' },
       sameAs: [site.links.github, site.links.linkedin],
@@ -35,13 +44,13 @@ export function StructuredData() {
     },
     {
       '@type': 'ProfessionalService',
-      '@id': `${siteUrl}/#service`,
-      name: `${site.name}, ${site.role}`,
-      description: site.description,
-      url: siteUrl,
-      image: `${siteUrl}/opengraph-image`,
+      '@id': `${base}/#service`,
+      name: meta.title,
+      description: meta.description,
+      url: base,
+      image: `${base}/opengraph-image`,
       email: `mailto:${site.email}`,
-      founder: { '@id': `${siteUrl}/#person` },
+      founder: { '@id': `${base}/#person` },
       areaServed: 'Worldwide',
       address: { '@type': 'PostalAddress', addressCountry: 'MA' },
       priceRange: '$$',
@@ -56,7 +65,7 @@ export function StructuredData() {
     },
     {
       '@type': 'FAQPage',
-      '@id': `${siteUrl}/#faq`,
+      '@id': `${base}/#faq`,
       mainEntity: faqSection.items.map((item) => ({
         '@type': 'Question',
         name: item.question,
@@ -65,7 +74,7 @@ export function StructuredData() {
     },
     {
       '@type': 'ItemList',
-      '@id': `${siteUrl}/#work`,
+      '@id': `${base}/#work`,
       name: 'Selected work',
       itemListElement: projects.map((project, index) => ({
         '@type': 'ListItem',
@@ -80,12 +89,16 @@ export function StructuredData() {
     },
     {
       '@type': 'WebSite',
-      '@id': `${siteUrl}/#website`,
-      url: siteUrl,
-      name: `${site.name}, ${site.role}`,
+      '@id': `${base}/#website`,
+      url: base,
+      name: meta.title,
       description: about.paragraphs[0],
-      publisher: { '@id': `${siteUrl}/#person` },
-      inLanguage: 'en',
+      publisher: { '@id': `${base}/#person` },
+      inLanguage: htmlLang[locale],
+      /* Declares the sibling translation, matching the hreflang tags. */
+      workTranslation: locales
+        .filter((l) => l !== locale)
+        .map((l) => ({ '@type': 'WebSite', '@id': `${siteUrl}/${l}/#website`, inLanguage: htmlLang[l] })),
     },
   ]
 

@@ -1,4 +1,5 @@
-import { projects, projectsSection } from '@/lib/content'
+import { getContent } from '@/lib/content'
+import type { Locale } from '@/lib/i18n'
 import { ProjectGrid } from './ProjectGrid'
 import { Eyebrow } from './ui/Eyebrow'
 import { Reveal } from './ui/Reveal'
@@ -17,7 +18,10 @@ import { Reveal } from './ui/Reveal'
  * The grid is a client component only because it holds the load-more count;
  * everything else here stays server-rendered.
  */
-export function Projects() {
+export function Projects({ locale }: { locale: Locale }) {
+  const content = getContent(locale)
+  const { projectsSection } = content
+
   return (
     <section id="projects" className="shell scroll-mt-28 bg-white py-16">
       <div className="mx-auto w-full max-w-[1200px] px-6 lg:px-0">
@@ -27,7 +31,7 @@ export function Projects() {
           <p className="text-base leading-[1.8] text-muted">{projectsSection.intro}</p>
         </Reveal>
 
-        <ProjectGrid projects={projects} />
+        <ProjectGrid />
 
       </div>
     </section>

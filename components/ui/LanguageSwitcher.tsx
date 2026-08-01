@@ -1,41 +1,26 @@
 'use client'
 
 import { useEffect, useId, useRef, useState } from 'react'
+import { locales, localeFlags, localeNames, type Locale } from '@/lib/i18n'
 import { Flag } from './Flag'
-
-export type LocaleCode = 'en' | 'fr'
-
-type Locale = {
-  code: LocaleCode
-  flag: 'gb' | 'fr'
-  label: string
-  /** Where switching to this locale should navigate. Null until it exists. */
-  href: string | null
-}
-
-/**
- * Locale list. Add an `href` here the moment a locale's route exists and it
- * becomes selectable; nothing else needs changing.
- */
-const LOCALES: Locale[] = [
-  { code: 'en', flag: 'gb', label: 'English', href: '/' },
-  { code: 'fr', flag: 'fr', label: 'Français', href: null },
-]
 
 /**
  * The flag dropdown from the reference's navbar: a pill showing the current
  * locale's flag with a chevron that rotates open, and a menu of locales.
  *
- * Locales without a route yet render as disabled menu items rather than being
- * hidden, so the control is genuinely interactive without silently doing
- * nothing when picked.
+ * Each entry is a real `<a href="/fr">`, deliberately not a client-side
+ * transition. Switching language should reload the document so the html `lang`
+ * attribute, the metadata and the JSON-LD all change together; a soft
+ * navigation would leave the old ones in place. Plain anchors also mean the
+ * control works before hydration and is crawlable, which is how the alternate
+ * language gets discovered.
  */
-export function LanguageSwitcher({ current = 'en' }: { current?: LocaleCode }) {
+export function LanguageSwitcher({ current = 'en' }: { current?: Locale }) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
   const menuId = `lang-menu-${useId().replace(/:/g, '')}`
 
-  const active = LOCALES.find((l) => l.code === current) ?? LOCALES[0]
+  const active = { code: current, flag: localeFlags[current], label: localeNames[current] }
 
   /* Close on outside click and on Escape. */
   useEffect(() => {
@@ -100,29 +85,22 @@ export function LanguageSwitcher({ current = 'en' }: { current?: LocaleCode }) {
           role="menu"
           className="animate-menu-in absolute top-full left-0 z-50 mt-2 min-w-[11rem] overflow-hidden rounded-[12px] border border-hairline bg-white py-1.5 shadow-ramp-lg"
         >
-          {LOCALES.map((locale) => {
-            const isActive = locale.code === active.code
-            const available = locale.href !== null
+          {locales.map((code) => {
+            const isActive = code === current
 
             return (
-              <li key={locale.code} role="none">
+              <li key={code} role="none">
                 <a
                   role="menuitem"
-                  href={available ? locale.href! : undefined}
+                  href={`/${code}`}
+                  hrefLang={code}
                   aria-current={isActive ? 'true' : undefined}
-                  aria-disabled={available ? undefined : 'true'}
-                  onClick={(e) => {
-                    if (!available) e.preventDefault()
-                    else setOpen(false)
-                  }}
-                  className={`flex items-center gap-2.5 px-3.5 py-2 text-sm transition-colors duration-200 ease-signature ${
-                    available ? 'text-ink hover:bg-panel' : 'cursor-not-allowed text-faint'
-                  }`}
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-2.5 px-3.5 py-2 text-sm text-ink transition-colors duration-200 ease-signature hover:bg-panel"
                 >
-                  <Flag code={locale.flag} />
-                  <span className="flex-1">{locale.label}</span>
+                  <Flag code={localeFlags[code]} />
+                  <span className="flex-1">{localeNames[code]}</span>
                   {isActive && <span className="text-accent">&#10003;</span>}
-                  {!available && <span className="text-[11px] text-faint">soon</span>}
                 </a>
               </li>
             )

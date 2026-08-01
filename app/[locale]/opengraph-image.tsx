@@ -1,10 +1,19 @@
 import { ImageResponse } from 'next/og'
-import { site } from '@/lib/content'
+import { getContent } from '@/lib/content'
+import { isLocale, locales } from '@/lib/i18n'
+import { site } from '@/lib/site'
 import { siteUrl } from '@/lib/site-url'
 
-export const alt = `${site.name}, ${site.role}`
+export const alt = site.name
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
+
+/* Prerendered per locale rather than generated on demand: social crawlers fetch
+   this the instant a link is pasted, and a cold serverless start is exactly the
+   wrong moment to be slow. */
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }))
+}
 
 /**
  * The card shown when the site is pasted into WhatsApp, LinkedIn or X.
@@ -14,7 +23,10 @@ export const contentType = 'image/png'
  * would add a network dependency to the build for a difference nobody can spot
  * at card size.
  */
-export default function Image() {
+export default async function Image({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  const { meta } = getContent(isLocale(locale) ? locale : 'en')
+
   return new ImageResponse(
     (
       <div
@@ -30,7 +42,7 @@ export default function Image() {
         }}
       >
         <div style={{ display: 'flex', color: '#4d80d1', fontSize: 28, letterSpacing: 4 }}>
-          {site.role.toUpperCase()}
+          {meta.role.toUpperCase()}
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
@@ -38,7 +50,7 @@ export default function Image() {
             {site.name}
           </div>
           <div style={{ display: 'flex', fontSize: 34, color: '#3f444a', maxWidth: 900 }}>
-            Websites, stores and automations that turn visitors into customers.
+            {meta.ogTagline}
           </div>
         </div>
 
@@ -51,11 +63,11 @@ export default function Image() {
             color: '#3f444a',
           }}
         >
-          <div style={{ display: 'flex' }}>{siteUrl.replace('https://', '')}</div>
+          <div style={{ display: 'flex' }}>{`${siteUrl.replace('https://', '')}/${locale}`}</div>
           <div style={{ display: 'flex', gap: 28 }}>
-            <span>30+ projects</span>
+            <span>{meta.ogStats[0]}</span>
             <span>·</span>
-            <span>Worldwide</span>
+            <span>{meta.ogStats[1]}</span>
           </div>
         </div>
       </div>

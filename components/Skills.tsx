@@ -1,14 +1,15 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { skillsSection, type SkillCard } from '@/lib/content'
+import type { SkillIcon } from '@/lib/content/en'
+import { useContent } from './ContentProvider'
 import { Pill } from './ui/Pill'
 import { Reveal } from './ui/Reveal'
 import { Section } from './ui/Section'
 
 /* Inline SVGs rather than an icon dependency: three icons is not worth a
    package, and these can be tuned to the 1.5px stroke weight used site-wide. */
-const icons: Record<SkillCard['icon'], ReactNode> = {
+const icons: Record<SkillIcon, ReactNode> = {
   layout: (
     <>
       <rect x="2.75" y="3.75" width="18.5" height="16.5" rx="2.25" />
@@ -31,7 +32,7 @@ const icons: Record<SkillCard['icon'], ReactNode> = {
   ),
 }
 
-function SkillIcon({ name }: { name: SkillCard['icon'] }) {
+function SkillIcon({ name }: { name: SkillIcon }) {
   return (
     <svg
       width="24"
@@ -50,6 +51,9 @@ function SkillIcon({ name }: { name: SkillCard['icon'] }) {
 }
 
 export function Skills() {
+  const { content } = useContent()
+  const { skillsSection } = content
+
 
   return (
     <Section

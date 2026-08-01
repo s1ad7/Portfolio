@@ -2,7 +2,7 @@
 
 import { gsap, prefersReducedMotion, useGSAP, EASE_UI } from '@/lib/gsap'
 import { useId, useRef, useState } from 'react'
-import { faqSection } from '@/lib/content'
+import { useContent } from './ContentProvider'
 import { Reveal } from './ui/Reveal'
 import { Section } from './ui/Section'
 
@@ -14,6 +14,9 @@ import { Section } from './ui/Section'
  * keyboard and reads correctly to a screen reader.
  */
 export function Faq() {
+  const { content } = useContent()
+  const { faqSection } = content
+
   const [open, setOpen] = useState<number | null>(0)
   const baseId = useId()
   const panelRefs = useRef<(HTMLDivElement | null)[]>([])

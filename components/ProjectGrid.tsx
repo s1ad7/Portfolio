@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { ScrollTrigger } from '@/lib/gsap'
-import type { Project } from '@/lib/content'
+import { format, getProjectCards, type ProjectCardData } from '@/lib/content'
+import { useContent } from './ContentProvider'
 import { ProjectCard } from './ProjectCard'
 import { Pill } from './ui/Pill'
 
@@ -18,7 +19,11 @@ const STEP = 4
  * Loading in batches keeps the section proportionate while leaving everything
  * reachable.
  */
-export function ProjectGrid({ projects }: { projects: readonly Project[] }) {
+export function ProjectGrid() {
+  const { content } = useContent()
+  const projects: ProjectCardData[] = getProjectCards(content)
+  const copy = content.projectsSection
+
   const [count, setCount] = useState(INITIAL)
   const gridRef = useRef<HTMLDivElement>(null)
   const previous = useRef(INITIAL)
@@ -63,7 +68,7 @@ export function ProjectGrid({ projects }: { projects: readonly Project[] }) {
             onClick={() => setCount((c) => Math.min(c + STEP, projects.length))}
             className="rounded-full bg-ink-cta px-6 py-3 font-display text-base font-semibold text-white shadow-ramp transition-colors duration-200 ease-signature hover:bg-ink-cta-hover"
           >
-            Load more
+            {copy.loadMore}
           </button>
         </div>
       )}
@@ -71,7 +76,7 @@ export function ProjectGrid({ projects }: { projects: readonly Project[] }) {
       {/* Announced to screen readers on change, so the count is not something
           you can only discover by looking. */}
       <p aria-live="polite" className="sr-only">
-        Showing {visible.length} of {projects.length} projects.
+        {format(copy.countAnnouncement, { shown: visible.length, total: projects.length })}
       </p>
     </>
   )

@@ -4,12 +4,15 @@ import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { gsap, useGSAP, DURATION_UI, EASE_UI } from '@/lib/gsap'
 import { useNavHidden } from '@/lib/useNavHidden'
-import { nav } from '@/lib/content'
+import { useContent } from './ContentProvider'
 import { LanguageSwitcher } from './ui/LanguageSwitcher'
 import { Pill } from './ui/Pill'
 import { Wordmark } from './ui/Wordmark'
 
 export function Navbar() {
+  const { content, locale } = useContent()
+  const { nav } = content
+
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState<string>('')
   const headerRef = useRef<HTMLElement>(null)
@@ -57,7 +60,10 @@ export function Navbar() {
 
     sections.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
-  }, [])
+    /* `nav` is a module-level dictionary reached through context, so its
+       identity is stable and this re-subscribes only if the locale changes,
+       which is a full document load anyway. */
+  }, [nav])
 
   /* Lock body scroll while the mobile overlay is open. */
   useEffect(() => {
@@ -133,7 +139,7 @@ export function Navbar() {
             <div className="flex items-center gap-4">
               <Wordmark />
               <span className="hidden sm:block">
-                <LanguageSwitcher />
+                <LanguageSwitcher current={locale} />
               </span>
             </div>
 
@@ -165,7 +171,7 @@ export function Navbar() {
                   element resolve by stylesheet order, not class order. */}
               <span className="hidden md:block">
                 <Pill href="#contact" variant="dark">
-                  Contact
+                  {content.navCta}
                 </Pill>
               </span>
 
@@ -174,7 +180,7 @@ export function Navbar() {
                 onClick={() => setOpen((v) => !v)}
                 aria-expanded={open}
                 aria-controls="mobile-menu"
-                aria-label={open ? 'Close menu' : 'Open menu'}
+                aria-label={open ? content.menu.close : content.menu.open}
                 className="flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-full border border-line bg-white md:hidden"
               >
                 <span
@@ -205,7 +211,7 @@ export function Navbar() {
         inert={!open}
       >
         <ul className="flex flex-col gap-2">
-          {[...nav, { label: 'Contact', href: '#contact' }].map((item) => (
+          {[...nav, { label: content.navCta, href: '#contact' }].map((item) => (
             <li key={item.href}>
               <Link href={item.href} onClick={() => setOpen(false)} className="block py-3 text-4xl">
                 {item.label}
