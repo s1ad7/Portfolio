@@ -20,11 +20,8 @@ export const site = {
   email: 'contact@saadifli.dev',
   location: 'Morocco',
   links: {
-    /* TODO (Saad): BROKEN LINK. github.com/saadifli returns 404; the real
-       account exists (1,106 contributions last year) under some other name.
-       Fixing this one string repairs the footer link AND lights up the
-       contribution calendar in About. */
-    github: 'https://github.com/saadifli',
+    /* Drives both the footer link and the contribution calendar in About. */
+    github: 'https://github.com/s1ad7',
     linkedin: 'https://www.linkedin.com/in/saad-ifli/',
   },
 } as const
