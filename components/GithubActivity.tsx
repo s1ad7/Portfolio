@@ -90,7 +90,7 @@ export function GithubActivity() {
   for (let i = 0; i < padded.length; i += 7) weeks.push(padded.slice(i, i + 7))
 
   return (
-    <div ref={scope} className="mt-14 flex flex-col gap-4">
+    <div ref={scope} className="mt-10 flex flex-col gap-4 md:mt-14">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <p className="text-base text-ink">
           <span className="font-display text-xl">{total.toLocaleString('en-US')}</span>{' '}

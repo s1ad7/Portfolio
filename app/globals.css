@@ -175,6 +175,23 @@
     background-size: 40px 40px;
   }
 
+  /* Body copy measure.
+
+     The reference sets 1.8 line-height, which is right on a wide column and
+     wrong on a phone: at 390px the lines drift so far apart that a paragraph
+     stops reading as a block. Guidance is consistent on ~1.6 for mobile body
+     text, tightening as the column widens, so that is what this does. WCAG
+     1.4.12 wants at least 1.5, which both satisfy. */
+  .copy {
+    line-height: 1.6;
+  }
+
+  @media (min-width: 768px) {
+    .copy {
+      line-height: 1.8;
+    }
+  }
+
   /* Section label, e.g. "// PROJECTS". The reference sets these in the accent
      blue at Poppins 14/600, which is where most of the colour on the page
      comes from. */

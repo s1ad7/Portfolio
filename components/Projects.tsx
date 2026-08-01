@@ -23,12 +23,12 @@ export function Projects({ locale }: { locale: Locale }) {
   const { projectsSection } = content
 
   return (
-    <section id="projects" className="shell scroll-mt-28 bg-white py-16">
+    <section id="projects" className="shell scroll-mt-28 bg-white py-16 md:py-20">
       <div className="mx-auto w-full max-w-[1200px] px-6 lg:px-0">
         <Reveal className="flex flex-col gap-4">
           <Eyebrow>{projectsSection.eyebrow}</Eyebrow>
           <h2 className="max-w-[745px] text-4xl md:text-5xl">{projectsSection.heading}</h2>
-          <p className="text-base leading-[1.8] text-muted">{projectsSection.intro}</p>
+          <p className="text-base copy text-muted">{projectsSection.intro}</p>
         </Reveal>
 
         <ProjectGrid />

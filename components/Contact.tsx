@@ -126,7 +126,7 @@ export function Contact() {
               <Eyebrow>{contactSection.eyebrow}</Eyebrow>
               {/* w900 on the reference; 800 is the heaviest the family ships. */}
               <h2 className="text-4xl font-extrabold">{contactSection.heading}</h2>
-              <p className="max-w-md text-base leading-[1.8] text-body">{contactSection.intro}</p>
+              <p className="max-w-md text-base copy text-body">{contactSection.intro}</p>
             </div>
 
             {/* The reference's dotted flourish between the copy and the chips. */}

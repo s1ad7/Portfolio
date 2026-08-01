@@ -47,19 +47,22 @@ export function Section({
   return (
     <section
       id={id}
-      className={`shell scroll-mt-28 py-24 md:py-32 ${
+      className={`shell scroll-mt-28 py-16 md:py-28 lg:py-32 ${
         tone === 'panel' ? 'bg-panel' : 'bg-white'
       } ${className}`}
     >
       <Container>
-        <Reveal className="flex flex-col items-center gap-4 text-center">
+        {/* Eyebrow and heading stay centred. The intro does NOT below md:
+            centring a paragraph that wraps to four or five lines makes the
+            reader hunt for the start of each line, which is exactly what
+            happens to these at phone width. Short enough to centre on a wide
+            screen, so it does from md up. */}
+        <Reveal className="flex flex-col gap-4 md:items-center md:text-center">
           <Eyebrow>{eyebrow}</Eyebrow>
           <h2 className="max-w-3xl text-4xl md:text-5xl">{heading}</h2>
-          {intro && (
-            <p className="max-w-2xl text-base leading-[1.8] text-body">{intro}</p>
-          )}
+          {intro && <p className="copy max-w-2xl text-base text-body">{intro}</p>}
         </Reveal>
-        <div className="mt-16 md:mt-20">{children}</div>
+        <div className="mt-10 md:mt-16 lg:mt-20">{children}</div>
       </Container>
     </section>
   )

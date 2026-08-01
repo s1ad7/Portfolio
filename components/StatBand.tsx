@@ -47,7 +47,7 @@ export function StatBand() {
   return (
     <div
       ref={scope}
-      className="mt-16 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-line pt-10 lg:grid-cols-4"
+      className="mt-10 grid grid-cols-2 md:mt-16 gap-x-6 gap-y-10 border-t border-line pt-10 lg:grid-cols-4"
     >
       {stats.map((stat) => (
         <div key={stat.label} className="flex flex-col gap-1">

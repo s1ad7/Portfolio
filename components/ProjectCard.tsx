@@ -86,7 +86,13 @@ export function ProjectCard({ project, index }: { project: ProjectCardData; inde
           {project.category}
         </span>
         <h3 className="mb-2 text-xl leading-[1.5]">{project.title}</h3>
-        <p className="text-base leading-[1.6] text-muted">{project.description}</p>
+        {/* Clamped on phones only. Unclamped it runs eight lines and is more than
+            a third of the card, which turns four cards into three screens of
+            scrolling. The full text still renders from md up, and the card
+            links to the live site regardless. */}
+        <p className="line-clamp-3 text-base leading-[1.6] text-muted md:line-clamp-none">
+          {project.description}
+        </p>
         {/* The "new tab" warning as content rather than an aria-label. An
             aria-label REPLACES the accessible name, and one that did not
             contain the card's own visible text failed WCAG 2.5.3 (Label in

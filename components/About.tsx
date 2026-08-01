@@ -24,9 +24,9 @@ export function About({ locale }: { locale: Locale }) {
   const { about } = getContent(locale)
 
   return (
-    <section id="about" className="shell scroll-mt-28 bg-panel py-24 md:py-32">
+    <section id="about" className="shell scroll-mt-28 bg-panel py-16 md:py-28 lg:py-32">
       <Container>
-        <div className="grid items-center gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:gap-24">
+        <div className="grid items-center gap-10 md:gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:gap-24">
           <div className="flex flex-col items-start gap-6">
             <Reveal className="flex flex-col gap-4">
               <Eyebrow>{about.eyebrow}</Eyebrow>
@@ -40,7 +40,7 @@ export function About({ locale }: { locale: Locale }) {
 
             <Reveal delay={0.08} className="flex flex-col items-start gap-6">
               {about.paragraphs.map((para: string) => (
-                <p key={para.slice(0, 24)} className="max-w-xl text-base leading-[1.8] text-body">
+                <p key={para.slice(0, 24)} className="max-w-xl text-base copy text-body">
                   {para}
                 </p>
               ))}

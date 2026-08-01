@@ -88,7 +88,7 @@ export function Hero() {
           <span data-hero-title>{hero.headline}</span>
         </h1>
 
-        <p data-hero-sub className="max-w-xl text-base leading-[1.8] text-muted">
+        <p data-hero-sub className="max-w-xl text-base copy text-muted">
           {hero.subline}
         </p>
       </div>

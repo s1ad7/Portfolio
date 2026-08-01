@@ -54,7 +54,7 @@ export function ProjectGrid() {
     <>
       <div
         ref={gridRef}
-        className="mx-auto mt-14 grid w-full max-w-[1090px] gap-6 md:grid-cols-2"
+        className="mx-auto mt-8 grid w-full max-w-[1090px] gap-6 md:mt-14 md:grid-cols-2"
       >
         {visible.map((project, i) => (
           <ProjectCard key={project.slug} project={project} index={i} />
