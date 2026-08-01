@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og'
 import { site } from '@/lib/content'
+import { siteUrl } from '@/lib/site-url'
 
 export const alt = `${site.name}, ${site.role}`
 export const size = { width: 1200, height: 630 }
@@ -50,7 +51,7 @@ export default function Image() {
             color: '#3f444a',
           }}
         >
-          <div style={{ display: 'flex' }}>{site.url.replace('https://', '')}</div>
+          <div style={{ display: 'flex' }}>{siteUrl.replace('https://', '')}</div>
           <div style={{ display: 'flex', gap: 28 }}>
             <span>30+ projects</span>
             <span>·</span>

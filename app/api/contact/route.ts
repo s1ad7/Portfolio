@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { site } from '@/lib/content'
+import { siteUrl } from '@/lib/site-url'
 
 /**
  * Contact form endpoint.
@@ -143,7 +144,7 @@ async function send({
         message,
         '',
         '--',
-        `Sent from the contact form at ${site.url}`,
+        `Sent from the contact form at ${siteUrl}`,
       ].join('\n'),
     }),
   })

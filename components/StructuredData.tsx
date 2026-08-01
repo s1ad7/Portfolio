@@ -1,4 +1,5 @@
 import { about, faqSection, projects, site, skillsSection } from '@/lib/content'
+import { siteUrl } from '@/lib/site-url'
 
 /**
  * JSON-LD for search engines.
@@ -22,10 +23,10 @@ export function StructuredData() {
   const graph = [
     {
       '@type': 'Person',
-      '@id': `${site.url}/#person`,
+      '@id': `${siteUrl}/#person`,
       name: site.name,
-      url: site.url,
-      image: `${site.url}/about-portrait.jpg`,
+      url: siteUrl,
+      image: `${siteUrl}/about-portrait.jpg`,
       jobTitle: site.role,
       email: `mailto:${site.email}`,
       address: { '@type': 'PostalAddress', addressCountry: 'MA' },
@@ -34,13 +35,13 @@ export function StructuredData() {
     },
     {
       '@type': 'ProfessionalService',
-      '@id': `${site.url}/#service`,
+      '@id': `${siteUrl}/#service`,
       name: `${site.name}, ${site.role}`,
       description: site.description,
-      url: site.url,
-      image: `${site.url}/opengraph-image`,
+      url: siteUrl,
+      image: `${siteUrl}/opengraph-image`,
       email: `mailto:${site.email}`,
-      founder: { '@id': `${site.url}/#person` },
+      founder: { '@id': `${siteUrl}/#person` },
       areaServed: 'Worldwide',
       address: { '@type': 'PostalAddress', addressCountry: 'MA' },
       priceRange: '$$',
@@ -55,7 +56,7 @@ export function StructuredData() {
     },
     {
       '@type': 'FAQPage',
-      '@id': `${site.url}/#faq`,
+      '@id': `${siteUrl}/#faq`,
       mainEntity: faqSection.items.map((item) => ({
         '@type': 'Question',
         name: item.question,
@@ -64,7 +65,7 @@ export function StructuredData() {
     },
     {
       '@type': 'ItemList',
-      '@id': `${site.url}/#work`,
+      '@id': `${siteUrl}/#work`,
       name: 'Selected work',
       itemListElement: projects.map((project, index) => ({
         '@type': 'ListItem',
@@ -79,11 +80,11 @@ export function StructuredData() {
     },
     {
       '@type': 'WebSite',
-      '@id': `${site.url}/#website`,
-      url: site.url,
+      '@id': `${siteUrl}/#website`,
+      url: siteUrl,
       name: `${site.name}, ${site.role}`,
       description: about.paragraphs[0],
-      publisher: { '@id': `${site.url}/#person` },
+      publisher: { '@id': `${siteUrl}/#person` },
       inLanguage: 'en',
     },
   ]

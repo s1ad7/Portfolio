@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { site } from '@/lib/content'
+import { siteUrl } from '@/lib/site-url'
 
 /**
  * One page, so one entry. `lastModified` is stamped at build time, which is the
@@ -8,7 +8,7 @@ import { site } from '@/lib/content'
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: site.url,
+      url: siteUrl,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 1,

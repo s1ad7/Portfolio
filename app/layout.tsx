@@ -4,6 +4,7 @@ import './globals.css'
 import { SmoothScroll } from '@/components/SmoothScroll'
 import { StructuredData } from '@/components/StructuredData'
 import { site } from '@/lib/content'
+import { siteUrl } from '@/lib/site-url'
 
 /* Two faces, matching the reference's measured usage: Bricolage Grotesque at
    weight 600 for every heading and the hero display, Poppins for everything
@@ -35,9 +36,10 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  /* Makes every relative URL below (canonical, OG image, sitemap) resolve
-     against the real domain instead of localhost. */
-  metadataBase: new URL(site.url),
+  /* Resolved from the environment, not hardcoded: absolute URLs must point at
+     a host that actually answers, or social cards fetch a dead origin and
+     render broken. See lib/site-url.ts. */
+  metadataBase: new URL(siteUrl),
   title: {
     default: `${site.name}, ${site.role} in Morocco`,
     template: `%s | ${site.name}`,
@@ -56,13 +58,13 @@ export const metadata: Metadata = {
     'business automation developer',
     site.name,
   ],
-  authors: [{ name: site.name, url: site.url }],
+  authors: [{ name: site.name, url: siteUrl }],
   creator: site.name,
   alternates: { canonical: '/' },
   openGraph: {
     title: `${site.name}, ${site.role} in Morocco`,
     description: site.description,
-    url: site.url,
+    url: siteUrl,
     siteName: site.name,
     locale: 'en',
     type: 'website',
