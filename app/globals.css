@@ -95,6 +95,16 @@
      scroll-padding-top here as well would stack, landing anchors twice as far
      down as intended. */
 
+  /* Tailwind v4's Preflight sets buttons to `cursor: default`, matching the
+     browser default. Every button on this site is a real control, so restore
+     the pointer once here rather than remembering a utility on each one.
+     Disabled controls keep the default cursor: the pointer would promise an
+     action that will not happen. */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']) {
+    cursor: pointer;
+  }
+
   body {
     background-color: var(--color-bg);
     color: var(--color-ink);
