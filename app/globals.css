@@ -112,6 +112,27 @@
     cursor: pointer;
   }
 
+  /* Notches, dynamic islands and home indicators. With viewport-fit=cover the
+     page paints edge to edge, so anything hugging an edge has to be pushed in
+     by the device's own reported inset or it can sit under the hardware. The
+     max() keeps the existing spacing on devices that report 0. */
+  /* iOS Safari zooms into any focused field under 16px, on iPhone AND iPad.
+     Keyed to pointer:coarse rather than a width breakpoint, because an iPad is
+     touch at a width where a laptop is not, and it is the touch keyboard that
+     causes the zoom. Pointer devices keep the reference's 14px. */
+  @media (pointer: coarse) {
+    input,
+    textarea,
+    select {
+      font-size: 1rem;
+    }
+  }
+
+  .safe-x {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+
   body {
     background-color: var(--color-bg);
     color: var(--color-ink);

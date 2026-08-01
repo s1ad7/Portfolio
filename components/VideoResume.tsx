@@ -34,16 +34,24 @@ export function VideoResume() {
   const [open, setOpen] = useState(false)
   const dialogRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
+  /* Distinguishes "closed because it was never opened" from "just closed".
+     Without it the focus restore below fires on mount and steals focus to a
+     button in the middle of the page on every page load. */
+  const wasOpen = useRef(false)
 
   const close = useCallback(() => setOpen(false), [])
 
   useEffect(() => {
     if (!open) {
-      /* Focus goes back where it came from, or a keyboard user is dumped at the
-         top of the document. */
-      triggerRef.current?.focus()
+      /* Only after a real close: focus goes back where it came from, or a
+         keyboard user is dumped at the top of the document. */
+      if (wasOpen.current) {
+        wasOpen.current = false
+        triggerRef.current?.focus()
+      }
       return
     }
+    wasOpen.current = true
 
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -87,17 +95,22 @@ export function VideoResume() {
         ref={triggerRef}
         type="button"
         onClick={() => setOpen(true)}
-        /* Deliberately not a Pill: it must never compete with the real CTA
-           beside it. Text only, no button chrome.
+        /* A ghost button, not plain text: as bare text it was invisible next
+           to the solid CTA, and its hit area was 20px tall against a 44px
+           floor. Outlined rather than filled, so it still reads as the
+           secondary of the two.
            text-muted rather than text-faint: faint measures 3.18:1 on the grey
-           panel, under the 4.5:1 WCAG AA floor for text this size. Muted is
-           5.92:1 and still reads as secondary. */
-        className="group inline-flex items-center gap-1.5 text-sm text-muted transition-colors duration-200 ease-signature hover:text-ink"
+           panel, under the 4.5:1 WCAG AA floor for text this size. */
+        className="group inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white/60 px-4 py-2.5 text-sm text-muted transition-colors duration-200 ease-signature hover:border-ink/25 hover:bg-white hover:text-ink"
       >
         {copy.trigger}
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-          <path d="M5.5 3.5v9l7-4.5-7-4.5Z" />
-        </svg>
+        {/* Filled circle so the play mark reads at a glance rather than
+            disappearing into the text. */}
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-ink text-white transition-colors duration-200 ease-signature group-hover:bg-accent">
+          <svg width="9" height="9" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M5 3.2v9.6l8-4.8-8-4.8Z" />
+          </svg>
+        </span>
       </button>
 
       {/* Rendered into <body> rather than in place.
@@ -110,7 +123,7 @@ export function VideoResume() {
       {open &&
         createPortal(
           <div
-            className="fixed inset-0 z-[70] flex items-center justify-center bg-ink/70 p-4 backdrop-blur-sm motion-safe:animate-scrim-in"
+            className="safe-x fixed inset-0 z-[70] flex items-center justify-center bg-ink/70 p-4 backdrop-blur-sm motion-safe:animate-scrim-in"
             onClick={close}
           >
             <div

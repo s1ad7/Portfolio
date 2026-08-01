@@ -53,7 +53,7 @@ export function LanguageSwitcher({ current = 'en' }: { current?: Locale }) {
         /* Measured off the reference: 69x36 box, 12px radius (a rounded
            rectangle, not a capsule), 1px #ededed border, white fill, no shadow,
            8px/8px/8px/12px padding and a 4px gap. */
-        className="inline-flex items-center gap-1 rounded-[12px] border border-hairline bg-white py-2 pr-2 pl-3 text-muted transition-colors duration-200 ease-signature hover:border-line hover:text-ink"
+        className="inline-flex min-h-11 items-center gap-1 rounded-[12px] border border-hairline bg-white py-2 pr-2 pl-3 text-muted transition-colors duration-200 ease-signature hover:border-line hover:text-ink"
       >
         <Flag code={active.flag} />
         {/* ~10px wide and near-ink, matching the reference. A 12px box with the
@@ -96,7 +96,7 @@ export function LanguageSwitcher({ current = 'en' }: { current?: Locale }) {
                   hrefLang={code}
                   aria-current={isActive ? 'true' : undefined}
                   onClick={() => setOpen(false)}
-                  className="flex items-center gap-2.5 px-3.5 py-2 text-sm text-ink transition-colors duration-200 ease-signature hover:bg-panel"
+                  className="flex min-h-11 items-center gap-2.5 px-3.5 py-2 text-sm text-ink transition-colors duration-200 ease-signature hover:bg-panel"
                 >
                   <Flag code={localeFlags[code]} />
                   <span className="flex-1">{localeNames[code]}</span>

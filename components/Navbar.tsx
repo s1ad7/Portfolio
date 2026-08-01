@@ -132,7 +132,7 @@ export function Navbar() {
       {/* Flush to the top of the viewport, inset to match the section cards, with
           only the bottom corners rounded. Tucks away on downward scroll so
           reading gets the whole viewport. */}
-      <header ref={headerRef} className="fixed inset-x-0 top-0 z-50 px-3 md:px-6">
+      <header ref={headerRef} className="safe-x fixed inset-x-0 top-0 z-50 px-3 md:px-6">
         <nav aria-label="Main" className="rounded-b-shell bg-glass shadow-ramp backdrop-blur-xl">
           {/* Wordmark left, then links and the CTA as one right-aligned group. */}
           <div className="mx-auto flex h-16 w-full max-w-[1280px] items-center justify-between gap-6 px-6 md:h-20 md:px-10">
@@ -157,7 +157,8 @@ export function Navbar() {
                            The reference keeps all links at full ink and has no
                            active indicator, so scroll-spy is exposed only via
                            aria-current for assistive tech. */
-                        className="font-ui text-base text-ink transition-colors duration-200 ease-signature hover:text-muted"
+                        /* -my-3 keeps the visual position while the hit area reaches 44px. */
+                        className="-mx-2 -my-3 flex min-h-11 items-center px-2 py-3 font-ui text-base text-ink transition-colors duration-200 ease-signature hover:text-muted"
                       >
                         {item.label}
                       </Link>
@@ -181,7 +182,7 @@ export function Navbar() {
                 aria-expanded={open}
                 aria-controls="mobile-menu"
                 aria-label={open ? content.menu.close : content.menu.open}
-                className="flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-full border border-line bg-white md:hidden"
+                className="flex h-11 w-11 flex-col items-center justify-center gap-[5px] rounded-full border border-line bg-white md:hidden"
               >
                 <span
                   className={`block h-[1.5px] w-4 rounded-full bg-ink transition-transform duration-200 ease-signature ${
@@ -202,7 +203,7 @@ export function Navbar() {
       <div
         id="mobile-menu"
         ref={overlayRef}
-        className="invisible fixed inset-0 z-40 flex flex-col justify-center bg-bg px-8 opacity-0 md:hidden"
+        className="safe-x invisible fixed inset-0 z-40 flex flex-col justify-center bg-bg px-8 opacity-0 md:hidden"
         aria-hidden={!open}
         /* React 19 takes `inert` as a boolean. Passing the HTML-style empty
            string silently produced no attribute at all, so the closed overlay

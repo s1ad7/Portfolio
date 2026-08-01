@@ -8,9 +8,17 @@ import { Reveal } from './ui/Reveal'
 
 type Errors = Partial<Record<'name' | 'email' | 'message', string>>
 
-/* Reference input treatment: white field, hairline border, small radius. */
+/* Reference input treatment: white field, hairline border, small radius.
+
+   16px up to lg, then the reference's 14px. iOS Safari zooms into any focused
+   field under 16px and jerks the layout sideways mid-form, and every phone and
+   tablet sits under 1024. globals.css additionally forces 16px on any
+   pointer:coarse device, which covers touch laptops above that width; the
+   width rule is here because Chromium cannot emulate the pointer feature, so
+   it is the half that can actually be regression-tested.
+   min-h-11 puts the fields on the 44px touch-target floor. */
 const inputClasses =
-  'w-full rounded-[8px] border border-line/60 bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-faint transition-colors duration-200 ease-signature focus:border-accent focus-visible:outline-none'
+  'w-full min-h-11 rounded-[8px] border border-line/60 bg-white px-3.5 py-2.5 text-base lg:text-sm text-ink placeholder:text-faint transition-colors duration-200 ease-signature focus:border-accent focus-visible:outline-none'
 
 /**
  * Get in touch, rebuilt to the reference's measured layout: a WHITE card
@@ -139,7 +147,7 @@ export function Contact() {
                     target={item.icon === 'mail' ? undefined : '_blank'}
                     rel="noopener noreferrer"
                     aria-label={item.label}
-                    className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-panel text-ink transition-colors duration-200 ease-signature hover:bg-panel-2"
+                    className="flex h-11 w-11 items-center justify-center rounded-[8px] bg-panel text-ink transition-colors duration-200 ease-signature hover:bg-panel-2"
                   >
                     <SocialIcon name={item.icon} />
                   </a>
@@ -224,7 +232,7 @@ export function Contact() {
                   <button
                     type="submit"
                     disabled={busy}
-                    className="w-full rounded-full bg-ink py-2.5 font-display text-sm font-semibold text-white transition-colors duration-200 ease-signature hover:bg-ink-cta-hover disabled:opacity-60"
+                    className="min-h-11 w-full rounded-full bg-ink py-2.5 font-display text-sm font-semibold text-white transition-colors duration-200 ease-signature hover:bg-ink-cta-hover disabled:opacity-60"
                   >
                     {busy ? contactSection.sending : contactSection.submit}
                   </button>

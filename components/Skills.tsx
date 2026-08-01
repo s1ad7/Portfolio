@@ -80,7 +80,7 @@ export function Skills() {
               {card.tags.map((tag) => (
                 <li
                   key={tag}
-                  className="rounded-full border border-line bg-panel px-3 py-1 text-[11px] tracking-[0.03em] text-muted"
+                  className="rounded-full border border-line bg-panel px-3 py-1 text-xs tracking-[0.03em] text-muted"
                 >
                   {tag}
                 </li>

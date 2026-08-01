@@ -96,8 +96,11 @@ export async function generateMetadata({
   }
 }
 
-/* Matches the page background, so mobile browsers tint their chrome to suit. */
-export const viewport: Viewport = { themeColor: '#ffffff' }
+/* themeColor tints mobile browser chrome to match the page.
+   viewportFit cover is what makes env(safe-area-inset-*) report real values;
+   without it the insets are always 0 and the notch and home indicator cannot
+   be accounted for at all. The insets themselves are applied in globals.css. */
+export const viewport: Viewport = { themeColor: '#ffffff', viewportFit: 'cover' }
 
 export default async function LocaleLayout({
   children,
