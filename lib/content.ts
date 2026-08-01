@@ -135,9 +135,8 @@ export const projects: Project[] = [
     description:
       'Storefront for digital game cards, top-ups and subscriptions in Morocco, priced in dirhams with codes delivered over WhatsApp. Spans gift cards, pins, subscriptions and game keys.',
     image: '/projects/acpins.jpg',
-    // TODO (Saad): no custom domain was given for this one, so it still points
-    // at the Vercel deployment. Swap it in if there is one.
-    href: 'https://ac-pins.vercel.app/',
+    href: 'https://pins.aczone.xyz/',
+    captureUrl: 'https://ac-pins.vercel.app/',
   },
   {
     slug: 'acpeds',

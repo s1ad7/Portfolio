@@ -16,7 +16,7 @@
  * install with:  npx playwright install chromium
  */
 import { chromium } from 'playwright'
-import { composeCard } from './lib/compose.mjs'
+import { composeCard, sampleTint } from './lib/compose.mjs'
 import { mkdirSync, existsSync, rmSync } from 'node:fs'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -322,26 +322,10 @@ for (const { slug, url } of targets) {
       shots.push(`data:image/jpeg;base64,${buf.toString('base64')}`)
     }
 
-    // Average colour of the hero, used for the backdrop gradient.
+    // Backdrop colour, taken from the hero's dominant brand colour.
     await page.evaluate(() => window.scrollTo(0, 0))
     await page.waitForTimeout(400)
-    const tint = await page.evaluate(async (dataUrl) => {
-      const img = new Image()
-      img.src = dataUrl
-      await img.decode()
-      const c = document.createElement('canvas')
-      c.width = 40
-      c.height = 40
-      const ctx = c.getContext('2d')
-      ctx.drawImage(img, 0, 0, 40, 40)
-      const d = ctx.getImageData(0, 0, 40, 40).data
-      let r = 0, g = 0, bl = 0
-      for (let i = 0; i < d.length; i += 4) {
-        r += d[i]; g += d[i + 1]; bl += d[i + 2]
-      }
-      const n = d.length / 4
-      return [Math.round(r / n), Math.round(g / n), Math.round(bl / n)]
-    }, shots[0])
+    const tint = await sampleTint(browser, shots[0])
 
     await composeCard(browser, shots, tint, join(outDir, `${slug}.jpg`))
     console.log(`ok  collage 1600x1200  tint rgb(${tint.join(',')})`)

@@ -17,7 +17,7 @@ import { chromium } from 'playwright'
 import { existsSync, readFileSync, rmSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, extname, join, resolve } from 'node:path'
-import { composeCard } from './lib/compose.mjs'
+import { composeCard, sampleTint } from './lib/compose.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const args = process.argv.slice(2)
@@ -50,27 +50,7 @@ while (shots.length < 3) shots.push(shots[shots.length - 1])
 
 const browser = await chromium.launch()
 
-/* Average colour of the hero, for the backdrop gradient. Sampled in a page
-   rather than with an image library, so this needs no extra dependency. */
-const probe = await (await browser.newContext()).newPage()
-await probe.setContent('<canvas id="c"></canvas>')
-const tint = await probe.evaluate(async (dataUrl) => {
-  const img = new Image()
-  img.src = dataUrl
-  await img.decode()
-  const c = document.getElementById('c')
-  c.width = 40
-  c.height = 40
-  const ctx = c.getContext('2d')
-  ctx.drawImage(img, 0, 0, 40, 40)
-  const d = ctx.getImageData(0, 0, 40, 40).data
-  let r = 0, g = 0, b = 0
-  for (let i = 0; i < d.length; i += 4) {
-    r += d[i]; g += d[i + 1]; b += d[i + 2]
-  }
-  const n = d.length / 4
-  return [Math.round(r / n), Math.round(g / n), Math.round(b / n)]
-}, shots[0])
+const tint = await sampleTint(browser, shots[0])
 
 const out = join(root, 'public', 'projects', `${slug}.jpg`)
 await composeCard(browser, shots, tint, out)

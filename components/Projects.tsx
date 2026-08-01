@@ -1,5 +1,5 @@
 import { projects, projectsSection } from '@/lib/content'
-import { ProjectCard } from './ProjectCard'
+import { ProjectGrid } from './ProjectGrid'
 import { Eyebrow } from './ui/Eyebrow'
 import { Reveal } from './ui/Reveal'
 
@@ -13,6 +13,9 @@ import { Reveal } from './ui/Reveal'
  * Two containers, not one. The header runs to 1200px while the card grid is
  * 1090px (two 533px cards plus a 24px gap), centred inside it. That inset is
  * measured, not invented.
+ *
+ * The grid is a client component only because it holds the load-more count;
+ * everything else here stays server-rendered.
  */
 export function Projects() {
   return (
@@ -24,11 +27,8 @@ export function Projects() {
           <p className="text-base leading-[1.8] text-muted">{projectsSection.intro}</p>
         </Reveal>
 
-        <div className="mx-auto mt-14 grid w-full max-w-[1090px] gap-6 md:grid-cols-2">
-          {projects.map((project, i) => (
-            <ProjectCard key={project.slug} project={project} index={i} />
-          ))}
-        </div>
+        <ProjectGrid projects={projects} />
+
       </div>
     </section>
   )
