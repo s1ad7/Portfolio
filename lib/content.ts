@@ -251,37 +251,41 @@ export interface FaqItem {
 export const faqSection = {
   eyebrow: 'FAQ',
   heading: 'Your questions, my answers.',
-  intro: 'Common questions about how I work, what I build, and what a project looks like.',
+  intro: 'The things clients actually want to know before they write to a developer.',
+  /* Ordered by hesitation, biggest first. Research on services FAQs is blunt:
+     the questions that convert are price, ownership and what happens after
+     launch, the three places clients have been burned before. The first item
+     renders open, so cost is answered before it is asked. */
   items: [
     {
-      question: 'What kind of projects do you take on?',
+      question: 'How much does a website cost?',
       answer:
-        'Websites that need to win customers, online stores and booking platforms, and the internal tools and automations that keep them running. I am most useful where there is real business logic to untangle rather than a purely visual brief.',
+        'It depends on what the site has to do, so I will not pretend there is one number. After one call you get a fixed quote in writing, and that is what you pay: no hourly surprises, no invoice creep. If your budget and the scope do not fit, I will tell you on that call, not three weeks in.',
     },
     {
-      question: 'Can you work with an existing codebase?',
+      question: 'Who owns the site when it is done?',
       answer:
-        'Yes, and it is often the more interesting work. I start by reading the code and the data model before proposing changes, so the first thing you get is an honest assessment rather than a rewrite pitch.',
+        'You do. Domain, hosting and code sit in your accounts and your name from day one, and you get a full handover at launch. If we ever part ways, you lose nothing.',
     },
     {
-      question: 'How do we start?',
+      question: 'What happens after launch?',
       answer:
-        'Send a message through the form below with a short description of the problem. I will reply with questions, a rough approach, and an honest view of whether I am the right person for it.',
-    },
-    {
-      question: 'What does your process look like?',
-      answer:
-        'Understand the workflow, agree on scope, then build in reviewable increments. You see working software early and often, which is the cheapest time to change direction.',
+        'I do not vanish. You get a walkthrough, a window for fixes, and the option of ongoing help with changes and updates. Where it makes sense, I build the site so you can edit the everyday content yourself.',
     },
     {
       question: 'How long does a project take?',
       answer:
-        'A focused tool or site is usually a few weeks. ERP work depends almost entirely on how clear the underlying process is, so I scope that after the first conversation rather than guessing up front.',
+        'A focused site is usually live in a few weeks. Bigger builds depend on scope, so the quote comes with a date, and you hear from me at every step rather than at the deadline.',
     },
     {
-      question: 'What do you need from me before we start?',
+      question: 'What do you need from me to start?',
       answer:
-        'A description of the process as it works today, including the awkward parts and manual workarounds. Access to whoever actually does the work daily is worth more than a written spec.',
+        'A clear picture of what you sell, who buys it, and what you want a visitor to do. If you have brand assets, photos or an old site, bring them. Everything else, including the copy, we can work out together.',
+    },
+    {
+      question: 'Can you redesign my existing site?',
+      answer:
+        'Yes, and it is often the more interesting work. I start by reading what is already there before proposing changes, so the first thing you get is an honest assessment rather than a rewrite pitch.',
     },
   ] satisfies FaqItem[],
 } as const
