@@ -15,11 +15,11 @@ const icons: Record<SkillCard['icon'], ReactNode> = {
       <path d="M2.75 9h18.5M9 9v11.25" />
     </>
   ),
-  server: (
+  cart: (
     <>
-      <rect x="2.75" y="3.75" width="18.5" height="7" rx="2" />
-      <rect x="2.75" y="13.25" width="18.5" height="7" rx="2" />
-      <path d="M6.5 7.25h.01M6.5 16.75h.01" />
+      <path d="M3 3.75h2l2.2 11.5h11.3l2.25-8.5H6.1" />
+      <circle cx="8.75" cy="19.5" r="1.4" />
+      <circle cx="17" cy="19.5" r="1.4" />
     </>
   ),
   workflow: (
@@ -53,7 +53,7 @@ export function Skills() {
 
   return (
     <Section
-      id="skills"
+      id="services"
       eyebrow={skillsSection.eyebrow}
       heading={skillsSection.heading}
       intro={skillsSection.intro}

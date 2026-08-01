@@ -13,7 +13,7 @@ export const site = {
   lastName: 'Ifli',
   role: 'Full-Stack Developer',
   description:
-    'Full-stack developer building web applications and Odoo/ERP integrations. React, Next.js, TypeScript, Node.js.',
+    'Full-stack developer in Morocco building websites, online stores and automations that turn visitors into customers. Next.js, WordPress, GSAP.',
   /** TODO: replace with the real production domain once deployed. */
   url: 'https://saadifli.dev',
   tagline: 'Built with structure, shipped with care.',
@@ -29,7 +29,7 @@ export const site = {
 export const nav = [
   { label: 'Projects', href: '#projects' },
   { label: 'About Me', href: '#about' },
-  { label: 'Skills', href: '#skills' },
+  { label: 'Services', href: '#services' },
   { label: 'FAQ', href: '#faq' },
 ] as const
 
@@ -202,33 +202,36 @@ export interface SkillCard {
   body: string
   tags: readonly string[]
   /** Key into the icon map in components/Skills.tsx. */
-  icon: 'layout' | 'server' | 'workflow'
+  icon: 'layout' | 'cart' | 'workflow'
 }
 
 export const skillsSection = {
-  eyebrow: 'Skills',
-  heading: 'What I work with.',
+  eyebrow: 'Services',
+  heading: 'What I can build for you.',
   intro:
-    'The tools I reach for most, and what I use each of them to do. Happy to work into an existing stack rather than insisting on my own.',
+    'Three ways I can help, and the tools behind each. Happy to work into an existing stack rather than insisting on my own.',
   cta: { label: 'Start a project', href: '#contact' },
+  /* Organised by the client's problem, not by stack layer. Research on services
+     pages is consistent: buyers shop by outcome, and jargon in the sentences
+     loses them. The tech lives in the chips, where scanners look for it. */
   cards: [
     {
       icon: 'layout',
-      title: 'Front-End',
-      body: 'Responsive, accessible interfaces with careful attention to state, performance and the small interactions that make a product feel finished.',
-      tags: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+      title: 'Websites that sell',
+      body: 'Marketing sites and landing pages where design, speed and copy all point at one goal: turning visitors into enquiries.',
+      tags: ['Next.js', 'WordPress', 'Tailwind CSS', 'GSAP', 'SEO'],
     },
     {
-      icon: 'server',
-      title: 'Back-End',
-      body: 'REST APIs, authentication and data modelling, with an eye on where a schema will hurt six months from now.',
-      tags: ['Node.js', 'Express', 'MongoDB', 'PostgreSQL', 'Docker'],
+      icon: 'cart',
+      title: 'Stores & bookings',
+      body: 'Shops, subscriptions and booking flows measured by one number: how many people finish checkout.',
+      tags: ['Next.js', 'Payments', 'WhatsApp API', 'Multilingual'],
     },
     {
       icon: 'workflow',
-      title: 'ERP & Odoo',
-      body: 'Custom Odoo modules and integrations: translating a real business process into something the system can actually run.',
-      tags: ['Odoo', 'Python', 'XML Views', 'ORM', 'Business Analysis'],
+      title: 'Automation',
+      body: 'The task that eats an hour of your day becomes a tool that does it in seconds. Connected systems, synced data, no copy-pasting.',
+      tags: ['Python', 'REST APIs', 'Odoo', 'Docker'],
     },
   ] satisfies SkillCard[],
 } as const
@@ -246,7 +249,7 @@ export const faqSection = {
     {
       question: 'What kind of projects do you take on?',
       answer:
-        'Web applications, internal tools and dashboards, and Odoo/ERP customisation. I am most useful where there is real business logic to untangle rather than a purely visual brief.',
+        'Websites that need to win customers, online stores and booking platforms, and the internal tools and automations that keep them running. I am most useful where there is real business logic to untangle rather than a purely visual brief.',
     },
     {
       question: 'Can you work with an existing codebase?',
