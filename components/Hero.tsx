@@ -86,12 +86,12 @@ export function Hero() {
             className="relative inline-block h-[1.5em] w-[1.44em] shrink-0 -rotate-4 overflow-hidden rounded-[0.13em] border-[0.045em] border-white bg-white shadow-portrait transition-transform duration-500 ease-signature hover:rotate-0"
           >
             <Image
-              src="/portrait.png"
+              src="/hero-portrait.jpg"
               alt={hero.portraitAlt}
               fill
               priority
               sizes="220px"
-              className="object-cover object-[50%_28%]"
+              className="object-cover object-[48%_32%]"
             />
           </span>
 

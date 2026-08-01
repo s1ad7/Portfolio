@@ -41,7 +41,7 @@ export const hero = {
   headline: "I'm Saad!",
   subline:
     'I build clean, dependable web applications that feel effortless to use and are built to last.',
-  portraitAlt: 'Illustrated portrait of Saad Ifli',
+  portraitAlt: 'Saad Ifli at his desk',
 } as const
 
 export interface Project {

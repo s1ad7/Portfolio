@@ -53,11 +53,11 @@ export function About() {
             <div className="w-64 rotate-3 rounded-panel bg-white p-3 shadow-ramp-lg transition-transform duration-500 ease-signature hover:rotate-0 sm:w-72">
               <div className="relative aspect-square overflow-hidden rounded-card">
                 <Image
-                  src="/portrait.png"
+                  src="/about-portrait.jpg"
                   alt={about.portraitAlt}
                   fill
                   sizes="288px"
-                  className="object-cover object-[50%_28%]"
+                  className="object-cover object-[50%_38%]"
                 />
               </div>
             </div>
