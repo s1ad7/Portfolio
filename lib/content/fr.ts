@@ -227,6 +227,11 @@ export const fr = {
           'Une idée claire de ce que vous vendez, à qui, et de ce que le visiteur doit faire. Si vous avez une charte, des photos ou un ancien site, apportez-les. Le reste, y compris les textes, on peut le construire ensemble.',
       },
       {
+        question: 'Utilisez-vous l’IA pour créer mon site ?',
+        answer:
+          'Oui, ouvertement, et je me méfierais de quiconque prétend le contraire en 2026. Elle écrit les parties répétitives plus vite que je ne les tape. Ce qu’elle ne fait pas : décider quoi construire, repérer ce qui cassera dans six mois, ou répondre devant vous quand un problème survient. J’ai appris ce métier avant ces outils, et c’est précisément pour cela que je sais reconnaître quand leur résultat est faux. Vous payez ce jugement, pas une vitesse de frappe.',
+      },
+      {
         question: 'Pouvez-vous refaire mon site existant ?',
         answer:
           'Oui, et c’est souvent le travail le plus intéressant. Je commence par lire ce qui existe avant de proposer des changements : la première chose que vous recevez est donc un avis honnête, pas un argumentaire pour tout refaire.',

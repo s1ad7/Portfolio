@@ -244,6 +244,17 @@ export const en = {
           'A clear picture of what you sell, who buys it, and what you want a visitor to do. If you have brand assets, photos or an old site, bring them. Everything else, including the copy, we can work out together.',
       },
       {
+        /* Disclosed proactively and deliberately. Research on freelance work
+           found clients want AI use stated upfront, and treat discovering it
+           later as the bigger breach of trust. The answer leads with judgment
+           rather than with the tool, because "I use AI" on its own is a
+           commodity claim that invites the question of why they are paying at
+           all. */
+        question: 'Do you use AI to build my site?',
+        answer:
+          'Yes, openly, and I would be wary of anyone claiming otherwise in 2026. It writes the repetitive parts faster than I can type them. What it does not do is decide what to build, notice the thing that will break in six months, or answer to you when something goes wrong. I learned this work before those tools existed, which is exactly why I can tell when their output is wrong. You are paying for that judgment, not for typing speed.',
+      },
+      {
         question: 'Can you redesign my existing site?',
         answer:
           'Yes, and it is often the more interesting work. I start by reading what is already there before proposing changes, so the first thing you get is an honest assessment rather than a rewrite pitch.',

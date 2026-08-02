@@ -43,7 +43,7 @@ export function Footer({ locale }: { locale: Locale }) {
             <li key={page.id}>
               <Link
                 href={`/${locale}/${page.copy[locale].slug}`}
-                className="-mx-2 -my-2 flex min-h-11 items-center px-2 py-2 font-ui text-sm text-muted transition-colors duration-200 ease-signature hover:text-ink"
+                className="-mx-2 -my-2 flex min-h-11 min-w-11 items-center justify-center px-2 py-2 font-ui text-sm text-muted transition-colors duration-200 ease-signature hover:text-ink"
               >
                 {page.city}
               </Link>
@@ -60,7 +60,7 @@ export function Footer({ locale }: { locale: Locale }) {
             <li key={page.id}>
               <Link
                 href={`/${locale}/${page.copy[locale].slug}`}
-                className="-mx-2 -my-2 flex min-h-11 items-center px-2 py-2 font-ui text-sm text-muted transition-colors duration-200 ease-signature hover:text-ink"
+                className="-mx-2 -my-2 flex min-h-11 min-w-11 items-center justify-center px-2 py-2 font-ui text-sm text-muted transition-colors duration-200 ease-signature hover:text-ink"
               >
                 {page.copy[locale].eyebrow}
               </Link>

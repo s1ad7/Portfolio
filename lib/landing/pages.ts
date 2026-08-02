@@ -710,6 +710,117 @@ export const landingPages: LandingPage[] = [
     },
   },
   {
+    /* The one service page NOT backed by a shipped AI feature, and it is
+       written to stay honest about that: it claims the integration work Saad
+       demonstrably does (REST APIs, Python, WhatsApp, Odoo, all already on the
+       site) rather than implying client AI projects that do not exist. Replace
+       the wording with a real case the moment one ships. */
+    id: 'ai',
+    kind: 'service',
+    city: 'Worldwide',
+    region: 'Worldwide',
+    copy: {
+      fr: {
+        slug: 'integration-ia-site-web',
+        title: 'Intégration d IA sur votre site',
+        description:
+          'Chatbot qui répond à partir de VOS contenus, tri automatique des demandes, textes générés dans votre back-office. Avec un coût mensuel maîtrisé.',
+        eyebrow: 'IA',
+        h1: 'De l IA que vos clients utilisent vraiment',
+        intro:
+          'La question n est pas d ajouter de l IA parce que tout le monde en parle, mais de savoir quelle tâche répétitive elle vous enlève. Un chatbot qui invente des réponses vous coûte des clients. Un chatbot qui répond correctement à partir de vos propres contenus vous en fait gagner.',
+        highlights: [
+          'Un assistant qui répond à partir de vos contenus, pas de connaissances générales',
+          'Les demandes triées et orientées automatiquement, sans intervention',
+          'Un coût mensuel plafonné, connu à l avance',
+        ],
+        sections: [
+          {
+            heading: 'Un chatbot ne vaut que ce qu il lit',
+            body: 'La différence entre un assistant utile et un générateur d approximations tient à une seule chose : sur quoi il s appuie. Je le branche sur vos pages, vos tarifs et vos documents, et je le contrains à ne répondre qu à partir de là. Quand il ne sait pas, il le dit et transmet à un humain, au lieu d inventer.',
+          },
+          {
+            heading: 'Là où l IA rapporte vraiment',
+            body: 'Rarement dans la vitrine, presque toujours dans les coulisses : trier et router les demandes entrantes, résumer un message long, rédiger une première version de fiche produit, traduire un catalogue. C est le même travail d intégration que les automatisations que je livre déjà, avec un modèle en plus dans la chaîne.',
+          },
+          {
+            heading: 'Coût, limites et garde-fous',
+            body: 'Chaque réponse générée a un prix. Je mets en place des plafonds, une mise en cache des questions fréquentes, et un repli clair quand le service est indisponible, pour que votre site continue de fonctionner sans lui. Vous connaissez le coût mensuel avant de démarrer.',
+          },
+        ],
+        faq: [
+          {
+            question: 'Est-ce qu il va inventer des réponses ?',
+            answer:
+              'C est le risque principal, et il se gère : l assistant est contraint à vos contenus et configuré pour dire qu il ne sait pas plutôt que de deviner. Aucune configuration n est parfaite, donc on prévoit toujours le passage à un humain.',
+          },
+          {
+            question: 'Combien cela coûte-t-il à faire tourner ?',
+            answer:
+              'Cela dépend du volume de questions. Le coût est facturé à l usage par le fournisseur du modèle ; j installe des plafonds et une mise en cache, et je vous donne une estimation mensuelle avant de commencer.',
+          },
+          {
+            question: 'Cela fonctionne-t-il en français et en arabe ?',
+            answer:
+              'Oui. Les modèles actuels gèrent les deux correctement, et l assistant répond dans la langue du visiteur.',
+          },
+        ],
+        ctaHeading: 'Une idée d IA pour votre activité ?',
+        ctaBody:
+          'Dites-moi quelle tâche vous prend du temps ou quelles questions vos clients posent en boucle. Je vous dis si l IA est la bonne réponse, et sinon ce qui le serait.',
+      },
+      en: {
+        slug: 'ai-integration-developer',
+        title: 'AI Integration for Your Website',
+        description:
+          'A chatbot answering from YOUR content, enquiries sorted automatically, copy drafted in your admin. With a monthly cost you know in advance.',
+        eyebrow: 'AI',
+        h1: 'AI features your customers actually use',
+        intro:
+          'The question is not whether to add AI because everyone is talking about it. It is which repetitive job it takes off you. A chatbot that invents answers costs you customers. One that answers correctly from your own content wins them.',
+        highlights: [
+          'An assistant answering from your content, not from general knowledge',
+          'Enquiries sorted and routed automatically, with nobody watching',
+          'A capped monthly cost, known before we start',
+        ],
+        sections: [
+          {
+            heading: 'A chatbot is only as good as what it reads',
+            body: 'The difference between a useful assistant and a confident guesser comes down to one thing: what it is allowed to draw on. I point it at your pages, your prices and your documents, and constrain it to answer only from those. When it does not know, it says so and hands over to a person instead of inventing.',
+          },
+          {
+            heading: 'Where AI actually pays',
+            body: 'Rarely on the shop front, almost always behind it: sorting and routing incoming enquiries, summarising a long message, drafting a first version of a product description, translating a catalogue. That is the same integration work as the automations I already deliver, with one more service in the chain.',
+          },
+          {
+            heading: 'Cost, limits and guardrails',
+            body: 'Every generated answer has a price. I set caps, cache the common questions, and build a clear fallback for when the service is down so your site keeps working without it. You know the monthly cost before we start.',
+          },
+        ],
+        faq: [
+          {
+            question: 'Will it make things up?',
+            answer:
+              'That is the main risk and it is manageable: the assistant is constrained to your content and configured to say it does not know rather than guess. No setup is perfect, so there is always a handover to a person.',
+          },
+          {
+            question: 'What does it cost to run?',
+            answer:
+              'It depends on how many questions you get. The model provider bills by usage; I add caps and caching, and give you a monthly estimate before we begin.',
+          },
+          {
+            question: 'Does it work in French and Arabic?',
+            answer:
+              'Yes. Current models handle both well, and the assistant replies in the visitor\u2019s own language.',
+          },
+        ],
+        ctaHeading: 'Have an AI idea for your business?',
+        ctaBody:
+          'Tell me which job eats your time, or what your customers ask over and over. I will tell you whether AI is the right answer, and what would be if it is not.',
+      },
+    },
+  },
+  {
     /* The lead magnet. Running a free audit on a prospect's site and naming
        the specific problems found is the single most effective outreach tactic
        in this market, and Saad already does the work for his own pages, so it
