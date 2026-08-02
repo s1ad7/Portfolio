@@ -74,11 +74,11 @@ export const caseStudies: CaseStudy[] = [
         eyebrow: 'Étude de cas',
         h1: 'Everstead : d’un modèle à une identité',
         intro:
-          'Everstead vend du design. Leur ancien site ressemblait pourtant à celui de n’importe quelle agence : fond clair, accent violet, trois cartes de services, quatre pastilles numérotées intitulées « notre approche méthodique ». Rien n’était mal fait. C’est justement le problème : rien ne permettait de les distinguer.',
+          'Everstead est un studio digital américain qui cherchait à changer d’échelle. Leur ancien site ne montrait pas ce dont ils étaient capables : fond clair, accent violet, trois cartes de services, quatre pastilles numérotées intitulées « notre approche méthodique ». Rien n’était mal fait, et c’est exactement le problème : rien ne les distinguait. En discutant, on est arrivés à une conclusion simple. Pour un studio qui vend du design, le site n’est pas une brochure, c’est la démonstration.',
         sections: [
           {
-            heading: 'Ressembler à un modèle, quand on vend du sur-mesure',
-            body: 'Pour un studio de design, ressembler à un gabarit n’est pas un détail esthétique, c’est une contradiction commerciale. Le site est la première preuve de ce qu’ils savent faire. La refonte part de là : tout ce qui aurait pu appartenir à une autre agence a été retiré.',
+            heading: 'Le site devait prouver, pas décrire',
+            body: 'C’est la décision prise ensemble avant la première maquette : ce que les gens voient doit refléter ce que l’équipe sait faire. Un studio de design qui ressemble à un gabarit se contredit lui-même. La refonte part de là, en retirant tout ce qui aurait pu appartenir à une autre agence.',
           },
           {
             heading: 'Une identité qu’on ne confond pas',
@@ -89,6 +89,10 @@ export const caseStudies: CaseStudy[] = [
             body: 'Les quatre pastilles « approche méthodique » ont laissé place à un enchaînement en six étapes, du cadrage au lancement, qui se déroule à mesure que le visiteur descend. On avance dans la méthode au lieu d’en lire le résumé. La grille « pour qui nous construisons » répond ensuite à la seule question que se pose un prospect : avez-vous déjà travaillé pour quelqu’un comme moi.',
           },
         ],
+        outcome: {
+          heading: 'Ce qui s’est passé ensuite',
+          body: 'Le lendemain de la mise en ligne, Everstead est revenu vers moi : leurs propres prospects réagissaient au nouveau site. Certains sont allés plus loin et ont demandé s’ils pouvaient avoir les mêmes animations sur leurs projets. Pour un studio qui vend du design, c’est le résultat qui compte : le site a cessé de décrire ce qu’ils savent faire pour commencer à en créer la demande.',
+        },
         facts: [
           { label: 'Type', value: 'Site d’agence' },
           { label: 'Rôle', value: 'Refonte complète' },
@@ -104,11 +108,11 @@ export const caseStudies: CaseStudy[] = [
         eyebrow: 'Case study',
         h1: 'Everstead: from template to identity',
         intro:
-          'Everstead sells design. Their old site looked like every other agency: light background, purple accent, three service cards, four numbered circles labelled "our methodical approach". Nothing about it was badly made. That was the problem, because nothing about it was theirs either.',
+          'Everstead is a US digital studio that wanted to scale. Their old site did not show what they were capable of: light ground, purple accent, three service cards, four numbered circles labelled "our methodical approach". Nothing about it was badly made, and that was exactly the problem, because nothing about it was theirs. Talking it through, we landed somewhere simple. For a studio that sells design, the site is not a brochure. It is the demonstration.',
         sections: [
           {
-            heading: 'Looking like a template while selling bespoke work',
-            body: 'For a design studio, resembling a template is not an aesthetic quibble, it is a contradiction in the sales pitch. The site is the first evidence of what they can do. The redesign started there: anything that could have belonged to another agency came out.',
+            heading: 'The site had to prove it, not describe it',
+            body: 'That was the decision we reached before the first mockup: what people see has to reflect what the team can actually do. A design studio that looks like a template contradicts itself. The redesign started there, taking out anything that could have belonged to another agency.',
           },
           {
             heading: 'An identity nobody confuses',
@@ -119,6 +123,10 @@ export const caseStudies: CaseStudy[] = [
             body: 'The four "methodical approach" circles gave way to a six-stage sequence, discovery through to launch, that unfolds as the visitor scrolls. You advance through the method instead of reading a summary of it. The "who we build for" grid then answers the only question a prospect actually has: have you worked for someone like me.',
           },
         ],
+        outcome: {
+          heading: 'What happened next',
+          body: 'The day after launch, Everstead came back to me: their own prospects were reacting to the new site. Some went further and asked whether they could have those animations on their projects. For a studio that sells design, that is the result that counts. The site stopped describing what they can do and started generating demand for it.',
+        },
         facts: [
           { label: 'Type', value: 'Agency site' },
           { label: 'Role', value: 'Full redesign' },
