@@ -34,10 +34,10 @@ export function Footer({ locale }: { locale: Locale }) {
           of where he works, which is the opposite of true. */}
       <p className="label-caps mt-4">{content.worldwide}</p>
 
-      <nav aria-label={content.areasServed} className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
-        {/* text-muted, not text-faint: faint is 3.28:1 on white, under the
-            4.5:1 floor. */}
-        <span className="font-ui text-sm text-muted">{content.areasServed}</span>
+      {/* The list is unlabelled on screen: "Remote, worldwide" above it
+          already sets the context, and a second heading made the row look like
+          a restriction. aria-label keeps it named for screen readers. */}
+      <nav aria-label={content.areasServed} className="mt-3 flex flex-wrap items-center justify-center">
         <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
           {cityPages.map((page) => (
             <li key={page.id}>
