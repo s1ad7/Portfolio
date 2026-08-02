@@ -67,7 +67,10 @@ export function About({ locale }: { locale: Locale }) {
                   src="/about-portrait.jpg"
                   alt={about.portraitAlt}
                   fill
-                  sizes="288px"
+                  /* Also rotated, so also oversampled. See the note in
+                     Hero.tsx: 288 for a 288px box left nothing for the
+                     rotation to resample from. */
+                  sizes="(max-width: 640px) 320px, 560px"
                   /* Explicitly lazy. It sits well below the fold, and letting
                      the browser fetch it early made it the LCP element on
                      desktop, pushing LCP from 0.7s to 1.1s for a picture

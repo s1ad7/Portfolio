@@ -80,7 +80,13 @@ export function Hero() {
               alt={hero.portraitAlt}
               fill
               priority
-              sizes="(max-width: 768px) 130px, 220px"
+              /* Deliberately larger than the 172px box: this element is
+                 permanently rotated, and a rotated bitmap is resampled, so a
+                 1.3x source rendered soft. 440 makes the browser fetch the
+                 640px candidate, about 3.7x, for 12KB instead of 3KB. Mobile
+                 stays at 130 because the portrait is only ~56px there and is
+                 already heavily oversampled by device pixel ratio. */
+              sizes="(max-width: 768px) 130px, 440px"
               className="object-cover object-[48%_32%]"
             />
           </span>
