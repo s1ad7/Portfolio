@@ -25,6 +25,12 @@ export interface Testimonial {
   id: string
   /** REQUIRED. Without it the entry is dropped: see above. */
   company: string
+  /**
+   * What the company is, per locale. Without it a reader sees a name they do
+   * not recognise and cannot tell whether the speaker is a client, a colleague
+   * or an invention.
+   */
+  descriptor: Record<Locale, string>
   /** The person. Strongly wanted; the entry renders without it but weaker. */
   author?: string
   role?: string
@@ -39,6 +45,7 @@ export const testimonials: Testimonial[] = [
   {
     id: 'everstead-prospects',
     company: 'Everstead',
+    descriptor: { en: 'Digital studio, United States', fr: 'Studio digital, États-Unis' },
     /* TODO (Saad): the name and role of whoever said this. A quote attributed
        to a person outperforms one attributed only to a company. */
     href: 'https://www.everstead.llc/',
@@ -50,9 +57,10 @@ export const testimonials: Testimonial[] = [
   },
   {
     id: 'mobile-check',
-    /* TODO (Saad): which client said this. Until a company is set, this entry
-       is dropped from the page rather than shown unattributed. */
-    company: '',
+    company: 'StreamElite',
+    descriptor: { en: 'Streaming subscriptions', fr: 'Abonnements streaming' },
+    /* TODO (Saad): the name and role of whoever said this. */
+    href: 'https://www.premiumstreamiptv.com/',
     verbatim: false,
     quote: {
       en: 'I checked it on my phone because I did not have my Mac with me, and I was impressed. It was clean.',
@@ -60,16 +68,20 @@ export const testimonials: Testimonial[] = [
     },
   },
   {
-    id: 'result-asked-for',
-    /* TODO (Saad): which client, and ideally one concrete detail. As written
-       this is the vague kind that converts at about half the rate of a
-       specific one; "the booking form stopped losing people" would do far
-       more work than "the result was what we asked for". */
-    company: '',
+    /* The strongest of the three, because it reports a change in behaviour
+       rather than a feeling. Saad's first version of this was "the result was
+       what we asked for", which is the vague kind that converts at roughly
+       half the rate; asking him what actually changed produced the channel
+       shift below. Worth doing for every future quote. */
+    id: 'carently-bookings',
+    company: 'Carently',
+    descriptor: { en: 'Car rental platform, Morocco', fr: 'Plateforme de location, Maroc' },
+    /* TODO (Saad): the name and role of whoever said this. */
+    href: 'https://www.carently.net/',
     verbatim: false,
     quote: {
-      en: 'The result was what we asked for, and that is what matters to us.',
-      fr: 'Le résultat correspondait à ce que nous avions demandé, et c’est ce qui compte pour nous.',
+      en: 'With the old site clients would almost always call us to book. Now they go through the website. They find it faster, and it is easier for us to follow up.',
+      fr: 'Avec l’ancien site, les clients nous appelaient presque toujours pour réserver. Maintenant ils passent par le site. Ils trouvent cela plus rapide, et le suivi est plus simple pour nous.',
     },
   },
 ]
