@@ -14,9 +14,9 @@ import type { Content } from './en'
 export const fr = {
   meta: {
     role: 'Développeur Full-Stack',
-    title: 'Saad Ifli, développeur full-stack au Maroc',
+    title: 'Saad Ifli, développeur full-stack, à distance',
     description:
-      'Développeur full-stack au Maroc. Je crée des sites, des boutiques en ligne et des automatisations qui transforment vos visiteurs en clients. Next.js, WordPress, GSAP.',
+      'Développeur full-stack basé au Maroc, disponible à distance partout dans le monde. Sites, boutiques en ligne et automatisations qui transforment vos visiteurs en clients. Next.js, WordPress, GSAP.',
     keywords: [
       'développeur web Maroc',
       'développeur web freelance',
@@ -26,6 +26,8 @@ export const fr = {
       'création boutique en ligne',
       'site de réservation en ligne',
       'automatisation entreprise',
+      'développeur full-stack à distance',
+      'développeur freelance télétravail',
     ],
     ogTagline: 'Des sites, des boutiques et des automatisations qui convertissent.',
     ogStats: ['30+ projets', 'International'],
@@ -41,11 +43,12 @@ export const fr = {
   menu: { open: 'Ouvrir le menu', close: 'Fermer le menu' },
   backToTop: ', retour en haut',
   seeAllWork: 'Voir tous les projets',
-  areasServed: 'Zones desservies',
+  worldwide: 'À distance, partout dans le monde',
+  areasServed: 'Également',
   tagline: 'Pensé avec méthode, livré avec soin.',
 
   hero: {
-    badge: 'Développeur Full-Stack · Maroc',
+    badge: 'Développeur Full-Stack · Maroc · Partout dans le monde',
     /* "Bonjour" not "Salut": the rest of the French copy addresses the
        visitor as "vous", and B2B French expects that register. "Salut" is the
        tutoiement greeting, so pairing it with vouvoiement everywhere else reads

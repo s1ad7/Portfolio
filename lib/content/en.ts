@@ -17,9 +17,9 @@ export type SkillIcon = 'layout' | 'cart' | 'workflow'
 export const en = {
   meta: {
     role: 'Full-Stack Developer',
-    title: 'Saad Ifli, Full-Stack Developer in Morocco',
+    title: 'Saad Ifli, Full-Stack Developer, Remote Worldwide',
     description:
-      'Full-stack developer in Morocco building websites, online stores and automations that turn visitors into customers. Next.js, WordPress, GSAP.',
+      'Full-stack developer based in Morocco, working remotely worldwide. Websites, online stores and automations that turn visitors into customers. Next.js, WordPress, GSAP.',
     keywords: [
       'web developer Morocco',
       'freelance web developer',
@@ -29,6 +29,8 @@ export const en = {
       'e-commerce website developer',
       'booking website developer',
       'business automation developer',
+      'remote full-stack developer',
+      'hire freelance developer remote',
     ],
     /* Printed on the social share card. */
     ogTagline: 'Websites, stores and automations that turn visitors into customers.',
@@ -45,11 +47,16 @@ export const en = {
   menu: { open: 'Open menu', close: 'Close menu' },
   backToTop: ', back to top',
   seeAllWork: 'See all work',
-  areasServed: 'Areas served',
+  /* Reach first, cities second. The list used to read as the limit of
+     where he works rather than as extra local pages. */
+  worldwide: 'Remote, worldwide',
+  areasServed: 'Also serving',
   tagline: 'Built with structure, shipped with care.',
 
   hero: {
-    badge: 'Full-Stack Developer · Morocco',
+    /* Location, then reach. Morocco alone reads as a limit to a client
+       abroad; the second half is what tells them they can hire him. */
+    badge: 'Full-Stack Developer · Morocco · Working worldwide',
     /** Rendered as: "Hi," [portrait] "I'm Saad!" */
     greeting: 'Hi,',
     headline: "I'm Saad!",

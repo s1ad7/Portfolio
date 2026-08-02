@@ -29,9 +29,16 @@ export function Footer({ locale }: { locale: Locale }) {
       {/* Every city page linked from every page. Crawlers reach pages through
           links, and a page nothing links to neither gets crawled reliably nor
           receives any of the site's authority. */}
-      <nav aria-label={content.areasServed} className="mt-4 flex flex-col items-center gap-2">
-        <span className="label-caps">{content.areasServed}</span>
-        <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+      {/* Reach stated before the city list. Three Moroccan cities under a
+          heading like "areas served" reads to a client abroad as the boundary
+          of where he works, which is the opposite of true. */}
+      <p className="label-caps mt-4">{content.worldwide}</p>
+
+      <nav aria-label={content.areasServed} className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+        {/* text-muted, not text-faint: faint is 3.28:1 on white, under the
+            4.5:1 floor. */}
+        <span className="font-ui text-sm text-muted">{content.areasServed}</span>
+        <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
           {cityPages.map((page) => (
             <li key={page.id}>
               <Link
