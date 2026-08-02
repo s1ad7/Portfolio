@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ScrollTrigger } from '@/lib/gsap'
 import { format, getProjectCards, type ProjectCardData } from '@/lib/content'
 import { useContent } from './ContentProvider'
+import { caseStudies } from '@/lib/work/cases'
 import { ProjectCard } from './ProjectCard'
 import { Pill } from './ui/Pill'
 
@@ -20,9 +21,14 @@ const STEP = 4
  * reachable.
  */
 export function ProjectGrid() {
-  const { content } = useContent()
+  const { content, locale } = useContent()
   const projects: ProjectCardData[] = getProjectCards(content)
   const copy = content.projectsSection
+  /* Slug of the case study for a project, when one exists. The card links
+     there instead of straight out to the client's site: a visitor who wants
+     the story is worth more than one who bounces to a third party. */
+  const caseFor = (slug: string) =>
+    caseStudies.find((study) => study.projectSlug === slug)?.copy[locale].slug
 
   const [count, setCount] = useState(INITIAL)
   const gridRef = useRef<HTMLDivElement>(null)
@@ -57,7 +63,12 @@ export function ProjectGrid() {
         className="mx-auto mt-8 grid w-full max-w-[1090px] gap-6 md:mt-14 md:grid-cols-2"
       >
         {visible.map((project, i) => (
-          <ProjectCard key={project.slug} project={project} index={i} />
+          <ProjectCard
+            key={project.slug}
+            project={project}
+            index={i}
+            caseStudySlug={caseFor(project.slug)}
+          />
         ))}
       </div>
 

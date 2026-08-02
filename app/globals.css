@@ -236,6 +236,32 @@
     }
   }
 
+  /* The comparison slider's input is invisible: the seam and handle drawn
+     behind it are the visual, and the input only has to be draggable across
+     the whole frame. The thumb is made full-height and transparent so a drag
+     anywhere in the image works, while the focus ring still lands on the
+     control for keyboard users. */
+  .compare-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 44px;
+    height: 100%;
+    background: transparent;
+    cursor: ew-resize;
+  }
+
+  .compare-range::-moz-range-thumb {
+    width: 44px;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    cursor: ew-resize;
+  }
+
+  .compare-range:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
   /* Modal scrim and panel enter, used by the video dialog. */
   .animate-scrim-in {
     animation: scrim-in 0.2s cubic-bezier(0.44, 0, 0.56, 1) both;

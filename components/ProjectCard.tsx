@@ -22,9 +22,23 @@ import versions from '@/public/projects/versions.json'
  * provoking the reference's own hover and diffing computed styles: no lift, no
  * image scale, no colour change.
  */
-export function ProjectCard({ project, index }: { project: ProjectCardData; index: number }) {
-  const { content } = useContent()
+export function ProjectCard({
+  project,
+  index,
+  caseStudySlug,
+}: {
+  project: ProjectCardData
+  index: number
+  /** When the project has a case study, the card leads there instead. */
+  caseStudySlug?: string
+}) {
+  const { content, locale } = useContent()
   const copy = content.projectsSection
+
+  /* A visitor who reads the story is worth more than one sent straight to a
+     third-party site, so the case study wins when there is one. */
+  const href = caseStudySlug ? `/${locale}/${caseStudySlug}` : project.href
+  const external = !caseStudySlug
   const scope = useRef<HTMLAnchorElement>(null)
 
   /* Content hash appended to the src, written by the capture and compose
@@ -59,9 +73,9 @@ export function ProjectCard({ project, index }: { project: ProjectCardData; inde
   return (
     <Link
       ref={scope}
-      href={project.href}
-      target="_blank"
-      rel="noopener noreferrer"
+      href={href}
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noopener noreferrer' : undefined}
       className="group flex h-full flex-col overflow-hidden rounded-[24px] bg-white shadow-ramp transition-shadow duration-300 ease-signature hover:shadow-ramp-hover"
     >
       <div className="relative aspect-[533/400] w-full shrink-0 overflow-hidden">
@@ -98,7 +112,11 @@ export function ProjectCard({ project, index }: { project: ProjectCardData; inde
             contain the card's own visible text failed WCAG 2.5.3 (Label in
             Name). Built from content, the name always includes what is on
             screen. */}
-        <span className="sr-only">{copy.opensInNewTab}</span>
+        {external ? (
+          <span className="sr-only">{copy.opensInNewTab}</span>
+        ) : (
+          <span className="sr-only">{content.work.caseStudy}</span>
+        )}
       </div>
     </Link>
   )

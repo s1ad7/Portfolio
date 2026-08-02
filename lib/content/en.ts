@@ -46,6 +46,15 @@ export const en = {
   navCta: 'Contact',
   menu: { open: 'Open menu', close: 'Close menu' },
   backToTop: ', back to top',
+  work: {
+    before: 'Before',
+    after: 'After',
+    caseStudy: 'Read the case study',
+    compare: {
+      label: 'Drag to compare the old design with the new site',
+      hint: 'Drag the handle, or use the arrow keys.',
+    },
+  },
   seeAllWork: 'See all work',
   /* Reach first, cities second. The list used to read as the limit of
      where he works rather than as extra local pages. */

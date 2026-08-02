@@ -1,22 +1,21 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { LandingPage } from '@/components/landing/LandingPage'
+import { CaseStudyPage } from '@/components/work/CaseStudyPage'
 import { landingPages, findLandingPage } from '@/lib/landing/pages'
+import { caseStudies, findCaseStudy } from '@/lib/work/cases'
 import { htmlLang, isLocale, locales } from '@/lib/i18n'
 import { site } from '@/lib/site'
 import { siteUrl } from '@/lib/site-url'
 
-/**
- * Local landing pages, one static file per city per locale.
- *
- * These sit at the top level (/fr/creation-site-web-casablanca) rather than
- * under a folder. The URL is a real ranking signal for this kind of page, and
- * burying the keyword under /services/ dilutes it for nothing.
- */
+/* Both content types live at the top level and share this route: the keyword
+   belongs in the URL, and burying either under a folder segment dilutes it for
+   nothing. Slugs are unique across both sets. */
 export function generateStaticParams() {
-  return locales.flatMap((locale) =>
-    landingPages.map((page) => ({ locale, slug: page.copy[locale].slug }))
-  )
+  return locales.flatMap((locale) => [
+    ...landingPages.map((page) => ({ locale, slug: page.copy[locale].slug })),
+    ...caseStudies.map((study) => ({ locale, slug: study.copy[locale].slug })),
+  ])
 }
 
 export async function generateMetadata({
@@ -28,16 +27,17 @@ export async function generateMetadata({
   if (!isLocale(locale)) return {}
 
   const page = findLandingPage(locale, slug)
-  if (!page) return {}
+  const study = !page ? findCaseStudy(locale, slug) : undefined
+  if (!page && !study) return {}
 
-  const copy = page.copy[locale]
+  const copy = page ? page.copy[locale] : study!.copy[locale]
+  const alternateFor = (l: typeof locales[number]) =>
+    page ? page.copy[l].slug : study!.copy[l].slug
 
   /* Each locale has a DIFFERENT slug for the same page, so the alternates have
      to be built from the page rather than by swapping the locale prefix. Get
      this wrong and hreflang points at a 404, which is worse than omitting it. */
-  const languages = Object.fromEntries(
-    locales.map((l) => [htmlLang[l], `/${l}/${page.copy[l].slug}`])
-  )
+  const languages = Object.fromEntries(locales.map((l) => [htmlLang[l], `/${l}/${alternateFor(l)}`]))
 
   return {
     title: copy.title,
@@ -63,7 +63,10 @@ export default async function Page({
   if (!isLocale(locale)) notFound()
 
   const page = findLandingPage(locale, slug)
-  if (!page) notFound()
+  if (page) return <LandingPage page={page} locale={locale} />
 
-  return <LandingPage page={page} locale={locale} />
+  const study = findCaseStudy(locale, slug)
+  if (study) return <CaseStudyPage study={study} locale={locale} />
+
+  notFound()
 }

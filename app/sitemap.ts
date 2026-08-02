@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { htmlLang, locales } from '@/lib/i18n'
 import { landingPages } from '@/lib/landing/pages'
+import { caseStudies } from '@/lib/work/cases'
 import { siteUrl } from '@/lib/site-url'
 
 /**
@@ -38,5 +39,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }))
   )
 
-  return [...home, ...landing]
+  const work = locales.flatMap((locale) =>
+    caseStudies.map((study) => ({
+      url: `${siteUrl}/${locale}/${study.copy[locale].slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+      alternates: {
+        languages: Object.fromEntries(
+          locales.map((l) => [htmlLang[l], `${siteUrl}/${l}/${study.copy[l].slug}`])
+        ),
+      },
+    }))
+  )
+
+  return [...home, ...landing, ...work]
 }

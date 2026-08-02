@@ -42,6 +42,15 @@ export const fr = {
   navCta: 'Contact',
   menu: { open: 'Ouvrir le menu', close: 'Fermer le menu' },
   backToTop: ', retour en haut',
+  work: {
+    before: 'Avant',
+    after: 'Après',
+    caseStudy: 'Lire l’étude de cas',
+    compare: {
+      label: 'Faites glisser pour comparer l’ancien design et le nouveau site',
+      hint: 'Faites glisser la poignée, ou utilisez les flèches du clavier.',
+    },
+  },
   seeAllWork: 'Voir tous les projets',
   servicesNav: 'Services',
   worldwide: 'À distance, partout dans le monde',
