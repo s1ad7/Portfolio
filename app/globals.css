@@ -29,6 +29,10 @@
      mixes in oklab, which shifts this slightly-blue ink noticeably cooler; the
      reference uses plain sRGB alpha. */
   --color-muted: rgb(25 29 33 / 0.7);
+  /* 3.29:1 on white, 3.18:1 on the panel. That clears the 3:1 bar for LARGE
+     text (the muted second line of a display heading, which is what it exists
+     for) and fails the 4.5:1 bar for anything body-sized. Use --color-muted
+     for small text; this has now been caught three times. */
   --color-faint: rgb(25 29 33 / 0.5);
   --color-wordmark: #5d6063;
 

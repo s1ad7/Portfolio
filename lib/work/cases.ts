@@ -43,6 +43,13 @@ export interface CaseStudy {
    * placeholder shipped to production is worse.
    */
   beforeImage?: string
+  /**
+   * The live site, cropped to the SAME region of the page as the before. The
+   * project card's collage is a composed, rotated montage: striking in a grid,
+   * useless in a comparison, because the eye cannot tell a design change from a
+   * framing change. Falls back to the collage when absent.
+   */
+  afterImage?: string
   copy: Record<Locale, CaseCopy>
 }
 
@@ -50,37 +57,41 @@ export const caseStudies: CaseStudy[] = [
   {
     id: 'everstead',
     projectSlug: 'everstead',
-    /* Waiting on the export of the old design. Drop it at
-       public/work/everstead-before.jpg and set this to that path. */
-    beforeImage: undefined,
+    /* Both cropped to the same slice of each page, the hero and what sits
+       under it, so the slider compares like with like.
+       NOTE: the before was supplied as a 283px-wide capture and is upscaled
+       about 4x, which is visibly soft next to the after. A re-export from the
+       original design file at 2x would fix it and needs no code change. */
+    beforeImage: '/work/everstead-before.jpg',
+    afterImage: '/work/everstead-after.jpg',
     copy: {
       fr: {
         slug: 'refonte-site-everstead',
         title: 'Refonte du site Everstead',
         description:
-          'Refonte complète du site d’un studio digital : identité sombre, typographie condensée, et un processus en six étapes déroulé au scroll.',
+          'D’un modèle d’agence générique à une identité qu’on ne confond pas. Refonte complète du site d’un studio digital : avant, après, et les décisions entre les deux.',
         eyebrow: 'Étude de cas',
-        h1: 'Everstead, refonte complète',
+        h1: 'Everstead : d’un modèle à une identité',
         intro:
-          'Everstead est un studio digital. Leur site devait faire ce qu’il vend : donner en quelques secondes le sentiment d’un travail soigné, puis expliquer comment ils travaillent sans transformer la page en documentation.',
+          'Everstead vend du design. Leur ancien site ressemblait pourtant à celui de n’importe quelle agence : fond clair, accent violet, trois cartes de services, quatre pastilles numérotées intitulées « notre approche méthodique ». Rien n’était mal fait. C’est justement le problème : rien ne permettait de les distinguer.',
         sections: [
           {
-            heading: 'Le parti pris',
-            body: 'Une identité presque noire, une typographie display condensée très marquée, et un seul accent doré. Un accent unique force les arbitrages : quand une seule couleur peut attirer l’œil, il faut décider ce qui compte vraiment sur chaque écran.',
+            heading: 'Ressembler à un modèle, quand on vend du sur-mesure',
+            body: 'Pour un studio de design, ressembler à un gabarit n’est pas un détail esthétique, c’est une contradiction commerciale. Le site est la première preuve de ce qu’ils savent faire. La refonte part de là : tout ce qui aurait pu appartenir à une autre agence a été retiré.',
           },
           {
-            heading: 'Le processus déroulé au scroll',
-            body: 'Le cœur du site est un enchaînement en six étapes, du cadrage au lancement, qui se déroule à mesure que le visiteur descend. C’est une façon de raconter une méthode sans en faire une page de texte : on avance dans le processus au lieu de le lire.',
+            heading: 'Une identité qu’on ne confond pas',
+            body: 'Fond presque noir, typographie display condensée à très grande échelle, et un seul accent doré. Un accent unique force les arbitrages : quand une seule couleur peut attirer l’œil, il faut décider ce qui compte réellement sur chaque écran. Les services, présentés avant en trois cartes, sont devenus une liste franche de neuf lignes.',
           },
           {
-            heading: 'Montrer pour qui ils travaillent',
-            body: 'La suite est une grille des secteurs adressés. Un visiteur cherche d’abord à savoir si ce studio a déjà travaillé pour quelqu’un comme lui, et cette grille répond à la question avant qu’elle ne soit posée.',
+            heading: 'Un processus qu’on traverse, pas qu’on lit',
+            body: 'Les quatre pastilles « approche méthodique » ont laissé place à un enchaînement en six étapes, du cadrage au lancement, qui se déroule à mesure que le visiteur descend. On avance dans la méthode au lieu d’en lire le résumé. La grille « pour qui nous construisons » répond ensuite à la seule question que se pose un prospect : avez-vous déjà travaillé pour quelqu’un comme moi.',
           },
         ],
         facts: [
           { label: 'Type', value: 'Site d’agence' },
-          { label: 'Rôle', value: 'Conception et développement' },
-          { label: 'Langue', value: 'Anglais' },
+          { label: 'Rôle', value: 'Refonte complète' },
+          { label: 'Portée', value: 'Identité, structure, développement' },
         ],
         visitLabel: 'Voir le site en ligne',
       },
@@ -88,29 +99,29 @@ export const caseStudies: CaseStudy[] = [
         slug: 'everstead-website-redesign',
         title: 'Everstead Website Redesign',
         description:
-          'A full redesign for a digital studio: near-black identity, heavy condensed display type, and a six-stage process that unfolds as you scroll.',
+          'From a generic agency template to an identity nobody confuses. A full redesign for a digital studio: before, after, and the decisions in between.',
         eyebrow: 'Case study',
-        h1: 'Everstead, a full redesign',
+        h1: 'Everstead: from template to identity',
         intro:
-          'Everstead is a digital studio. Their site had to do the thing it sells: convey careful work within seconds, then explain how they operate without turning the page into documentation.',
+          'Everstead sells design. Their old site looked like every other agency: light background, purple accent, three service cards, four numbered circles labelled "our methodical approach". Nothing about it was badly made. That was the problem, because nothing about it was theirs either.',
         sections: [
           {
-            heading: 'The decision',
-            body: 'A near-black identity, heavy condensed display type, and a single gold accent. One accent forces the trade-offs: when only one colour can pull the eye, you have to decide what actually matters on each screen.',
+            heading: 'Looking like a template while selling bespoke work',
+            body: 'For a design studio, resembling a template is not an aesthetic quibble, it is a contradiction in the sales pitch. The site is the first evidence of what they can do. The redesign started there: anything that could have belonged to another agency came out.',
           },
           {
-            heading: 'The process, unfolded by scrolling',
-            body: 'The spine of the site is a six-stage sequence, discovery through to launch, that unfolds as the visitor moves down the page. It tells a methodology without becoming a wall of text: you move through the process instead of reading it.',
+            heading: 'An identity nobody confuses',
+            body: 'Near-black ground, condensed display type at enormous scale, and a single gold accent. One accent forces the trade-offs: when only one colour can pull the eye, you have to decide what actually matters on each screen. The services, previously three cards, became a blunt nine-line list.',
           },
           {
-            heading: 'Showing who they build for',
-            body: 'It ends in a grid of the industries they serve. A visitor first wants to know whether this studio has worked for someone like them, and the grid answers that before it is asked.',
+            heading: 'A process you move through, not one you read',
+            body: 'The four "methodical approach" circles gave way to a six-stage sequence, discovery through to launch, that unfolds as the visitor scrolls. You advance through the method instead of reading a summary of it. The "who we build for" grid then answers the only question a prospect actually has: have you worked for someone like me.',
           },
         ],
         facts: [
           { label: 'Type', value: 'Agency site' },
-          { label: 'Role', value: 'Design and build' },
-          { label: 'Language', value: 'English' },
+          { label: 'Role', value: 'Full redesign' },
+          { label: 'Scope', value: 'Identity, structure, build' },
         ],
         visitLabel: 'Visit the live site',
       },

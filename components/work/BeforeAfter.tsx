@@ -114,7 +114,7 @@ export function BeforeAfter({ before, after, beforeLabel, afterLabel, alt }: Pro
       </div>
 
       <figcaption className="text-sm text-muted">
-        {alt} <span className="text-faint">{copy.hint}</span>
+        {alt} <span className="text-muted">{copy.hint}</span>
       </figcaption>
     </figure>
   )

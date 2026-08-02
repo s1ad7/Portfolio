@@ -70,7 +70,8 @@ export function Faq() {
                     onClick={() => setOpen(isOpen ? null : i)}
                     className="flex w-full items-center gap-4 py-6 text-left transition-colors duration-200 ease-signature hover:text-accent"
                   >
-                    <span className="text-xs font-semibold text-faint">
+                    {/* muted, not faint: 12px is small text, so the 4.5:1 bar applies. */}
+                    <span className="text-xs font-semibold text-muted">
                       {String(i + 1).padStart(2, '0')}.
                     </span>
 

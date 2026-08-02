@@ -30,7 +30,7 @@ export function CaseStudyPage({ study, locale }: { study: CaseStudy; locale: Loc
   if (!project) return null
 
   const version = (versions as Record<string, string>)[project.slug]
-  const after = version ? `${project.image}?v=${version}` : project.image
+  const after = study.afterImage ?? (version ? `${project.image}?v=${version}` : project.image)
 
   return (
     <>
