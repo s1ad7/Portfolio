@@ -58,10 +58,11 @@ export const caseStudies: CaseStudy[] = [
     id: 'everstead',
     projectSlug: 'everstead',
     /* Both cropped to the same slice of each page, the hero and what sits
-       under it, so the slider compares like with like.
-       NOTE: the before was supplied as a 283px-wide capture and is upscaled
-       about 4x, which is visibly soft next to the after. A re-export from the
-       original design file at 2x would fix it and needs no code change. */
+       under it, so the slider compares like with like. The before was
+       recaptured at 1017px and had its device frame detected and stripped, so
+       it renders at about 1.2x rather than the 4.2x of the first attempt: a
+       framed mockup beside a raw screenshot reads as two different KINDS of
+       image, which distracts from the only difference that matters. */
     beforeImage: '/work/everstead-before.jpg',
     afterImage: '/work/everstead-after.jpg',
     copy: {
