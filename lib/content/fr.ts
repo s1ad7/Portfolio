@@ -52,6 +52,7 @@ export const fr = {
     },
   },
   seeAllWork: 'Voir tous les projets',
+  languageLabel: 'Langue',
   servicesNav: 'Services',
   worldwide: 'À distance, partout dans le monde',
   areasServed: 'Également',

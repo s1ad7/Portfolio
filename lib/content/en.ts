@@ -58,6 +58,7 @@ export const en = {
   seeAllWork: 'See all work',
   /* Reach first, cities second. The list used to read as the limit of
      where he works rather than as extra local pages. */
+  languageLabel: 'Language',
   servicesNav: 'Services',
   worldwide: 'Remote, worldwide',
   areasServed: 'Also serving',

@@ -5,7 +5,9 @@ import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { gsap, useGSAP, DURATION_UI, EASE_UI } from '@/lib/gsap'
 import { useNavHidden } from '@/lib/useNavHidden'
+import { localeFlags, localeNames, locales } from '@/lib/i18n'
 import { useContent } from './ContentProvider'
+import { Flag } from './ui/Flag'
 import { LanguageSwitcher } from './ui/LanguageSwitcher'
 import { Pill } from './ui/Pill'
 import { Wordmark } from './ui/Wordmark'
@@ -228,6 +230,36 @@ export function Navbar() {
             </li>
           ))}
         </ul>
+
+        {/* The language switcher lives in the bar from sm up, where it is
+            hidden below that width. Without this the site had no way at all to
+            change language on a phone, which for a bilingual site aimed partly
+            at French speakers is not a missing nicety but a broken feature.
+            Rendered as plain links rather than reusing the dropdown: the menu
+            is already open, so a second popover inside it would be a menu in a
+            menu. */}
+        <div className="mt-10 flex flex-col gap-3 border-t border-line pt-8">
+          <span className="label-caps">{content.languageLabel}</span>
+          <ul className="flex items-center gap-3">
+            {locales.map((code) => (
+              <li key={code}>
+                <a
+                  href={`/${code}`}
+                  hrefLang={code}
+                  aria-current={code === locale ? 'true' : undefined}
+                  className={`flex min-h-11 items-center gap-2 rounded-[12px] border px-4 py-2 font-ui text-base transition-colors duration-200 ease-signature ${
+                    code === locale
+                      ? 'border-ink bg-ink text-white'
+                      : 'border-line text-ink hover:border-ink'
+                  }`}
+                >
+                  <Flag code={localeFlags[code]} />
+                  {localeNames[code]}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </>
   )
