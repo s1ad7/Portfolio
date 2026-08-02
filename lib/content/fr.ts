@@ -205,6 +205,41 @@ export const fr = {
     ],
   },
 
+  processSection: {
+    eyebrow: 'Ma méthode',
+    heading: 'Cinq étapes, aucune surprise.',
+    intro:
+      'La même séquence sur chaque projet. Vous savez toujours où nous en sommes et ce qui vient ensuite.',
+    steps: [
+      {
+        title: 'Comprendre les chiffres',
+        body: 'Avant toute maquette, on se met d’accord sur ce que le site doit produire. Ce que vaut un nouveau client pour vous décide de ce qui se construit, et de ce qui peut attendre.',
+      },
+      {
+        title: 'Un devis fixe, par écrit',
+        body: 'Un appel, puis un prix écrit et une date. Pas de facturation à l’heure, pas de facture qui gonfle. Si votre budget et le périmètre ne collent pas, vous l’apprenez pendant l’appel, pas trois semaines plus tard.',
+      },
+      {
+        title: 'La structure avant le décor',
+        body: 'Ce qui va où, et ce qu’un visiteur doit trouver en cinq secondes. Le design se pose sur cette décision au lieu de la remplacer.',
+      },
+      {
+        title: 'Construire, puis mesurer',
+        body: 'Testé sur un vrai téléphone et une connexion moyenne, pas seulement sur ma machine. Vous recevez les chiffres avant et après, parce qu’une promesse invérifiable ne vaut rien.',
+      },
+      {
+        title: 'Passation, à votre nom',
+        body: 'Domaine, hébergement et code sur vos comptes dès le premier jour, une prise en main, et une période de corrections. Vous ne dépendez jamais de moi.',
+      },
+    ],
+  },
+
+  testimonialsSection: {
+    eyebrow: 'Clients',
+    heading: 'Ce qu’ils en ont dit.',
+    seeTheWork: 'Voir le projet',
+  },
+
   faqSection: {
     eyebrow: 'FAQ',
     heading: 'Vos questions, mes réponses.',

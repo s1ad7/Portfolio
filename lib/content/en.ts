@@ -222,6 +222,41 @@ export const en = {
     ],
   },
 
+  processSection: {
+    eyebrow: 'How I work',
+    heading: 'Five steps, no surprises.',
+    intro:
+      'The same sequence on every project. You always know which step we are on and what comes next.',
+    steps: [
+      {
+        title: 'Understand the numbers',
+        body: 'Before anything is designed, we agree what the site has to achieve. What one new client is worth to you decides how much gets built, and what can wait.',
+      },
+      {
+        title: 'A fixed quote, in writing',
+        body: 'One call, then a written price and a date. No hourly billing and no invoice creep. If your budget and the scope do not fit, you hear that on the call, not three weeks in.',
+      },
+      {
+        title: 'Structure before decoration',
+        body: 'What goes where, and what a visitor has to find within five seconds. Design sits on top of that decision rather than replacing it.',
+      },
+      {
+        title: 'Build, then measure',
+        body: 'Tested on a real phone on an average connection, not only on my machine. You get the performance numbers before and after, because a claim you cannot check is worth nothing.',
+      },
+      {
+        title: 'Handover, in your name',
+        body: 'Domain, hosting and code on your accounts from the first day, a walkthrough, and a window for fixes. You are never locked to me.',
+      },
+    ],
+  },
+
+  testimonialsSection: {
+    eyebrow: 'Clients',
+    heading: 'What they said afterwards.',
+    seeTheWork: 'See the work',
+  },
+
   faqSection: {
     eyebrow: 'FAQ',
     heading: 'Your questions, my answers.',

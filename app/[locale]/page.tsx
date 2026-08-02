@@ -5,8 +5,10 @@ import { Faq } from '@/components/Faq'
 import { Footer } from '@/components/Footer'
 import { Hero } from '@/components/Hero'
 import { Navbar } from '@/components/Navbar'
+import { Process } from '@/components/Process'
 import { Projects } from '@/components/Projects'
 import { Skills } from '@/components/Skills'
+import { Testimonials } from '@/components/Testimonials'
 import { StructuredData } from '@/components/StructuredData'
 import { isLocale } from '@/lib/i18n'
 
@@ -29,7 +31,9 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
         <Projects locale={locale} />
         <About locale={locale} />
         <Skills />
+        <Process />
         <Faq />
+        <Testimonials locale={locale} />
         <Contact />
       </main>
       <Footer locale={locale} />
