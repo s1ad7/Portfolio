@@ -49,6 +49,7 @@ export const en = {
   seeAllWork: 'See all work',
   /* Reach first, cities second. The list used to read as the limit of
      where he works rather than as extra local pages. */
+  servicesNav: 'Services',
   worldwide: 'Remote, worldwide',
   areasServed: 'Also serving',
   tagline: 'Built with structure, shipped with care.',
@@ -147,6 +148,36 @@ export const en = {
       featured: 'featured above, every one live',
       years: 'years building for the web',
       lighthouse: 'top Lighthouse performance score',
+    },
+    /* What a remote client screens for before they even look at the work:
+       can we talk during my day, in my language, without chasing him. The site
+       said none of it. */
+    remote: {
+      title: 'Working with me remotely',
+      items: [
+        {
+          label: 'Time zone',
+          value: 'GMT+1',
+          detail:
+            'The same working day as Paris, Madrid and Lisbon, and my afternoon covers the US East Coast morning.',
+        },
+        {
+          label: 'Languages',
+          value: 'FR · EN · AR',
+          detail: 'Calls, written updates and the site copy itself, in any of the three.',
+        },
+        {
+          label: 'How we work',
+          value: 'Async by default',
+          detail:
+            'Written progress you can read when it suits you, calls when a decision actually needs one.',
+        },
+        {
+          label: 'Replies',
+          value: 'Within 24h',
+          detail: 'On working days, and I tell you in advance when I will be away.',
+        },
+      ],
     },
     github: {
       contributions: 'GitHub contributions in the last year',

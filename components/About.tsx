@@ -5,6 +5,7 @@ import { Container } from './ui/Section'
 import { Eyebrow } from './ui/Eyebrow'
 import { Pill } from './ui/Pill'
 import { Reveal } from './ui/Reveal'
+import { RemoteBand } from './RemoteBand'
 import { StatBand } from './StatBand'
 import { VideoResume } from './VideoResume'
 import { GithubActivity } from './GithubActivity'
@@ -81,6 +82,13 @@ export function About({ locale }: { locale: Locale }) {
 
         <Reveal delay={0.1}>
           <StatBand />
+        </Reveal>
+
+        {/* Placed straight after the numbers: a remote client reads the proof,
+            then immediately wants to know whether working together is
+            practical. */}
+        <Reveal delay={0.1}>
+          <RemoteBand locale={locale} />
         </Reveal>
 
         {/* Client-fetched; renders nothing until data arrives, and nothing at

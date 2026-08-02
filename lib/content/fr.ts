@@ -43,6 +43,7 @@ export const fr = {
   menu: { open: 'Ouvrir le menu', close: 'Fermer le menu' },
   backToTop: ', retour en haut',
   seeAllWork: 'Voir tous les projets',
+  servicesNav: 'Services',
   worldwide: 'À distance, partout dans le monde',
   areasServed: 'Également',
   tagline: 'Pensé avec méthode, livré avec soin.',
@@ -132,6 +133,33 @@ export const fr = {
       featured: 'présentés ci-dessus, tous en ligne',
       years: 'ans à construire pour le web',
       lighthouse: 'meilleur score de performance Lighthouse',
+    },
+    remote: {
+      title: 'Travailler avec moi à distance',
+      items: [
+        {
+          label: 'Fuseau horaire',
+          value: 'GMT+1',
+          detail:
+            'Les mêmes horaires que Paris, Madrid et Lisbonne, et mon après-midi couvre la matinée de la côte est américaine.',
+        },
+        {
+          label: 'Langues',
+          value: 'FR · EN · AR',
+          detail: 'Les appels, les comptes rendus et le contenu du site, dans l’une des trois.',
+        },
+        {
+          label: 'Méthode',
+          value: 'Asynchrone',
+          detail:
+            'Un suivi écrit que vous lisez quand cela vous arrange, et des appels quand une décision l’exige vraiment.',
+        },
+        {
+          label: 'Réponses',
+          value: 'Sous 24h',
+          detail: 'En jours ouvrés, et je vous préviens à l’avance de mes absences.',
+        },
+      ],
     },
     github: {
       contributions: 'contributions GitHub sur l’année écoulée',

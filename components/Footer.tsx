@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { getContent } from '@/lib/content'
 import type { Locale } from '@/lib/i18n'
-import { cityPages, offerPages } from '@/lib/landing/pages'
+import { cityPages, offerPages, servicePages } from '@/lib/landing/pages'
 import { site } from '@/lib/site'
 
 /**
@@ -43,9 +43,26 @@ export function Footer({ locale }: { locale: Locale }) {
             <li key={page.id}>
               <Link
                 href={`/${locale}/${page.copy[locale].slug}`}
-                className="-my-2 block py-2 font-ui text-sm text-muted transition-colors duration-200 ease-signature hover:text-ink"
+                className="-mx-2 -my-2 flex min-h-11 items-center px-2 py-2 font-ui text-sm text-muted transition-colors duration-200 ease-signature hover:text-ink"
               >
                 {page.city}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* Capabilities, above the places. These are what a remote client
+          searches for; the cities are the local extra. */}
+      <nav aria-label={content.servicesNav} className="mt-4 flex flex-wrap items-center justify-center">
+        <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+          {servicePages.map((page) => (
+            <li key={page.id}>
+              <Link
+                href={`/${locale}/${page.copy[locale].slug}`}
+                className="-mx-2 -my-2 flex min-h-11 items-center px-2 py-2 font-ui text-sm text-muted transition-colors duration-200 ease-signature hover:text-ink"
+              >
+                {page.copy[locale].eyebrow}
               </Link>
             </li>
           ))}
@@ -59,7 +76,7 @@ export function Footer({ locale }: { locale: Locale }) {
         <Link
           key={page.id}
           href={`/${locale}/${page.copy[locale].slug}`}
-          className="mt-2 font-ui text-sm text-accent-text underline-offset-4 hover:underline"
+          className="-my-2 mt-1 flex min-h-11 items-center px-3 py-2 font-ui text-sm text-accent-text underline-offset-4 hover:underline"
         >
           {page.copy[locale].eyebrow}
         </Link>

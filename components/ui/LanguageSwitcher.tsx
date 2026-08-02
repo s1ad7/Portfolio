@@ -33,11 +33,19 @@ export function LanguageSwitcher({ current = 'en' }: { current?: Locale }) {
       if (e.key === 'Escape') setOpen(false)
     }
 
+    /* The navbar tucks itself away on downward scroll. An open menu does not
+       follow it, so it was left stranded over the page with nothing attached
+       to it. Scrolling closes it, which is what a nav dropdown should do
+       anyway: the intent to scroll is an intent to stop choosing. */
+    const onScroll = () => setOpen(false)
+
     document.addEventListener('pointerdown', onPointerDown)
     document.addEventListener('keydown', onKey)
+    window.addEventListener('scroll', onScroll, { passive: true })
     return () => {
       document.removeEventListener('pointerdown', onPointerDown)
       document.removeEventListener('keydown', onKey)
+      window.removeEventListener('scroll', onScroll)
     }
   }, [open])
 

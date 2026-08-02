@@ -53,11 +53,15 @@ export interface LandingPage {
   /** Stable internal id, also the JSON-LD anchor. */
   id: string
   /**
-   * 'city' pages are listed as areas served. 'offer' pages are not places and
-   * must not appear in that list, which is why this exists rather than
-   * inferring from the data.
+   * 'city'    a place. Listed under areas served, areaServed is that city.
+   * 'service' a capability, sold anywhere. areaServed is worldwide, and it
+   *           must never appear in the areas list or it reads as a location.
+   * 'offer'   the free audit. Linked on its own.
+   *
+   * Explicit rather than inferred: the schema and the footer both branch on it,
+   * and guessing from the data is how a service ends up advertised as a city.
    */
-  kind: 'city' | 'offer'
+  kind: 'city' | 'offer' | 'service'
   /** Populates areaServed in the schema and the visible service line. */
   city: string
   /** Wider area the city page also serves, for areaServed. */
@@ -385,6 +389,327 @@ export const landingPages: LandingPage[] = [
     },
   },
   {
+    /* Every service page is tied to work already shipped: the project cards sit
+       further down the same page, so a visitor can check the claim. Nothing
+       here advertises a capability with no live site behind it. */
+    id: 'multilingual',
+    kind: 'service',
+    city: 'Worldwide',
+    region: 'Worldwide',
+    copy: {
+      fr: {
+        slug: 'site-web-multilingue',
+        title: 'Création de site web multilingue (FR/EN)',
+        description:
+          'Sites bilingues et multilingues faits correctement : une URL par langue, balises hreflang, contenu réellement rédigé. Sans plugin qui casse votre référencement.',
+        eyebrow: 'Multilingue',
+        h1: 'Sites multilingues, faits correctement',
+        intro:
+          'La plupart des sites multilingues sont un plugin de traduction posé sur un site monolingue. Résultat : une seule URL pour toutes les langues, des balises manquantes, et un référencement qui ne fonctionne dans aucune. Un site réellement multilingue se construit autrement, dès le départ.',
+        highlights: [
+          'Une URL dédiée par langue, indexée séparément par Google',
+          'Balises hreflang réciproques, la condition pour être trouvé dans chaque langue',
+          'Traduction rédigée, pas générée automatiquement',
+        ],
+        sections: [
+          {
+            heading: 'Ce que coûtent les plugins de traduction',
+            body: 'Quand toutes les langues partagent la même adresse, Google n en indexe qu une. Vous payez pour une traduction que personne ne trouvera en cherchant dans cette langue. C est la raison la plus fréquente pour laquelle un site bilingue ne rapporte rien.',
+          },
+          {
+            heading: 'La méthode qui fonctionne',
+            body: 'Une adresse par langue, des balises hreflang qui se répondent, un sitemap qui déclare les alternatives, et un contenu rédigé dans chaque langue. C est exactement ainsi que ce site est construit : français et anglais, chacun prégénéré sur sa propre adresse.',
+          },
+          {
+            heading: 'Rédigé, pas traduit',
+            body: 'Une phrase qui convainc en anglais tombe souvent à plat traduite littéralement en français. Je réécris les arguments dans la langue cible plutôt que de les transposer, parce que c est le texte qui vend, pas la grammaire.',
+          },
+        ],
+        faq: [
+          {
+            question: 'Combien de langues pouvez-vous gérer ?',
+            answer:
+              'Deux dans la plupart des projets, français et anglais, et davantage si votre marché le justifie. La méthode reste la même : une URL par langue et le balisage correspondant.',
+          },
+          {
+            question: 'Pouvez-vous rendre multilingue un site existant ?',
+            answer:
+              'Oui, et c est une demande fréquente, souvent pour réparer une version traduite par plugin qui n a jamais été référencée.',
+          },
+          {
+            question: 'Rédigez-vous les traductions ?',
+            answer:
+              'Je rédige le français et l anglais. Pour d autres langues, je structure le site et j intègre le texte que vous fournissez.',
+          },
+        ],
+        ctaHeading: 'Un projet multilingue ?',
+        ctaBody:
+          'Dites-moi vos langues et vos marchés. Je vous dis ce que cela implique et, si votre site actuel est mal configuré, ce qu il faudrait corriger.',
+      },
+      en: {
+        slug: 'multilingual-website-developer',
+        title: 'Multilingual Website Developer (FR/EN)',
+        description:
+          'Bilingual and multilingual sites done properly: one URL per language, real hreflang, written translation. No plugin that quietly breaks your ranking.',
+        eyebrow: 'Multilingual',
+        h1: 'Multilingual websites, done properly',
+        intro:
+          'Most multilingual sites are a translation plugin bolted onto a single-language site. One URL for every language, missing tags, and search visibility that works in neither. A genuinely multilingual site is built differently, from the start.',
+        highlights: [
+          'A dedicated URL per language, indexed separately by Google',
+          'Reciprocal hreflang tags, the requirement for being found in each language',
+          'Translation written, not machine-generated',
+        ],
+        sections: [
+          {
+            heading: 'What translation plugins cost you',
+            body: 'When every language shares one address, Google indexes one of them. You pay for a translation nobody will find by searching in that language. It is the most common reason a bilingual site earns nothing.',
+          },
+          {
+            heading: 'The approach that works',
+            body: 'One address per language, hreflang tags that reference each other, a sitemap declaring the alternates, and content written in each language rather than word for word. That is exactly how this site is built: French and English, each prerendered on its own address.',
+          },
+          {
+            heading: 'Written, not translated',
+            body: 'A sentence that persuades in English often falls flat translated literally into French. I rewrite the argument in the target language instead of transposing it, because the copy is what sells, not the grammar.',
+          },
+        ],
+        faq: [
+          {
+            question: 'How many languages can you handle?',
+            answer:
+              'Two on most projects, French and English, and more where your market justifies it. The method is the same either way: one URL per language with matching markup.',
+          },
+          {
+            question: 'Can you make an existing site multilingual?',
+            answer:
+              'Yes, and it is a common request, usually to repair a plugin-translated version that never ranked.',
+          },
+          {
+            question: 'Do you write the translations?',
+            answer:
+              'I write French and English. For other languages I structure the site and integrate the copy you supply.',
+          },
+        ],
+        ctaHeading: 'Working across languages?',
+        ctaBody:
+          'Tell me your languages and markets. I will tell you what it involves, and if your current site is set up wrong, what needs fixing.',
+      },
+    },
+  },
+  {
+    id: 'booking',
+    kind: 'service',
+    city: 'Worldwide',
+    region: 'Worldwide',
+    copy: {
+      fr: {
+        slug: 'site-de-reservation-en-ligne',
+        title: 'Création de site de réservation en ligne',
+        description:
+          'Plateformes de réservation sur mesure : parcours guidé, disponibilités, paiement ou acompte, espace partenaire. Pour reprendre la main sur vos réservations.',
+        eyebrow: 'Réservation',
+        h1: 'Sites et plateformes de réservation',
+        intro:
+          'Une réservation qui passe par une plateforme vous coûte une commission, à chaque fois. Un site de réservation directe ne remplace pas ces plateformes : il récupère les clients qui vous ont déjà trouvés et qui préféreraient réserver chez vous.',
+        highlights: [
+          'Parcours de réservation guidé, pensé pour être terminé et pas abandonné',
+          'Paiement intégral, acompte, ou paiement sur place selon votre activité',
+          'Espace dédié aux partenaires quand vous gérez plusieurs prestataires',
+        ],
+        sections: [
+          {
+            heading: 'Le taux de complétion avant tout',
+            body: 'Un formulaire de réservation se juge sur un seul chiffre : combien de personnes qui le commencent le terminent. Moins d étapes, aucune information demandée sans raison, une confirmation claire. C est le même travail que sur la plateforme de location de véhicules que j ai livrée, avec parcours guidé et mise en avant des offres.',
+          },
+          {
+            heading: 'Plusieurs prestataires, un seul site',
+            body: 'Si vous agrégez l offre de plusieurs partenaires, il faut deux parcours distincts : celui du client qui réserve, et celui du partenaire qui inscrit son offre. Les mélanger est la façon la plus sûre de perdre les deux.',
+          },
+          {
+            heading: 'Mobile, parce que c est là que ça se joue',
+            body: 'Vos clients réservent depuis leur téléphone, souvent en déplacement et parfois sur un réseau médiocre. Le site doit rester rapide dans ces conditions, sinon la réservation se termine ailleurs.',
+          },
+        ],
+        faq: [
+          {
+            question: 'Pour quels secteurs travaillez-vous ?',
+            answer:
+              'Location, hébergement, restauration, prestations sur rendez-vous. Le mécanisme est proche : des disponibilités, un parcours, une confirmation.',
+          },
+          {
+            question: 'Peut-on encaisser en ligne ?',
+            answer:
+              'Oui, en totalité ou en acompte, avec le solde sur place. On choisit selon votre clientèle et votre trésorerie.',
+          },
+          {
+            question: 'Cela remplace-t-il les plateformes de réservation ?',
+            answer:
+              'Non, et je ne le conseillerais pas. L objectif est de récupérer la part de clients qui vous connaissent déjà, sans commission.',
+          },
+        ],
+        ctaHeading: 'Un projet de réservation ?',
+        ctaBody:
+          'Décrivez ce que vous proposez et comment vos clients réservent aujourd hui. Je vous dis ce qui augmenterait vos réservations directes.',
+      },
+      en: {
+        slug: 'booking-website-developer',
+        title: 'Booking Website and Platform Developer',
+        description:
+          'Custom booking platforms: guided flow, availability, full payment or deposit, partner area. Built to win back the bookings you pay commission on.',
+        eyebrow: 'Booking',
+        h1: 'Booking websites and platforms',
+        intro:
+          'Every booking through a platform costs you commission, every time. A direct booking site does not replace those platforms. It recaptures the customers who already found you and would rather book with you.',
+        highlights: [
+          'A guided booking flow, built to be finished rather than abandoned',
+          'Full payment, deposit, or pay on arrival, depending on your business',
+          'A separate partner area when you list several providers',
+        ],
+        sections: [
+          {
+            heading: 'Completion rate above everything',
+            body: 'A booking flow is judged on one number: how many people who start it finish it. Fewer steps, nothing asked without a reason, and a confirmation that is unmistakable. That is the same work as the vehicle rental platform I delivered, with a guided flow and featured listings.',
+          },
+          {
+            heading: 'Several providers, one site',
+            body: 'If you aggregate other providers you need two distinct journeys: the customer booking, and the partner listing. Merging them is the surest way to lose both.',
+          },
+          {
+            heading: 'Mobile, because that is where it is decided',
+            body: 'Your customers book from a phone, often travelling, sometimes on a poor connection. The site has to stay fast in those conditions or the booking finishes somewhere else.',
+          },
+        ],
+        faq: [
+          {
+            question: 'Which sectors do you work with?',
+            answer:
+              'Rental, accommodation, restaurants, appointment-based services. The mechanics are close: availability, a flow, a confirmation.',
+          },
+          {
+            question: 'Can I take payment online?',
+            answer:
+              'Yes, in full or as a deposit with the balance on arrival. We choose based on your customers and your cash flow.',
+          },
+          {
+            question: 'Does this replace booking platforms?',
+            answer:
+              'No, and I would not advise it. The goal is recapturing the share of customers who already know you, without commission.',
+          },
+        ],
+        ctaHeading: 'Building something with bookings?',
+        ctaBody:
+          'Describe what you offer and how customers book today. I will tell you what would actually raise your direct bookings.',
+      },
+    },
+  },
+  {
+    id: 'speed',
+    kind: 'service',
+    city: 'Worldwide',
+    region: 'Worldwide',
+    copy: {
+      fr: {
+        slug: 'optimisation-vitesse-site-web',
+        title: 'Optimisation de la vitesse d un site web',
+        description:
+          'Votre site est lent sur mobile et vous perdez des visiteurs. Diagnostic mesuré, corrections priorisées, et des chiffres avant et après.',
+        eyebrow: 'Performance',
+        h1: 'Votre site est lent. Cela vous coûte des clients.',
+        intro:
+          'La lenteur est le problème le plus coûteux d un site, et le plus facile à ignorer : sur votre ordinateur et votre connexion, tout paraît normal. Vos visiteurs, eux, sont sur un téléphone et un réseau moyen. Je mesure ce qu ils vivent réellement, puis je corrige dans l ordre de ce qui coûte le plus.',
+        highlights: [
+          'Mesures réelles sur mobile, pas une impression sur votre écran',
+          'Corrections classées par gain, du plus rentable au cosmétique',
+          'Chiffres avant et après, pour que le résultat soit vérifiable',
+        ],
+        sections: [
+          {
+            heading: 'Ce qui ralentit vraiment un site',
+            body: 'Presque toujours les mêmes causes : des images bien plus lourdes que nécessaire, des scripts tiers qui bloquent l affichage, des polices mal chargées, et du contenu rendu en JavaScript alors qu il pouvait être servi tel quel. Le diagnostic est rapide, la correction est du travail.',
+          },
+          {
+            heading: 'Vitesse et référencement sont le même problème',
+            body: 'Google mesure l expérience réelle de vos visiteurs et s en sert pour vous classer. Un site lent est donc pénalisé deux fois : moins bien positionné, et abandonné par ceux qui arrivent malgré tout.',
+          },
+          {
+            heading: 'Mesuré, pas affirmé',
+            body: 'Ce site est à 100 sur 100 en performance sur ordinateur, et chaque projet livré est mesuré de la même manière. Vous recevez les chiffres, avant et après, plutôt qu une promesse.',
+          },
+        ],
+        faq: [
+          {
+            question: 'Travaillez-vous sur WordPress, Shopify, Wix ?',
+            answer:
+              'Oui. Les causes de lenteur sont largement les mêmes d une plateforme à l autre, et les corrections sont adaptées à la vôtre.',
+          },
+          {
+            question: 'Faut-il refaire le site ?',
+            answer:
+              'Rarement. La plupart des gains viennent de corrections ciblées. Si une refonte est réellement plus rentable, je vous le dis, mais ce n est pas le point de départ.',
+          },
+          {
+            question: 'Comment savoir si mon site est concerné ?',
+            answer:
+              'Demandez l audit gratuit. Vous recevez les mesures et une liste priorisée, sans engagement.',
+          },
+        ],
+        ctaHeading: 'Faites mesurer votre site',
+        ctaBody:
+          'Envoyez-moi l adresse de votre site. Je vous renvoie ce que vivent réellement vos visiteurs sur mobile, et ce qui vous ferait gagner le plus.',
+      },
+      en: {
+        slug: 'website-speed-optimisation',
+        title: 'Website Speed Optimisation',
+        description:
+          'Your site is slow on mobile and it is costing you visitors. Measured diagnosis, prioritised fixes, and before and after numbers.',
+        eyebrow: 'Performance',
+        h1: 'Your site is slow. That costs you customers.',
+        intro:
+          'Slowness is the most expensive problem a site can have and the easiest to miss, because on your machine and your connection everything looks fine. Your visitors are on a phone and an average network. I measure what they actually experience, then fix in order of what costs you most.',
+        highlights: [
+          'Real measurements on mobile, not an impression from your desktop',
+          'Fixes ranked by payoff, from the most valuable down to the cosmetic',
+          'Before and after numbers, so the result is verifiable',
+        ],
+        sections: [
+          {
+            heading: 'What actually slows a site down',
+            body: 'Almost always the same causes: images far heavier than they need to be, third-party scripts blocking the render, fonts loaded badly, and content rendered in JavaScript when it could have been served as-is. Diagnosis is quick. Fixing it is work.',
+          },
+          {
+            heading: 'Speed and ranking are the same problem',
+            body: 'Google measures what your visitors actually experience and ranks you on it. A slow site is penalised twice: it places lower, and it is abandoned by the people who arrive anyway.',
+          },
+          {
+            heading: 'Measured, not asserted',
+            body: 'This site scores 100 out of 100 on desktop performance, and every project I deliver is measured the same way. You get the numbers, before and after, rather than a promise.',
+          },
+        ],
+        faq: [
+          {
+            question: 'Do you work on WordPress, Shopify, Wix?',
+            answer:
+              'Yes. The causes of slowness are largely the same across platforms, and the fixes are adapted to yours.',
+          },
+          {
+            question: 'Will the site need rebuilding?',
+            answer:
+              'Rarely. Most of the gain comes from targeted fixes. If a rebuild genuinely pays better I will say so, but it is not the starting point.',
+          },
+          {
+            question: 'How do I know if this applies to my site?',
+            answer:
+              'Ask for the free audit. You get the measurements and a prioritised list, with nothing attached.',
+          },
+        ],
+        ctaHeading: 'Have your site measured',
+        ctaBody:
+          'Send me your address. I will send back what your visitors actually experience on a phone, and what would gain you the most.',
+      },
+    },
+  },
+  {
     /* The lead magnet. Running a free audit on a prospect's site and naming
        the specific problems found is the single most effective outreach tactic
        in this market, and Saad already does the work for his own pages, so it
@@ -498,6 +823,9 @@ export const landingPages: LandingPage[] = [
     },
   },
 ]
+
+/** Capabilities, sold anywhere. Linked separately from the places. */
+export const servicePages = landingPages.filter((page) => page.kind === 'service')
 
 /** Only the real places, for the "areas served" list. */
 export const cityPages = landingPages.filter((page) => page.kind === 'city')

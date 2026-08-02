@@ -29,10 +29,16 @@ export function LandingSchema({ page, locale }: { page: LandingPage; locale: Loc
       serviceType: meta.role,
       url,
       provider: { '@id': `${siteUrl}/${locale}/#person` },
-      areaServed: [
-        { '@type': 'City', name: page.city },
-        { '@type': 'AdministrativeArea', name: page.region },
-      ],
+      /* A capability is sold anywhere; only a city page is bounded by a place.
+         Declaring a service as City "Worldwide" would be nonsense to a parser
+         and would cap a global offer at an imaginary town. */
+      areaServed:
+        page.kind === 'city'
+          ? [
+              { '@type': 'City', name: page.city },
+              { '@type': 'AdministrativeArea', name: page.region },
+            ]
+          : { '@type': 'Place', name: 'Worldwide' },
       availableLanguage: ['fr', 'en'],
       inLanguage: htmlLang[locale],
     },

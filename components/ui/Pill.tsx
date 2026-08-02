@@ -9,16 +9,21 @@ const variants: Record<Variant, string> = {
    * #f2f2f2 -> #e6e6e6 gradient rather than a flat tint, which is what gives it
    * the slightly recessed look.
    */
+  /* max-w-full + wrapping: the badge now carries three segments (role,
+     country, reach) and ran past the edge of a 320px screen as one line. */
+  /* The badge wraps. It carries three segments (role, country, reach) and as
+     one unbreakable line it pushed the hero 160px past a 320px screen.
+     Buttons and tags keep nowrap; they are short and should not break. */
   badge:
-    'bg-gradient-to-b from-panel to-[#e6e6e6] border border-line/70 text-ink text-[0.8125rem] md:text-base tracking-[0.09em] uppercase px-5 py-2',
+    'bg-gradient-to-b from-panel to-[#e6e6e6] border border-line/70 text-ink text-[0.8125rem] md:text-base tracking-[0.09em] uppercase px-5 py-2 max-w-full text-balance text-center',
   /**
    * The primary call to action: solid near-black capsule. Bricolage Grotesque
    * 16px semibold with 12px/24px padding, measured off the reference's button.
    */
-  dark: 'bg-ink-cta text-white font-display text-base font-semibold px-6 py-3 hover:bg-ink-cta-hover shadow-ramp',
+  dark: 'whitespace-nowrap bg-ink-cta text-white font-display text-base font-semibold px-6 py-3 hover:bg-ink-cta-hover shadow-ramp',
   /** Secondary capsule on tinted panels. */
   light:
-    'bg-white text-ink font-display text-base font-semibold px-6 py-3 border border-line hover:bg-panel',
+    'whitespace-nowrap bg-white text-ink font-display text-base font-semibold px-6 py-3 border border-line hover:bg-panel',
   /** Small status capsule sitting beside the wordmark. */
   status: 'bg-white border border-line text-ink text-sm px-3 py-1.5',
 }
@@ -36,8 +41,11 @@ type PillProps = {
  * badges do not end up as bogus interactive elements.
  */
 export function Pill({ children, variant = 'badge', href, className = '' }: PillProps) {
-  const base =
-    'inline-flex items-center gap-2 rounded-full whitespace-nowrap transition-colors duration-200 ease-signature'
+  /* No whitespace utility in the base. It used to be `whitespace-nowrap`, and
+     a variant could not override it: two utilities from the same group on one
+     element resolve by stylesheet order, not class order. Each variant now
+     states what it needs. */
+  const base = 'inline-flex items-center gap-2 rounded-full transition-colors duration-200 ease-signature'
   const classes = `${base} ${variants[variant]} ${className}`
 
   if (href) {
