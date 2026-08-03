@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next'
 import { htmlLang, locales } from '@/lib/i18n'
 import { landingPages } from '@/lib/landing/pages'
 import { caseStudies } from '@/lib/work/cases'
+import { getContent } from '@/lib/content'
 import { siteUrl } from '@/lib/site-url'
 
 /**
@@ -53,5 +54,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }))
   )
 
-  return [...home, ...landing, ...work]
+  const hire = locales.map((locale) => ({
+    url: `${siteUrl}/${locale}/${getContent(locale).hire.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+    alternates: {
+      languages: Object.fromEntries(
+        locales.map((l) => [htmlLang[l], `${siteUrl}/${l}/${getContent(l).hire.slug}`])
+      ),
+    },
+  }))
+
+  return [...home, ...landing, ...work, ...hire]
 }

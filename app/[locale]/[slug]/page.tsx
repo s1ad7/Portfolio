@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { LandingPage } from '@/components/landing/LandingPage'
+import { HirePage } from '@/components/hire/HirePage'
 import { CaseStudyPage } from '@/components/work/CaseStudyPage'
 import { landingPages, findLandingPage } from '@/lib/landing/pages'
 import { caseStudies, findCaseStudy } from '@/lib/work/cases'
+import { getContent } from '@/lib/content'
 import { htmlLang, isLocale, locales } from '@/lib/i18n'
 import { site } from '@/lib/site'
 import { siteUrl } from '@/lib/site-url'
@@ -15,6 +17,7 @@ export function generateStaticParams() {
   return locales.flatMap((locale) => [
     ...landingPages.map((page) => ({ locale, slug: page.copy[locale].slug })),
     ...caseStudies.map((study) => ({ locale, slug: study.copy[locale].slug })),
+    { locale, slug: getContent(locale).hire.slug },
   ])
 }
 
@@ -28,11 +31,12 @@ export async function generateMetadata({
 
   const page = findLandingPage(locale, slug)
   const study = !page ? findCaseStudy(locale, slug) : undefined
-  if (!page && !study) return {}
+  const hire = !page && !study && getContent(locale).hire.slug === slug
+  if (!page && !study && !hire) return {}
 
-  const copy = page ? page.copy[locale] : study!.copy[locale]
-  const alternateFor = (l: typeof locales[number]) =>
-    page ? page.copy[l].slug : study!.copy[l].slug
+  const copy = page ? page.copy[locale] : study ? study.copy[locale] : getContent(locale).hire
+  const alternateFor = (l: (typeof locales)[number]) =>
+    page ? page.copy[l].slug : study ? study.copy[l].slug : getContent(l).hire.slug
 
   /* Each locale has a DIFFERENT slug for the same page, so the alternates have
      to be built from the page rather than by swapping the locale prefix. Get
@@ -67,6 +71,8 @@ export default async function Page({
 
   const study = findCaseStudy(locale, slug)
   if (study) return <CaseStudyPage study={study} locale={locale} />
+
+  if (getContent(locale).hire.slug === slug) return <HirePage locale={locale} />
 
   notFound()
 }

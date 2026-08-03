@@ -206,6 +206,58 @@ export const fr = {
     ],
   },
 
+  hire: {
+    slug: 'recrutement',
+    eyebrow: 'Pour les recruteurs',
+    title: 'Recruter Saad Ifli, développeur full-stack à distance',
+    description:
+      'Développeur full-stack disponible pour des postes à distance en Europe et dans le Golfe. GMT+1, français, anglais et arabe, plus de 30 projets livrés.',
+    h1: 'Disponible pour des postes à distance',
+    intro:
+      'Je conçois et je livre du web en production : sites vitrines, boutiques, plateformes de réservation et les automatisations derrière. Voici ce qu’une équipe de recrutement demande en général avant un premier échange, dans l’ordre où elle le demande.',
+    availability: {
+      label: 'Statut',
+      value: 'Ouvert aux postes à distance',
+      detail: 'Temps plein, temps partiel ou mission, via un employer of record si vous en avez besoin.',
+    },
+    facts: [
+      { label: 'Basé à', value: 'Maroc', detail: 'GMT+1 toute l’année, les mêmes horaires que Paris, Madrid et Lisbonne.' },
+      { label: 'Langues', value: 'Français, anglais, arabe', detail: 'Réunions, comptes rendus et contenu produit dans l’une des trois.' },
+      { label: 'Expérience', value: '3+ ans, 30+ projets', detail: 'Sept sont en ligne et liés ici : vous pouvez les ouvrir plutôt que me croire sur parole.' },
+      { label: 'Méthode', value: 'Asynchrone', detail: 'Un suivi écrit que vous lisez quand vous voulez, des appels quand une décision l’exige.' },
+    ],
+    stackHeading: 'Ce que j’utilise',
+    stack: [
+      { group: 'Front-end', items: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP'] },
+      { group: 'Back-end', items: ['Node.js', 'Python', 'API REST', 'PostgreSQL', 'Odoo'] },
+      { group: 'Livraison', items: ['Vercel', 'Docker', 'Git', 'WordPress', 'Playwright'] },
+    ],
+    strengthsHeading: 'Là où je suis utile',
+    strengths: [
+      {
+        title: 'Livrer, pas prototyper',
+        body: 'Tout ce que je montre est en ligne et utilisé. Je connais la partie qui vient après la démo : les cas limites, la passation, ce qui casse au troisième mois.',
+      },
+      {
+        title: 'Produits multilingues',
+        body: 'Des sites et applications en plusieurs langues, faits correctement : une URL par langue et un balisage hreflang réel, plutôt qu’un plugin de traduction qui coûte silencieusement du trafic.',
+      },
+      {
+        title: 'La performance comme habitude',
+        body: 'Je mesure au lieu de supposer. Ce site est à 100 en performance sur ordinateur et à 100 en accessibilité, et chaque projet livré est vérifié de la même façon.',
+      },
+      {
+        title: 'Le contexte métier',
+        body: 'J’ai étudié le management et l’économie avant le développement. Je demande ce que vaut une fonctionnalité avant de la construire, ce qui fait généralement gagner plus de temps que cela n’en coûte.',
+      },
+    ],
+    ctaHeading: 'On en parle ?',
+    ctaBody: 'Envoyez-moi quelques lignes sur le poste et la stack. Je réponds sous un jour ouvré, et un échange technique avant toute paperasse me va très bien.',
+    ctaLabel: 'Me contacter',
+    cvLabel: 'Imprimer ou enregistrer en PDF',
+    cvHint: 'Cette page s’imprime comme un CV d’une page.',
+  },
+
   processSection: {
     eyebrow: 'Ma méthode',
     heading: 'Cinq étapes, aucune surprise.',

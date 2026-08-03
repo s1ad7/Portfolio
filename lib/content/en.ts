@@ -223,6 +223,58 @@ export const en = {
     ],
   },
 
+  hire: {
+    slug: 'hire',
+    eyebrow: 'For hiring teams',
+    title: 'Hire Saad Ifli, Remote Full-Stack Developer',
+    description:
+      'Full-stack developer available for remote roles across Europe and the Gulf. GMT+1, French, English and Arabic, 30+ shipped projects. CV and references on request.',
+    h1: 'Available for remote roles',
+    intro:
+      'I build and ship production web work: marketing sites, stores, booking platforms and the automations behind them. Below is what a hiring team usually wants to know before a first call, in the order they usually ask it.',
+    availability: {
+      label: 'Status',
+      value: 'Open to remote roles',
+      detail: 'Full-time, part-time or contract, through an employer of record where you need one.',
+    },
+    facts: [
+      { label: 'Based in', value: 'Morocco', detail: 'GMT+1 all year, the same working day as Paris, Madrid and Lisbon.' },
+      { label: 'Languages', value: 'French, English, Arabic', detail: 'Meetings, written updates and product copy in any of the three.' },
+      { label: 'Experience', value: '3+ years, 30+ projects', detail: 'Seven of them live and linked, so you can open the work rather than take my word for it.' },
+      { label: 'Working style', value: 'Async by default', detail: 'Written progress you can read on your own time, calls when a decision needs one.' },
+    ],
+    stackHeading: 'What I work with',
+    stack: [
+      { group: 'Front-end', items: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP'] },
+      { group: 'Back-end', items: ['Node.js', 'Python', 'REST APIs', 'PostgreSQL', 'Odoo'] },
+      { group: 'Delivery', items: ['Vercel', 'Docker', 'Git', 'WordPress', 'Playwright'] },
+    ],
+    strengthsHeading: 'Where I am useful',
+    strengths: [
+      {
+        title: 'Shipping, not prototyping',
+        body: 'Everything in my portfolio is live and in use. I am used to the part after the demo: the edge cases, the handover, the thing that breaks in month three.',
+      },
+      {
+        title: 'Multilingual products',
+        body: 'Sites and apps in more than one language, done properly, with one URL per language and correct hreflang rather than a translation plugin that quietly costs you search traffic.',
+      },
+      {
+        title: 'Performance as a habit',
+        body: 'I measure rather than assume. This site scores 100 on desktop performance and 100 on accessibility, and every project I ship is checked the same way.',
+      },
+      {
+        title: 'Business context',
+        body: 'I studied management and economics before development. I will ask what a feature is worth before building it, which tends to save more time than it costs.',
+      },
+    ],
+    ctaHeading: 'Want to talk?',
+    ctaBody: 'Send a short note about the role and the stack. I reply within a working day, and I am happy to do a technical call before any paperwork.',
+    ctaLabel: 'Get in touch',
+    cvLabel: 'Print or save as PDF',
+    cvHint: 'This page prints as a one-page CV.',
+  },
+
   processSection: {
     eyebrow: 'How I work',
     heading: 'Five steps, no surprises.',
